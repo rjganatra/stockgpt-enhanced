@@ -55,14 +55,23 @@ def adaptive_slider(label: str, series: pd.Series, step: float = 1.0,
     always `series.min()`/`series.max()` off the data passed in -- never a
     literal. If you're tempted to hardcode a min/max "just this once",
     that's the exact mistake that broke the original dashboard's price
-    filter for high-priced stocks. Don't; call this instead."""
+    filter for high-priced stocks. Don't; call this instead.
+
+    When the series has no real numeric data at all (column missing, or
+    entirely NaN -- e.g. the fundamentals fetch hasn't run yet), this does
+    NOT fall back to a fake 0-to-step range. A slider that always shows
+    "0.00 to 0.50" regardless of what's actually in the data looks adaptive
+    but isn't, which is worse than no slider -- it quietly filters out real
+    rows. Shows a caption and returns (None, None) instead; callers must
+    skip filtering when either bound is None."""
+    target = st.sidebar if sidebar else st
     clean = pd.to_numeric(series, errors="coerce").replace([float("inf"), float("-inf")], pd.NA).dropna()
     if clean.empty:
-        lo, hi = 0.0, float(step)
-    else:
-        lo, hi = float(clean.min()), float(clean.max())
-        if hi <= lo:
-            hi = lo + float(step)
+        target.caption(f"{label}: no data available yet.")
+        return None, None
+    lo, hi = float(clean.min()), float(clean.max())
+    if hi <= lo:
+        hi = lo + float(step)
     widget = st.sidebar.slider if sidebar else st.slider
     return widget(label, min_value=lo, max_value=hi, value=(lo, hi), step=float(step), key=key)
 
@@ -181,7 +190,11 @@ if S.SCAN_TIME in df.columns and not df[S.SCAN_TIME].dropna().empty:
 st.sidebar.header("Filters")
 st.sidebar.caption("Every slider below is bounded by today's actual data, not a fixed number.")
 
-search_symbol = st.sidebar.text_input("Search symbol")
+all_symbols = sorted(df[S.SYMBOL].dropna().unique()) if S.SYMBOL in df.columns else []
+search_symbols = st.sidebar.multiselect(
+    "Search symbol", all_symbols, default=[], placeholder="Type to search...",
+    help="Options are today's actual scanned symbols -- pulled live, never a fixed list.",
+)
 sectors = sorted(df[S.SECTOR].dropna().unique()) if S.SECTOR in df.columns else []
 selected_sectors = st.sidebar.multiselect("Sectors", sectors, default=sectors)
 bands = sorted(df[S.SCORE_BAND].dropna().unique()) if S.SCORE_BAND in df.columns else []
@@ -197,15 +210,15 @@ if selected_sectors:
     filtered = filtered[filtered[S.SECTOR].isin(selected_sectors)]
 if selected_bands:
     filtered = filtered[filtered[S.SCORE_BAND].isin(selected_bands)]
-if search_symbol.strip():
-    filtered = filtered[filtered[S.SYMBOL].str.contains(search_symbol.upper(), case=False, na=False)]
-if S.CURRENT_PRICE in filtered.columns:
+if search_symbols:
+    filtered = filtered[filtered[S.SYMBOL].isin(search_symbols)]
+if S.CURRENT_PRICE in filtered.columns and price_min is not None:
     filtered = filtered[filtered[S.CURRENT_PRICE].between(price_min, price_max)]
-if S.FINAL_SCORE in filtered.columns:
+if S.FINAL_SCORE in filtered.columns and score_min is not None:
     filtered = filtered[filtered[S.FINAL_SCORE].between(score_min, score_max)]
-if S.RISK_PENALTY in filtered.columns:
+if S.RISK_PENALTY in filtered.columns and risk_min is not None:
     filtered = filtered[filtered[S.RISK_PENALTY].between(risk_min, risk_max)]
-if S.RSI in filtered.columns:
+if S.RSI in filtered.columns and rsi_min is not None:
     filtered = filtered[filtered[S.RSI].between(rsi_min, rsi_max)]
 
 st.sidebar.metric("Matching stocks", len(filtered))
@@ -472,12 +485,19 @@ with tab_fundamentals:
                    "to today's price scan -- this is intentional (Yahoo throttles a full fetch).")
 
         st.subheader("Fundamental filters")
+        if S.ROE not in fund_df.columns:
+            st.caption(
+                "ROE %: not present in the current fundamentals file yet. This file only carries "
+                "ROE once scripts/run_weekly_fundamentals.py has run for real against live Yahoo "
+                "data -- it fetches ROE reliably (see fundamentals.py::fetch_one), the column is "
+                "just missing from whatever fundamentals snapshot is currently loaded."
+            )
         roe_min, roe_max = adaptive_slider("ROE %", fund_df.get(S.ROE, pd.Series(dtype=float)), step=0.5, sidebar=False, key="roe")
         dte_min, dte_max = adaptive_slider("Debt/Equity", fund_df.get(S.DEBT_TO_EQUITY, pd.Series(dtype=float)), step=1.0, sidebar=False, key="dte")
         f = fund_df.copy()
-        if S.ROE in f.columns:
+        if S.ROE in f.columns and roe_min is not None:
             f = f[f[S.ROE].between(roe_min, roe_max) | f[S.ROE].isna()]
-        if S.DEBT_TO_EQUITY in f.columns:
+        if S.DEBT_TO_EQUITY in f.columns and dte_min is not None:
             f = f[f[S.DEBT_TO_EQUITY].between(dte_min, dte_max) | f[S.DEBT_TO_EQUITY].isna()]
 
         st.subheader("Fundamental Quality Table")
@@ -522,10 +542,14 @@ with tab_changes:
                       if "change_signal" in changes_df else "-")
 
             st.subheader("Change Filters")
-            search = st.text_input("Search symbol", key="changes_search")
+            changes_symbols = sorted(changes_df[S.SYMBOL].dropna().unique()) if S.SYMBOL in changes_df.columns else []
+            search_selected = st.multiselect(
+                "Search symbol", changes_symbols, default=[], key="changes_search",
+                placeholder="Type to search...",
+            )
             cf = changes_df.copy()
-            if search.strip() and S.SYMBOL in cf.columns:
-                cf = cf[cf[S.SYMBOL].str.contains(search.upper(), case=False, na=False)]
+            if search_selected and S.SYMBOL in cf.columns:
+                cf = cf[cf[S.SYMBOL].isin(search_selected)]
 
             if "score_change" in cf.columns:
                 st.subheader("Biggest Score Improvers")
