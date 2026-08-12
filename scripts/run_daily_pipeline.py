@@ -81,6 +81,7 @@ def download_history(symbols: list[str], period: str = "1y") -> dict[str, pd.Dat
 def main() -> None:
     print("Refreshing universe...")
     uni, used_fallback = universe.fetch_universe()
+    (DATA_DIR / "universe").mkdir(parents=True, exist_ok=True)
     uni.to_csv(DATA_DIR / "universe" / "universe.csv", index=False)
     print(f"Universe: {len(uni)} symbols (fallback={used_fallback})")
 
@@ -147,6 +148,7 @@ def main() -> None:
 
     print("Computing final scores...")
     final_df = scoring.compute_final_scores(merged)
+    (DATA_DIR / "scans").mkdir(parents=True, exist_ok=True)
     final_df.to_csv(DATA_DIR / "scans" / "latest_scan.csv", index=False)
     print(f"Final scan saved: {len(final_df)} rows")
 
