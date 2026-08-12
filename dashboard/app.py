@@ -614,34 +614,47 @@ with tab_signal_perf:
         "not the original's vs-today fuzzy bucketing). Bearish rows are warnings, not buys -- "
         "for those, a negative return means the warning was right."
     )
-    with st.spinner("Running every catalog signal through the backtest engine..."):
-        perf_df = compute_signal_catalog_performance()
+    st.caption(
+        "This runs every catalog signal through the backtest engine across all of history, which "
+        "gets slower as more daily snapshots accumulate -- gated behind a button rather than run "
+        "on every page load, both so other tabs aren't stuck waiting on it (Streamlit executes "
+        "every tab's code on every rerun, not just the one you're looking at) and so a full page "
+        "load stays fast."
+    )
+    if st.button("Compute signal performance", key="signal_perf_run"):
+        st.session_state["signal_perf_computed"] = True
 
-    if perf_df.empty:
-        st.info("No history snapshots to backtest against yet.")
+    if not st.session_state.get("signal_perf_computed"):
+        st.info("Click 'Compute signal performance' to run the backtest across all catalog signals.")
     else:
-        p1, p2 = st.columns(2)
-        with p1:
-            signal_options = sorted(perf_df["strategy_name"].unique())
-            chosen_signals = st.multiselect("Signal type", signal_options, default=[], placeholder="All")
-        with p2:
-            horizon_options = sorted(perf_df["horizon_label"].unique())
-            chosen_horizons = st.multiselect("Horizon", horizon_options, default=[], placeholder="All")
+        with st.spinner("Running every catalog signal through the backtest engine..."):
+            perf_df = compute_signal_catalog_performance()
 
-        pf = perf_df.copy()
-        if chosen_signals:
-            pf = pf[pf["strategy_name"].isin(chosen_signals)]
-        if chosen_horizons:
-            pf = pf[pf["horizon_label"].isin(chosen_horizons)]
+        if perf_df.empty:
+            st.info("No history snapshots to backtest against yet.")
+        else:
+            p1, p2 = st.columns(2)
+            with p1:
+                signal_options = sorted(perf_df["strategy_name"].unique())
+                chosen_signals = st.multiselect("Signal type", signal_options, default=[], placeholder="All")
+            with p2:
+                horizon_options = sorted(perf_df["horizon_label"].unique())
+                chosen_horizons = st.multiselect("Horizon", horizon_options, default=[], placeholder="All")
 
-        st.dataframe(
-            pf.sort_values(["avg_return_pct", "win_rate_pct"], ascending=[False, False]),
-            width="stretch",
-        )
-        for _, row in pf.iterrows():
-            if row.get("low_sample_warning"):
-                st.caption(f"'{row['strategy_name']}' / {row['horizon_label']}: only "
-                           f"{row['closed_trades']} closed trades -- treat as a rough signal.")
+            pf = perf_df.copy()
+            if chosen_signals:
+                pf = pf[pf["strategy_name"].isin(chosen_signals)]
+            if chosen_horizons:
+                pf = pf[pf["horizon_label"].isin(chosen_horizons)]
+
+            st.dataframe(
+                pf.sort_values(["avg_return_pct", "win_rate_pct"], ascending=[False, False]),
+                width="stretch",
+            )
+            for _, row in pf.iterrows():
+                if row.get("low_sample_warning"):
+                    st.caption(f"'{row['strategy_name']}' / {row['horizon_label']}: only "
+                               f"{row['closed_trades']} closed trades -- treat as a rough signal.")
 
 # --- Strategy Lab ------------------------------------------------------------
 with tab_strategy:
