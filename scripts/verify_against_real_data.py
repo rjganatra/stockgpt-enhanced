@@ -74,6 +74,21 @@ def build_price_panel(source_history_dir: Path) -> pd.DataFrame:
 
 
 def load_real_fundamentals(source_fund_csv: Path) -> pd.DataFrame:
+    """NOTE (found during a later audit, kept here rather than silently
+    fixed): `keep` below is a narrow column subset built for this script's
+    one job -- verifying the backtest engine against real historical scans.
+    It deliberately excludes S.ROE and most other raw ratios, and does not
+    run them through fundamentals.py's `_safe_percent()` scale conversion
+    (this passes `fund` straight into score_fundamentals(), unlike the real
+    production path in fetch_one()). That's fine for this script's own
+    purpose, but it means a `data/fundamentals/fundamentals_scored.csv`
+    produced by THIS function is missing ROE entirely -- which is exactly
+    what shipped as the example dataset and is why the dashboard's ROE
+    slider showed no real data until a real scripts/run_weekly_fundamentals.py
+    run replaces it. If you extend `keep` to include S.ROE, verify the
+    source CSV's scale first (percentage vs fraction) -- score_row()'s ROE
+    thresholds assume percentage scale, same convention fetch_one() enforces
+    via _safe_percent()."""
     fund = pd.read_csv(source_fund_csv)
     fund[S.SYMBOL] = fund[S.SYMBOL].astype(str).str.upper().str.strip()
     fund = fund.drop_duplicates(subset=S.SYMBOL, keep="last")
