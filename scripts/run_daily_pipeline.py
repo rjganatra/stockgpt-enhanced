@@ -88,6 +88,40 @@ def main() -> None:
     symbols = uni[S.SYMBOL].tolist()
     sector_map = dict(zip(uni[S.SYMBOL], uni[S.SECTOR]))
 
+    print("Loading latest fundamentals (used for sector/industry + later merge)...")
+    fundamentals_path = DATA_DIR / "fundamentals" / "fundamentals_scored.csv"
+    if fundamentals_path.exists():
+        fund_df = pd.read_csv(fundamentals_path)
+    else:
+        print("No fundamentals file yet -- run run_weekly_fundamentals.py first. Continuing with 0 coverage.")
+        fund_df = pd.DataFrame(columns=[S.SYMBOL, S.SECTOR_ADJUSTED_FUNDAMENTAL_SCORE])
+
+    # Sector/industry: prefer the per-symbol Yahoo .info values already
+    # captured weekly for fundamentals (fundamentals.py::fetch_one, proven
+    # reliable there) over the universe fetch's own sector map, which comes
+    # from a second, more fragile external CSV scrape (niftyindices.com)
+    # that silently degrades to "Unknown" the moment that one URL is down --
+    # and which never had industry data at all (hence the old hardcoded
+    # "Unknown" industry literal this replaces). Falls back to the universe
+    # scrape's sector, then to "Unknown", only for symbols with no
+    # fundamentals fetch yet (e.g. a brand-new listing).
+    yf_sector_map: dict[str, str] = {}
+    yf_industry_map: dict[str, str] = {}
+    if "sector_yf" in fund_df.columns:
+        yf_sector_map = dict(zip(fund_df[S.SYMBOL], fund_df["sector_yf"]))
+    if "industry_yf" in fund_df.columns:
+        yf_industry_map = dict(zip(fund_df[S.SYMBOL], fund_df["industry_yf"]))
+
+    def sector_for(symbol: str) -> str:
+        yf_val = yf_sector_map.get(symbol)
+        if isinstance(yf_val, str) and yf_val and yf_val != "Unknown":
+            return yf_val
+        return sector_map.get(symbol, "Unknown")
+
+    def industry_for(symbol: str) -> str:
+        yf_val = yf_industry_map.get(symbol)
+        return yf_val if isinstance(yf_val, str) and yf_val else "Unknown"
+
     print(f"Downloading price history for {len(symbols)} symbols...")
     price_history = download_history(symbols)
     print(f"Got history for {len(price_history)}/{len(symbols)} symbols")
@@ -95,7 +129,7 @@ def main() -> None:
     print("Running technical scanner...")
     scan_rows = []
     for symbol, hist in price_history.items():
-        row = scanner.process_history(symbol, hist, sector_map.get(symbol, "Unknown"), "Unknown")
+        row = scanner.process_history(symbol, hist, sector_for(symbol), industry_for(symbol))
         if row:
             scan_rows.append(row)
     scan_df = pd.DataFrame(scan_rows)
@@ -103,31 +137,43 @@ def main() -> None:
 
     print("Computing relative strength...")
     nifty_1m = nifty_3m = nifty_6m = None
-    try:
-        nifty_hist = yf.download("^NSEI", period="8mo", interval="1d", progress=False, timeout=20)
-        nifty_close = nifty_hist["Close"]
-        # Some yfinance versions return MultiIndex columns (ticker sub-level)
-        # even for a single-symbol download -- nifty_hist["Close"] is then a
-        # one-column DataFrame, not a Series, and calc_return()'s scalar
-        # comparisons (`if past == 0`) raise "truth value of a Series is
-        # ambiguous" on that shape. Same MultiIndex check already used in
-        # download_history() above; applied here too for the one place that
-        # was missing it.
-        if isinstance(nifty_close, pd.DataFrame):
-            nifty_close = nifty_close.iloc[:, 0]
-        nifty_close = nifty_close.dropna()
+    nifty_close = None
+    NIFTY_ATTEMPTS = 3
+    for attempt in range(NIFTY_ATTEMPTS):
+        try:
+            nifty_hist = yf.download("^NSEI", period="8mo", interval="1d", progress=False, timeout=20)
+            close = nifty_hist["Close"]
+            # Some yfinance versions return MultiIndex columns (ticker
+            # sub-level) even for a single-symbol download -- close is then
+            # a one-column DataFrame, not a Series, and calc_return()'s
+            # scalar comparisons (`if past == 0`) raise "truth value of a
+            # Series is ambiguous" on that shape. Same MultiIndex check
+            # already used in download_history() above.
+            if isinstance(close, pd.DataFrame):
+                close = close.iloc[:, 0]
+            close = close.dropna()
+            if not close.empty:
+                nifty_close = close
+                break
+            raise ValueError("Nifty download returned no usable rows")
+        except Exception as e:  # noqa: BLE001
+            print(f"Nifty benchmark fetch attempt {attempt + 1}/{NIFTY_ATTEMPTS} failed: {e}")
+            if attempt < NIFTY_ATTEMPTS - 1:
+                time.sleep(3 + attempt * 3)
+
+    if nifty_close is not None:
         nifty_1m = relative_strength.calc_return(nifty_close, 21)
         nifty_3m = relative_strength.calc_return(nifty_close, 63)
         nifty_6m = relative_strength.calc_return(nifty_close, 126)
-    except Exception as e:  # noqa: BLE001
-        print(f"Nifty benchmark unavailable, continuing without it: {e}")
+    else:
+        print(f"Nifty benchmark unavailable after {NIFTY_ATTEMPTS} attempts, continuing without it.")
 
     rs_rows = []
     for symbol, hist in price_history.items():
         if symbol not in scan_df[S.SYMBOL].values:
             continue
         rs_rows.append(relative_strength.compute_for_symbol(
-            symbol, hist["Close"], sector_map.get(symbol, "Unknown"), nifty_1m, nifty_3m, nifty_6m))
+            symbol, hist["Close"], sector_for(symbol), nifty_1m, nifty_3m, nifty_6m))
     rs_df = relative_strength.add_sector_rank(pd.DataFrame(rs_rows))
 
     print("Running range-bound scanner...")
@@ -141,13 +187,6 @@ def main() -> None:
     range_df = pd.DataFrame(range_rows)
 
     print("Merging with latest fundamentals...")
-    fundamentals_path = DATA_DIR / "fundamentals" / "fundamentals_scored.csv"
-    if fundamentals_path.exists():
-        fund_df = pd.read_csv(fundamentals_path)
-    else:
-        print("No fundamentals file yet -- run run_weekly_fundamentals.py first. Continuing with 0 coverage.")
-        fund_df = pd.DataFrame(columns=[S.SYMBOL, S.SECTOR_ADJUSTED_FUNDAMENTAL_SCORE])
-
     merged = scan_df.merge(rs_df.drop(columns=[S.SECTOR], errors="ignore"), on=S.SYMBOL, how="left")
     merged = merged.merge(range_df, on=S.SYMBOL, how="left")
     merged = merged.merge(fund_df, on=S.SYMBOL, how="left", suffixes=("", "_fund"))
