@@ -1,0 +1,42 @@
+name: Weekly Fundamentals
+
+# Fundamentals get their own schedule, separate from the daily price scan,
+# because Yahoo Finance's .info endpoint throttles hard under sustained
+# polling -- fetching 1000+ tickers' full fundamentals daily alongside the
+# price scan was the original repo's design mistake this avoids. Sunday
+# morning, when NSE is closed anyway, matches the original's timing.
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "30 3 * * 0"
+
+permissions:
+  contents: write
+
+jobs:
+  fundamentals:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run weekly fundamentals fetch + sector-adjusted scoring
+        run: python scripts/run_weekly_fundamentals.py
+
+      - name: Commit updated fundamentals
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+          git add data/fundamentals/
+          git commit -m "Weekly fundamentals update $(date -u +%Y-%m-%d)" || echo "No changes"
+          git pull --rebase origin main
+          git push

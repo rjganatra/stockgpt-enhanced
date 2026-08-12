@@ -1,0 +1,49 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Compile every module (fast syntax/import sanity check)
+        run: |
+          python -m py_compile src/stockgpt/*.py src/stockgpt/backtest/*.py scripts/*.py dashboard/app.py
+
+      - name: Run unit tests
+        run: python -m pytest tests/ -q
+
+      - name: Stage sample data for the dashboard smoke test
+        run: |
+          mkdir -p data/scans data/history
+          cp examples/sample_scan_latest.csv data/scans/latest_scan.csv
+          cp -r examples/sample_history/* data/history/
+
+      - name: Dashboard smoke test (real sample data, real Streamlit script run)
+        run: |
+          python -c "
+          from streamlit.testing.v1 import AppTest
+          at = AppTest.from_file('dashboard/app.py', default_timeout=90)
+          at.run()
+          assert not at.exception, at.exception
+          print('Dashboard smoke test passed:', len(at.tabs), 'tabs, no exceptions')
+          "

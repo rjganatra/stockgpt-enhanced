@@ -1,0 +1,13 @@
+# Core pipeline
+pandas>=2.1
+numpy>=1.26
+yfinance>=0.2.40
+requests>=2.31
+
+# Dashboard
+streamlit>=1.32
+plotly>=5.20
+
+# Dev / test (not needed for the deployed dashboard or GitHub Actions runs,
+# but required to run `pytest tests/`)
+pytest>=8.0

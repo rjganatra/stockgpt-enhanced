@@ -1,0 +1,17 @@
+# data/ is intentionally NOT ignored -- same as the original repo, git is the
+# persistence layer: daily_pipeline.yml and weekly_fundamentals.yml commit
+# data/ back to the repo on every scheduled run. examples/ is a separate,
+# permanent real-data fixture (see examples/README.md) so the dashboard and
+# backtester work immediately after clone, before the pipeline has run once.
+
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+.venv/
+venv/
+.env
+.streamlit/secrets.toml
+
+.DS_Store
+*.log
