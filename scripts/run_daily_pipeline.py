@@ -105,7 +105,17 @@ def main() -> None:
     nifty_1m = nifty_3m = nifty_6m = None
     try:
         nifty_hist = yf.download("^NSEI", period="8mo", interval="1d", progress=False, timeout=20)
-        nifty_close = nifty_hist["Close"].dropna()
+        nifty_close = nifty_hist["Close"]
+        # Some yfinance versions return MultiIndex columns (ticker sub-level)
+        # even for a single-symbol download -- nifty_hist["Close"] is then a
+        # one-column DataFrame, not a Series, and calc_return()'s scalar
+        # comparisons (`if past == 0`) raise "truth value of a Series is
+        # ambiguous" on that shape. Same MultiIndex check already used in
+        # download_history() above; applied here too for the one place that
+        # was missing it.
+        if isinstance(nifty_close, pd.DataFrame):
+            nifty_close = nifty_close.iloc[:, 0]
+        nifty_close = nifty_close.dropna()
         nifty_1m = relative_strength.calc_return(nifty_close, 21)
         nifty_3m = relative_strength.calc_return(nifty_close, 63)
         nifty_6m = relative_strength.calc_return(nifty_close, 126)
