@@ -9,6 +9,7 @@ or tiny universe that would silently starve the rest of the pipeline.
 from __future__ import annotations
 
 import logging
+import time
 from io import StringIO
 
 import pandas as pd
@@ -44,10 +45,22 @@ FALLBACK_UNIVERSE = [
 ]
 
 
-def _fetch_csv(url: str) -> pd.DataFrame:
-    response = requests.get(url, headers=HEADERS, timeout=30)
-    response.raise_for_status()
-    return pd.read_csv(StringIO(response.text))
+def _fetch_csv(url: str, attempts: int = 3, backoff: float = 2.0) -> pd.DataFrame:
+    """Same single-attempt-was-the-bug lesson as download_history() in the
+    daily pipeline: a transient network hiccup shouldn't be indistinguishable
+    from the source being genuinely gone. Retries a few times with a short
+    backoff before the caller's fallback logic kicks in."""
+    last_exc: Exception = RuntimeError(f"no attempts made for {url}")
+    for attempt in range(attempts):
+        try:
+            response = requests.get(url, headers=HEADERS, timeout=30)
+            response.raise_for_status()
+            return pd.read_csv(StringIO(response.text))
+        except Exception as e:  # noqa: BLE001
+            last_exc = e
+            if attempt < attempts - 1:
+                time.sleep(backoff * (attempt + 1))
+    raise last_exc
 
 
 def fallback_universe() -> pd.DataFrame:
