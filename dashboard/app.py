@@ -160,7 +160,10 @@ def render_add_to_watchlist(candidates: pd.DataFrame, key_prefix: str, default_b
             else:
                 ok, msg = W.add_symbols(store, chosen, basket, "",
                                          pd.Timestamp.now().strftime("%Y-%m-%d %H:%M"))
-                st.success("Added.") if ok else st.error(msg)
+                if ok:
+                    st.success("Added.")
+                else:
+                    st.error(msg)
 
 
 df = load_scan()
@@ -436,7 +439,10 @@ with tab_watchlist:
             if st.button("Add", key="wl_add_btn") and store:
                 ok, msg = W.add_symbols(store, symbols_to_add, basket, "",
                                          pd.Timestamp.now().strftime("%Y-%m-%d %H:%M"))
-                st.success("Added.") if ok else st.error(msg)
+                if ok:
+                    st.success("Added.")
+                else:
+                    st.error(msg)
         else:
             st.caption("Enter the access key to add stocks.")
 
@@ -448,7 +454,10 @@ with tab_watchlist:
             symbols_to_remove = st.multiselect("Symbols", existing, key="wl_remove_symbols")
             if st.button("Remove", key="wl_remove_btn") and store:
                 ok, msg = W.remove_symbols(store, symbols_to_remove)
-                st.success("Removed.") if ok else st.error(msg)
+                if ok:
+                    st.success("Removed.")
+                else:
+                    st.error(msg)
         else:
             st.caption("Enter the access key to remove stocks.")
 
@@ -551,18 +560,24 @@ with tab_range:
 
         st.subheader("Accumulation Zone")
         accum = range_filtered[range_filtered[S.RANGE_STATUS].isin(["Accumulation Zone", "Lower Range Watch"])]
-        st.dataframe(accum.sort_values(S.RANGE_SCORE, ascending=False), width="stretch") if not accum.empty \
-            else st.caption("None under current filters.")
+        if not accum.empty:
+            st.dataframe(accum.sort_values(S.RANGE_SCORE, ascending=False), width="stretch")
+        else:
+            st.caption("None under current filters.")
 
         st.subheader("Profit Booking Zone")
         booking = range_filtered[range_filtered[S.RANGE_STATUS] == "Profit Booking Zone"]
-        st.dataframe(booking.sort_values(S.RANGE_SCORE, ascending=False), width="stretch") if not booking.empty \
-            else st.caption("None under current filters.")
+        if not booking.empty:
+            st.dataframe(booking.sort_values(S.RANGE_SCORE, ascending=False), width="stretch")
+        else:
+            st.caption("None under current filters.")
 
         st.subheader("Breakdown / Volatility Risk")
         breakdown = range_filtered[range_filtered[S.RANGE_STATUS] == "Breakdown Risk"]
-        st.dataframe(breakdown.sort_values(S.RANGE_SCORE, ascending=True), width="stretch") if not breakdown.empty \
-            else st.caption("None under current filters.")
+        if not breakdown.empty:
+            st.dataframe(breakdown.sort_values(S.RANGE_SCORE, ascending=True), width="stretch")
+        else:
+            st.caption("None under current filters.")
 
         st.subheader("Full Range Bound Table")
         st.dataframe(range_filtered.sort_values(S.RANGE_SCORE, ascending=False), width="stretch")
