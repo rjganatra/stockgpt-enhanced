@@ -224,33 +224,41 @@ if S.SCAN_TIME in df.columns and not df[S.SCAN_TIME].dropna().empty:
 st.sidebar.header("Filters")
 st.sidebar.caption("Every slider below is bounded by today's actual data, not a fixed number.")
 
-# Every filter widget below has an explicit key so this button can clear them
-# by name and let each widget fall back to its own "show everything" default
-# (empty symbol search, every sector/band selected, full slider range) rather
-# than needing a second, separately-maintained list of default values that
-# could quietly drift out of sync with the widgets themselves.
-FILTER_KEYS = ["flt_search_symbols", "flt_sectors", "flt_bands", "price", "score", "risk", "rsi",
-               "overview_custom_query"]
+# Deleting a widget's session_state entry and calling st.rerun() (the first
+# attempt here) resets the VALUE Streamlit computes, but not necessarily
+# what's painted on screen -- slider and text_input frontend components are
+# stateful and don't always repaint from a cleared key, so the widget can
+# keep showing its old handle position / old text even though the backend
+# value (and therefore the filtered data) has genuinely reset underneath it.
+# Confirmed live: after a reset, "Matching stocks" and the results table
+# both updated correctly, but the price slider stayed visually parked at
+# its narrowed position and the custom-query text box kept showing its old
+# query. The reliable fix is to change every filter widget's *key* on
+# reset, not just clear its value -- a new key makes Streamlit mount a
+# genuinely new widget instance with a clean default, which always repaints
+# correctly, instead of asking the old instance to reset itself.
+if "filter_reset_version" not in st.session_state:
+    st.session_state["filter_reset_version"] = 0
 if st.sidebar.button("Reset filters", help="Clears every filter below back to \"show everything\"."):
-    for _key in FILTER_KEYS:
-        st.session_state.pop(_key, None)
+    st.session_state["filter_reset_version"] += 1
     st.rerun()
+_rv = st.session_state["filter_reset_version"]
 
 all_symbols = sorted(df[S.SYMBOL].dropna().unique()) if S.SYMBOL in df.columns else []
 search_symbols = st.sidebar.multiselect(
     "Search symbol", all_symbols, default=[], placeholder="Type to search...",
     help="Options are today's actual scanned symbols -- pulled live, never a fixed list.",
-    key="flt_search_symbols",
+    key=f"flt_search_symbols_{_rv}",
 )
 sectors = sorted(df[S.SECTOR].dropna().unique()) if S.SECTOR in df.columns else []
-selected_sectors = st.sidebar.multiselect("Sectors", sectors, default=sectors, key="flt_sectors")
+selected_sectors = st.sidebar.multiselect("Sectors", sectors, default=sectors, key=f"flt_sectors_{_rv}")
 bands = sorted(df[S.SCORE_BAND].dropna().unique()) if S.SCORE_BAND in df.columns else []
-selected_bands = st.sidebar.multiselect("Score band", bands, default=bands, key="flt_bands")
+selected_bands = st.sidebar.multiselect("Score band", bands, default=bands, key=f"flt_bands_{_rv}")
 
-price_min, price_max = adaptive_slider("Current price", df.get(S.CURRENT_PRICE, pd.Series(dtype=float)), step=1.0, key="price")
-score_min, score_max = adaptive_slider("Final score", df.get(S.FINAL_SCORE, pd.Series(dtype=float)), step=1.0, key="score")
-risk_min, risk_max = adaptive_slider("Risk penalty", df.get(S.RISK_PENALTY, pd.Series(dtype=float)), step=1.0, key="risk")
-rsi_min, rsi_max = adaptive_slider("RSI", df.get(S.RSI, pd.Series(dtype=float)), step=0.5, key="rsi")
+price_min, price_max = adaptive_slider("Current price", df.get(S.CURRENT_PRICE, pd.Series(dtype=float)), step=1.0, key=f"price_{_rv}")
+score_min, score_max = adaptive_slider("Final score", df.get(S.FINAL_SCORE, pd.Series(dtype=float)), step=1.0, key=f"score_{_rv}")
+risk_min, risk_max = adaptive_slider("Risk penalty", df.get(S.RISK_PENALTY, pd.Series(dtype=float)), step=1.0, key=f"risk_{_rv}")
+rsi_min, rsi_max = adaptive_slider("RSI", df.get(S.RSI, pd.Series(dtype=float)), step=0.5, key=f"rsi_{_rv}")
 
 filtered = df.copy()
 if selected_sectors:
@@ -306,7 +314,7 @@ with tab_overview:
     )
     render_column_reference(filtered, "overview_custom_filter")
     custom_query = st.text_input(
-        "Filter expression", value="", key="overview_custom_query",
+        "Filter expression", value="", key=f"overview_custom_query_{_rv}",
         placeholder="e.g. dividend_yield > 2 and rsi > 55",
     )
     custom_filtered = filtered
