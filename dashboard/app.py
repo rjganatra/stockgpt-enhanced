@@ -175,6 +175,40 @@ def render_add_to_watchlist(candidates: pd.DataFrame, key_prefix: str, default_b
                     st.error(msg)
 
 
+def render_column_reference(reference_df: pd.DataFrame, key_prefix: str) -> None:
+    """Shared "what can I actually type in this box" reference, used by both
+    the Overview tab's custom filter and Strategy Lab. Built from the live
+    dataframe's own columns/dtypes/sample values -- not a hand-maintained
+    list -- so it never goes stale and any field that shows up in a future
+    scan (new fundamentals ratio, new signal, whatever) appears here
+    automatically with no code change required."""
+    with st.expander("Which columns can I use? (click to see available fields + example values)"):
+        numeric_cols = sorted(reference_df.select_dtypes(include="number").columns.tolist())
+        text_cols = sorted(reference_df.select_dtypes(exclude="number").columns.tolist())
+        c1, c2 = st.columns(2)
+        with c1:
+            st.markdown("**Numeric fields** (use `>`, `<`, `>=`, `<=`, `==`)")
+            rows = []
+            for col in numeric_cols:
+                clean = reference_df[col].dropna()
+                sample = f"{clean.min():.2f} to {clean.max():.2f}" if not clean.empty else "no data yet"
+                rows.append({"field": col, "range today": sample})
+            st.dataframe(pd.DataFrame(rows), width="stretch", height=250, key=f"{key_prefix}_numeric_ref")
+        with c2:
+            st.markdown("**Text fields** (use `==`, `!=`, or `.str.contains('x')`)")
+            rows = []
+            for col in text_cols:
+                clean = reference_df[col].dropna().astype(str)
+                sample = ", ".join(sorted(clean.unique())[:4]) if not clean.empty else "no data yet"
+                rows.append({"field": col, "example values": sample})
+            st.dataframe(pd.DataFrame(rows), width="stretch", height=250, key=f"{key_prefix}_text_ref")
+        st.caption(
+            "Combine with `and` / `or`, e.g. `dividend_yield > 2 and rsi > 55` or "
+            "`score_band == \"Strong\" and sector == \"Information Technology\"`. "
+            "Text values need quotes; field names are typed exactly as shown above."
+        )
+
+
 df = load_scan()
 if df.empty:
     st.warning("No scan data yet. Run scripts/run_daily_pipeline.py first.")
@@ -249,10 +283,32 @@ with tab_overview:
         fig = px.bar(band_counts, title="Stocks per score band")
         st.plotly_chart(fig, width="stretch")
 
+    st.subheader("Custom filter")
+    st.caption(
+        "The sidebar sliders cover a handful of common fields. For anything else -- dividend "
+        "yield, PE, any fundamental ratio, any combination -- type a filter expression here "
+        "instead of us guessing which sliders you'll want next. Works with whatever columns "
+        "exist in today's scan, so it stays useful as more fields land (e.g. once "
+        "scripts/run_weekly_fundamentals.py has run and PE/dividend_yield/etc. are populated)."
+    )
+    render_column_reference(filtered, "overview_custom_filter")
+    custom_query = st.text_input(
+        "Filter expression", value="", key="overview_custom_query",
+        placeholder="e.g. dividend_yield > 2 and rsi > 55",
+    )
+    custom_filtered = filtered
+    if custom_query.strip():
+        try:
+            custom_filtered = filtered.query(custom_query, engine="python")
+            st.caption(f"{len(custom_filtered)} of {len(filtered)} filtered stocks match.")
+        except Exception as e:  # noqa: BLE001
+            st.error(f"Couldn't evaluate that filter: {e}")
+            custom_filtered = filtered
+
     show_cols = [c for c in [S.SYMBOL, S.SECTOR, S.CURRENT_PRICE, S.FINAL_SCORE, S.SCORE_BAND,
                               S.TECHNICAL_SCORE, S.SECTOR_ADJUSTED_FUNDAMENTAL_SCORE,
-                              S.RELATIVE_STRENGTH_SCORE, S.RISK_PENALTY, S.REASONS] if c in filtered.columns]
-    st.dataframe(filtered.sort_values(S.FINAL_SCORE, ascending=False)[show_cols].head(200),
+                              S.RELATIVE_STRENGTH_SCORE, S.RISK_PENALTY, S.REASONS] if c in custom_filtered.columns]
+    st.dataframe(custom_filtered.sort_values(S.FINAL_SCORE, ascending=False)[show_cols].head(200),
                  width="stretch")
 
 # --- Heatmap -------------------------------------------------------------
@@ -440,6 +496,51 @@ with tab_watchlist:
         basket_summary = watchlist_df.groupby("basket").agg(
             symbols=(S.SYMBOL, "count")).reset_index().sort_values("symbols", ascending=False)
         st.dataframe(basket_summary, width="stretch")
+
+        st.subheader("Concentration Check")
+        st.caption(
+            "A basket that's accidentally all one sector isn't really diversified, even if it "
+            "has 20 symbols in it. Sector/industry looked up against today's scan."
+        )
+        basket_options = ["All baskets combined"] + sorted(watchlist_df["basket"].unique())
+        chosen_basket = st.selectbox("Basket", basket_options, key="wl_conc_basket")
+        conc_source = watchlist_df if chosen_basket == "All baskets combined" \
+            else watchlist_df[watchlist_df["basket"] == chosen_basket]
+
+        if conc_source.empty:
+            st.caption("No symbols in this basket yet.")
+        elif S.SYMBOL not in conc_source.columns or S.SECTOR not in df.columns:
+            st.caption("Can't compute concentration -- missing symbol or sector data.")
+        else:
+            wl_with_sector = conc_source.merge(
+                df[[S.SYMBOL, S.SECTOR]].drop_duplicates(S.SYMBOL), on=S.SYMBOL, how="left")
+            wl_with_sector[S.SECTOR] = wl_with_sector[S.SECTOR].fillna("Unknown")
+            total = len(wl_with_sector)
+            sector_counts = wl_with_sector[S.SECTOR].value_counts()
+            sector_pct = (sector_counts / total * 100).round(1)
+
+            conc_threshold = st.slider(
+                "Flag a sector as concentrated above this % of the basket",
+                min_value=10, max_value=100, value=30, step=5, key="wl_conc_threshold",
+            )
+            concentrated = sector_pct[sector_pct > conc_threshold]
+            if not concentrated.empty:
+                for sector, pct in concentrated.items():
+                    st.warning(
+                        f"{sector}: {pct}% of this basket ({sector_counts[sector]}/{total} stocks) "
+                        f"-- above your {conc_threshold}% concentration line."
+                    )
+            else:
+                st.success(f"No sector exceeds {conc_threshold}% of this basket ({total} stocks).")
+
+            conc_df = pd.DataFrame({
+                "sector": sector_pct.index, "pct_of_basket": sector_pct.values,
+                "count": sector_counts.reindex(sector_pct.index).values,
+            }).sort_values("pct_of_basket", ascending=False)
+            st.dataframe(conc_df, width="stretch")
+            fig = px.pie(conc_df, names="sector", values="count",
+                         title=f"{chosen_basket} -- sector composition ({total} stocks)")
+            st.plotly_chart(fig, width="stretch")
 
     col_add, col_remove = st.columns(2)
 
@@ -663,6 +764,15 @@ with tab_strategy:
         "your actual historical win rate would have been -- computed from real daily snapshots, "
         "not eyeballed."
     )
+    st.caption(
+        "Preset strategies below come from backtest/strategy.py's PRESET_STRATEGIES list -- "
+        "adding a new Strategy() there (or saving one from this tab) makes it show up in the "
+        "dropdown automatically, no other code changes needed. Same for the Signal Performance "
+        "tab's catalog (src/stockgpt/signal_catalog.py)."
+    )
+    _history_panel_for_ref = load_history_panel_cached()
+    render_column_reference(_history_panel_for_ref if not _history_panel_for_ref.empty else df,
+                             "strategy_lab_ref")
 
     saved = load_saved_strategies()
     all_strategies = {s.name: s for s in PRESET_STRATEGIES}
@@ -670,10 +780,13 @@ with tab_strategy:
 
     chosen_name = st.selectbox("Start from a strategy", ["-- New custom strategy --"] + list(all_strategies.keys()))
     base = all_strategies.get(chosen_name)
+    if base and base.description:
+        st.info(base.description)
 
     name = st.text_input("Strategy name", value=base.name if base else "My strategy")
     entry_query = st.text_area(
-        "Entry condition (pandas query syntax, evaluated against daily scan columns)",
+        "Entry condition (pandas query syntax, evaluated against daily scan columns -- "
+        "see the column reference above for exact field names and today's actual value ranges)",
         value=base.entry_query if base else "final_score >= 65 and score_band == 'Strong'",
     )
     exit_mode = st.radio("Exit style", [ExitMode.FIXED_HOLDING.value, ExitMode.CONDITION_EXIT.value],
@@ -737,3 +850,104 @@ with tab_strategy:
                                 f"'{row['horizon_label']}': only {row['closed_trades']} closed trades -- "
                                 "treat this win rate as a rough signal, not a reliable statistic."
                             )
+
+    st.divider()
+    st.subheader("Parameter sweep")
+    st.caption(
+        "Testing one threshold at a time above means guessing, running, tweaking, running again. "
+        "This instead runs the SAME entry condition across a whole range of threshold values in "
+        "one pass and ranks them by historical performance -- write your condition with `{t}` "
+        "wherever the number you want to sweep goes, e.g. "
+        "`final_score >= {t} and score_band == \"Strong\"`. Fixed-holding exit only for now "
+        "(condition-based exit sweeps are a fair bit more complex and not built yet)."
+    )
+    sweep_template = st.text_input(
+        "Entry condition template (use {t} as the swept value)",
+        value="final_score >= {t}", key="sweep_template",
+    )
+    sc1, sc2, sc3 = st.columns(3)
+    sweep_min = sc1.number_input("Sweep from", value=50.0, step=5.0, key="sweep_min")
+    sweep_max = sc2.number_input("Sweep to", value=80.0, step=5.0, key="sweep_max")
+    sweep_step = sc3.number_input("Step", value=5.0, step=1.0, min_value=0.5, key="sweep_step")
+    sweep_days_text = st.text_input("Holding periods (days, comma separated)", value="15,30", key="sweep_days")
+    sweep_win_threshold = st.number_input(
+        "A trade counts as a win if return % is above", value=0.0, step=0.5, key="sweep_win_threshold",
+    )
+
+    if st.button("Run parameter sweep", key="sweep_run"):
+        st.session_state["sweep_computed"] = True
+
+    if st.session_state.get("sweep_computed"):
+        try:
+            sweep_days = tuple(int(x.strip()) for x in sweep_days_text.split(",") if x.strip())
+            thresholds = []
+            v = sweep_min
+            while v <= sweep_max + 1e-9:
+                thresholds.append(round(v, 4))
+                v += sweep_step
+            if not thresholds:
+                raise ValueError("Sweep range produced no values -- check from/to/step.")
+        except ValueError as e:
+            st.error(f"Invalid sweep settings: {e}")
+            thresholds = []
+            sweep_days = ()
+
+        if thresholds:
+            panel = load_history_panel_cached()
+            if panel.empty:
+                st.warning("No history snapshots found yet -- the backtester needs at least a few "
+                           "days of data/history/YYYY-MM-DD/scan.csv to test against.")
+            else:
+                sweep_rows = []
+                errors = []
+                no_signal_thresholds = []
+                with st.spinner(f"Running {len(thresholds)} backtests..."):
+                    for t in thresholds:
+                        try:
+                            query = sweep_template.format(t=t)
+                        except (KeyError, IndexError) as e:
+                            errors.append(f"t={t}: couldn't fill template ({e})")
+                            continue
+                        sweep_strategy = Strategy(
+                            name=f"sweep(t={t})", entry_query=query,
+                            exit_mode=ExitMode.FIXED_HOLDING, fixed_holding_days=sweep_days,
+                        )
+                        try:
+                            sweep_trades = run_backtest(panel, sweep_strategy)
+                        except ValueError as e:
+                            errors.append(f"t={t}: {e}")
+                            continue
+                        if not sweep_trades:
+                            no_signal_thresholds.append(t)
+                            continue
+                        sweep_summary = summarize(sweep_trades, f"t={t}", sweep_win_threshold)
+                        sweep_summary["threshold"] = t
+                        sweep_rows.append(sweep_summary)
+
+                if errors:
+                    with st.expander(f"{len(errors)} threshold(s) failed to run"):
+                        for e in errors:
+                            st.caption(e)
+                if no_signal_thresholds:
+                    st.caption(
+                        f"No historical signals matched at threshold(s): "
+                        f"{', '.join(str(t) for t in no_signal_thresholds)} -- not a bug, just "
+                        f"too strict for this history window, so they're left out of the table below."
+                    )
+
+                if not sweep_rows:
+                    st.info("No threshold in this range produced any historical signals.")
+                else:
+                    sweep_result = pd.concat(sweep_rows, ignore_index=True)
+                    sweep_result = sweep_result.sort_values(
+                        ["horizon_label", "avg_return_pct"], ascending=[True, False])
+                    st.dataframe(
+                        sweep_result[["threshold", "horizon_label", "closed_trades", "win_rate_pct",
+                                       "avg_return_pct", "median_return_pct", "low_sample_warning"]],
+                        width="stretch",
+                    )
+                    for horizon in sorted(sweep_result["horizon_label"].unique()):
+                        hz = sweep_result[sweep_result["horizon_label"] == horizon]
+                        fig = px.line(hz.sort_values("threshold"), x="threshold", y="avg_return_pct",
+                                      markers=True, title=f"Avg return % vs threshold ({horizon})")
+                        st.plotly_chart(fig, width="stretch")

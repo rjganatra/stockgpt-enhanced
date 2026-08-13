@@ -197,9 +197,19 @@ def main() -> None:
 
     print("Computing final scores...")
     final_df = scoring.compute_final_scores(merged)
+
+    # S.SCAN_TIME was defined in schema.py but never actually written by any
+    # stage above -- the dashboard's "Last scanned" caption checks for this
+    # column and silently renders nothing when it's absent, which is exactly
+    # what happened. Stamp every row with the real run time (not just the
+    # date) since this pipeline runs twice a day and "which of today's two
+    # runs is this" is genuinely useful information.
+    scan_timestamp = pd.Timestamp.now(tz="Asia/Kolkata").strftime("%Y-%m-%d %H:%M IST")
+    final_df[S.SCAN_TIME] = scan_timestamp
+
     (DATA_DIR / "scans").mkdir(parents=True, exist_ok=True)
     final_df.to_csv(DATA_DIR / "scans" / "latest_scan.csv", index=False)
-    print(f"Final scan saved: {len(final_df)} rows")
+    print(f"Final scan saved: {len(final_df)} rows (scan_time={scan_timestamp})")
 
     print("Saving history snapshot + change tracking...")
     today = pd.Timestamp.now(tz="Asia/Kolkata").normalize().tz_localize(None)

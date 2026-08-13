@@ -195,28 +195,33 @@ src/stockgpt/
   history.py                  daily snapshot save/diff
   watchlist.py                 GitHub-backed watchlist store, secret-gated writes
   signal_catalog.py             the original's ~12 signal types as backtestable Strategy objects
+  alerts.py                      detection (new High Conviction / saved-strategy matches / sharp
+                                   watchlist changes) + Telegram/email delivery
   backtest/
     strategy.py                  Strategy definition (entry/exit rules)
     engine.py                     signal detection + trade simulation
     metrics.py                     win rate / return summary stats
 
-dashboard/app.py     Streamlit dashboard, 12 tabs: Overview, Heatmap, Opportunities, Sectors,
-                       Stock Explorer, History, Watchlist, Fundamentals, Movers & Changes,
-                       Range Bound, Signal Performance, Strategy Lab -- full parity with the
-                       original's 11 tabs plus the 2 new backtest-powered ones
+dashboard/app.py     Streamlit dashboard, 12 tabs: Overview (incl. a live custom-filter query box),
+                       Heatmap, Opportunities, Sectors, Stock Explorer, History, Watchlist (incl.
+                       sector concentration check), Fundamentals, Movers & Changes, Range Bound,
+                       Signal Performance, Strategy Lab (incl. a parameter sweep) -- full parity
+                       with the original's 11 tabs plus the 2 new backtest-powered ones
 
 scripts/
   run_daily_pipeline.py       universe -> scan -> relative strength -> range bound -> merge
                                 fundamentals -> final score -> save + history/change tracking
   run_weekly_fundamentals.py    fetch + score fundamentals separately (Yahoo throttles bulk .info)
+  run_alerts.py                  runs after the daily pipeline; reads scan/changes/saved
+                                   strategies/watchlist and sends a summary via Telegram/email
   verify_against_real_data.py    the real-data verification described above
 
-tests/                 28 unit tests: scoring (incl. a regression test encoding the original's
+tests/                 54 unit tests: scoring (incl. a regression test encoding the original's
                           risk-penalty bug as an assertion), backtest engine correctness (hand-computed
                           expected returns), fundamentals, scanner, watchlist access control,
-                          signal catalog validity
+                          signal catalog validity, alert detection + delivery (mocked network)
 examples/                real 66-day sample dataset (see above) so the app works on first clone
-.github/workflows/         daily_pipeline.yml, weekly_fundamentals.yml, tests.yml
+.github/workflows/         daily_pipeline.yml (includes the alerts step), weekly_fundamentals.yml, tests.yml
 ```
 
 ## Setup
@@ -227,7 +232,7 @@ examples/                real 66-day sample dataset (see above) so the app works
    values as repository secrets in GitHub Actions / your Streamlit Cloud app settings. Everything is
    optional except that an unset `WATCHLIST_SECRET` makes the watchlist tab read-only everywhere,
    fail-closed, which is the intended default.
-4. `python -m pytest tests/ -q` to confirm everything passes (28 tests).
+4. `python -m pytest tests/ -q` to confirm everything passes (54 tests).
 5. `streamlit run dashboard/app.py` to run the dashboard locally against the sample data in `examples/`
    (copy `examples/sample_scan_latest.csv` to `data/scans/latest_scan.csv` and
    `examples/sample_history/*` to `data/history/` first, or just run `run_daily_pipeline.py` to fetch
@@ -236,3 +241,15 @@ examples/                real 66-day sample dataset (see above) so the app works
    start populating `data/` on their schedules (or trigger them manually via `workflow_dispatch`).
 7. Deploy `dashboard/app.py` on Streamlit Community Cloud (or anywhere else that runs Streamlit) for a
    shareable link, same as the original.
+
+## Alerts
+
+`scripts/run_alerts.py` runs automatically as the last step of `daily_pipeline.yml`, after data is
+committed. It checks three things: symbols that newly crossed into the High Conviction band since the
+last snapshot, any saved Strategy Lab strategy whose entry condition matches today's scan (a live
+check, not a backtest), and sharp score/band/risk changes on symbols already in the watchlist. If
+nothing triggers, it does nothing. If something does, it's sent via Telegram and/or email -- whichever
+you've configured as repository secrets (see `.env.example`); configuring neither still computes and
+prints the alert in the workflow log, it just isn't delivered anywhere. A delivery failure on one
+channel doesn't block the other, and never fails the pipeline job itself -- the data commit already
+succeeded by the time alerts run.

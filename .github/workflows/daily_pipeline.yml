@@ -40,3 +40,20 @@ jobs:
           git commit -m "Daily pipeline update $(date -u +%Y-%m-%dT%H:%M:%SZ)" || echo "No changes"
           git pull --rebase origin main
           git push
+
+      - name: Send alerts (new High Conviction, saved strategy matches, watchlist changes)
+        # Best-effort by design: a delivery failure here (bad token, SMTP
+        # hiccup) is reported in the log but does not fail this job -- the
+        # pipeline's main job (updating and committing data) already
+        # succeeded above, and that should stay green independent of
+        # whether a notification channel is currently working.
+        continue-on-error: true
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          ALERT_EMAIL_TO: ${{ secrets.ALERT_EMAIL_TO }}
+        run: python scripts/run_alerts.py
