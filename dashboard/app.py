@@ -224,15 +224,28 @@ if S.SCAN_TIME in df.columns and not df[S.SCAN_TIME].dropna().empty:
 st.sidebar.header("Filters")
 st.sidebar.caption("Every slider below is bounded by today's actual data, not a fixed number.")
 
+# Every filter widget below has an explicit key so this button can clear them
+# by name and let each widget fall back to its own "show everything" default
+# (empty symbol search, every sector/band selected, full slider range) rather
+# than needing a second, separately-maintained list of default values that
+# could quietly drift out of sync with the widgets themselves.
+FILTER_KEYS = ["flt_search_symbols", "flt_sectors", "flt_bands", "price", "score", "risk", "rsi",
+               "overview_custom_query"]
+if st.sidebar.button("Reset filters", help="Clears every filter below back to \"show everything\"."):
+    for _key in FILTER_KEYS:
+        st.session_state.pop(_key, None)
+    st.rerun()
+
 all_symbols = sorted(df[S.SYMBOL].dropna().unique()) if S.SYMBOL in df.columns else []
 search_symbols = st.sidebar.multiselect(
     "Search symbol", all_symbols, default=[], placeholder="Type to search...",
     help="Options are today's actual scanned symbols -- pulled live, never a fixed list.",
+    key="flt_search_symbols",
 )
 sectors = sorted(df[S.SECTOR].dropna().unique()) if S.SECTOR in df.columns else []
-selected_sectors = st.sidebar.multiselect("Sectors", sectors, default=sectors)
+selected_sectors = st.sidebar.multiselect("Sectors", sectors, default=sectors, key="flt_sectors")
 bands = sorted(df[S.SCORE_BAND].dropna().unique()) if S.SCORE_BAND in df.columns else []
-selected_bands = st.sidebar.multiselect("Score band", bands, default=bands)
+selected_bands = st.sidebar.multiselect("Score band", bands, default=bands, key="flt_bands")
 
 price_min, price_max = adaptive_slider("Current price", df.get(S.CURRENT_PRICE, pd.Series(dtype=float)), step=1.0, key="price")
 score_min, score_max = adaptive_slider("Final score", df.get(S.FINAL_SCORE, pd.Series(dtype=float)), step=1.0, key="score")
