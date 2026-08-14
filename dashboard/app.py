@@ -65,22 +65,23 @@ def adaptive_slider(label: str, series: pd.Series, step: float = 1.0,
     rows. Shows a caption and returns (None, None) instead; callers must
     skip filtering when either bound is None.
 
-    Also has a pair of "exact" number inputs below the slider. Dragging a
-    handle across a wide, skewed range (Rs 0.18 to Rs 130,985 for one
-    outlier stock like MRF is a real observed case) cannot reliably land on
-    an exact pixel-perfect endpoint -- a handle that visually looks like
-    it's at the far edge can still sit meaningfully short of the true max,
-    silently dropping the single most extreme stock with no indication
-    anything was excluded. Typing an exact number sidesteps that entirely.
-    The slider and the two number boxes are kept in sync both ways via
-    on_change callbacks that write directly into each other's
-    session_state key before the other widget is (re)constructed on the
-    resulting rerun -- same key-write-before-mount mechanism as the Reset
-    button's key-versioning fix. Typing an exact value moves the slider;
-    dragging the slider updates the number boxes to match, so they never
-    silently show a stale full range while the slider is actually
-    narrower. The slider's own return value is still what every caller
-    filters on."""
+    The slider itself is DISABLED -- drag-locked, display-only. It exists
+    purely so you can see the current min/max at a glance. Dragging a
+    handle (or even a single click aimed right at it) across a wide, skewed
+    range (Rs 0.18 to Rs 130,985 for one outlier stock like MRF is a real
+    observed case) cannot reliably land on an exact pixel-perfect endpoint
+    -- at that scale a single pixel of mouse imprecision is worth roughly
+    Rs 500, and this was confirmed live: a single click directly on the
+    handle, no drag at all, silently moved it off the true max and excluded
+    MRF. No code fix can make a mouse click precise at this scale, so
+    rather than leave a control that quietly lies, it's locked. The two
+    number inputs below are the only way to actually set the filter --
+    typing an exact value writes into the slider's own session_state key
+    before it's (re)constructed on the resulting rerun (same key-write-
+    before-mount mechanism as the Reset button's key-versioning fix), so
+    the frozen slider display always mirrors exactly what's being filtered
+    on. The slider's own return value is still what every caller filters
+    on -- the number boxes only ever adjust it, never bypass it."""
     target = st.sidebar if sidebar else st
     clean = pd.to_numeric(series, errors="coerce").replace([float("inf"), float("-inf")], pd.NA).dropna()
     if clean.empty:
@@ -95,11 +96,11 @@ def adaptive_slider(label: str, series: pd.Series, step: float = 1.0,
     exact_max_key = f"{key}_exact_max" if key else None
 
     def _sync_slider_from_inputs():
-        """Typed a number -> move the slider. Reads the just-changed number
-        boxes and writes the slider's own session_state entry, which the
-        slider widget (constructed after this callback runs, on the
-        resulting rerun) will pick up in place of its `value=` default --
-        same key-write-before-mount mechanism as the Reset button fix."""
+        """Typed a number -> move the (disabled, display-only) slider.
+        Reads the just-changed number boxes and writes the slider's own
+        session_state entry, which the slider widget (constructed after
+        this callback runs, on the resulting rerun) will pick up in place
+        of its `value=` default."""
         typed_min = st.session_state.get(exact_min_key, lo)
         typed_max = st.session_state.get(exact_max_key, hi)
         if typed_min > typed_max:
@@ -109,31 +110,23 @@ def adaptive_slider(label: str, series: pd.Series, step: float = 1.0,
             max(lo, min(typed_max, hi)),
         )
 
-    def _sync_inputs_from_slider():
-        """Dragged the slider -> update the number boxes to match. Without
-        this, the boxes would silently keep showing the full lo/hi range
-        after a drag, which is worse than no number boxes at all -- it would
-        look like nothing is excluded when the slider is actually narrower.
-        Only one of these two callbacks fires per interaction (whichever
-        widget the user actually touched), so there's no update loop."""
-        current = st.session_state.get(slider_key, (lo, hi))
-        st.session_state[exact_min_key] = current[0]
-        st.session_state[exact_max_key] = current[1]
-
-    target.number_input(
-        f"{label} -- exact min", min_value=lo, max_value=hi, value=lo, step=float(step),
-        key=exact_min_key, on_change=_sync_slider_from_inputs, label_visibility="collapsed",
-    )
-    target.number_input(
-        f"{label} -- exact max", min_value=lo, max_value=hi, value=hi, step=float(step),
-        key=exact_max_key, on_change=_sync_slider_from_inputs, label_visibility="collapsed",
-    )
-
     widget = st.sidebar.slider if sidebar else st.slider
-    return widget(
+    slider_value = widget(
         label, min_value=lo, max_value=hi, value=(lo, hi), step=float(step),
-        key=slider_key, on_change=_sync_inputs_from_slider,
+        key=slider_key, disabled=True,
     )
+
+    target.caption("Slider above is frozen (display-only) -- type exact values below to filter.")
+    target.number_input(
+        "Min", min_value=lo, max_value=hi, value=lo, step=float(step),
+        key=exact_min_key, on_change=_sync_slider_from_inputs,
+    )
+    target.number_input(
+        "Max", min_value=lo, max_value=hi, value=hi, step=float(step),
+        key=exact_max_key, on_change=_sync_slider_from_inputs,
+    )
+
+    return slider_value
 
 
 @st.cache_data(ttl=300)
