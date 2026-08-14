@@ -63,7 +63,24 @@ def adaptive_slider(label: str, series: pd.Series, step: float = 1.0,
     "0.00 to 0.50" regardless of what's actually in the data looks adaptive
     but isn't, which is worse than no slider -- it quietly filters out real
     rows. Shows a caption and returns (None, None) instead; callers must
-    skip filtering when either bound is None."""
+    skip filtering when either bound is None.
+
+    Also has a pair of "exact" number inputs below the slider. Dragging a
+    handle across a wide, skewed range (Rs 0.18 to Rs 130,985 for one
+    outlier stock like MRF is a real observed case) cannot reliably land on
+    an exact pixel-perfect endpoint -- a handle that visually looks like
+    it's at the far edge can still sit meaningfully short of the true max,
+    silently dropping the single most extreme stock with no indication
+    anything was excluded. Typing an exact number sidesteps that entirely.
+    The slider and the two number boxes are kept in sync both ways via
+    on_change callbacks that write directly into each other's
+    session_state key before the other widget is (re)constructed on the
+    resulting rerun -- same key-write-before-mount mechanism as the Reset
+    button's key-versioning fix. Typing an exact value moves the slider;
+    dragging the slider updates the number boxes to match, so they never
+    silently show a stale full range while the slider is actually
+    narrower. The slider's own return value is still what every caller
+    filters on."""
     target = st.sidebar if sidebar else st
     clean = pd.to_numeric(series, errors="coerce").replace([float("inf"), float("-inf")], pd.NA).dropna()
     if clean.empty:
@@ -72,8 +89,52 @@ def adaptive_slider(label: str, series: pd.Series, step: float = 1.0,
     lo, hi = float(clean.min()), float(clean.max())
     if hi <= lo:
         hi = lo + float(step)
+
+    slider_key = key
+    exact_min_key = f"{key}_exact_min" if key else None
+    exact_max_key = f"{key}_exact_max" if key else None
+
+    def _sync_slider_from_inputs():
+        """Typed a number -> move the slider. Reads the just-changed number
+        boxes and writes the slider's own session_state entry, which the
+        slider widget (constructed after this callback runs, on the
+        resulting rerun) will pick up in place of its `value=` default --
+        same key-write-before-mount mechanism as the Reset button fix."""
+        typed_min = st.session_state.get(exact_min_key, lo)
+        typed_max = st.session_state.get(exact_max_key, hi)
+        if typed_min > typed_max:
+            typed_min, typed_max = typed_max, typed_min
+        st.session_state[slider_key] = (
+            max(lo, min(typed_min, hi)),
+            max(lo, min(typed_max, hi)),
+        )
+
+    def _sync_inputs_from_slider():
+        """Dragged the slider -> update the number boxes to match. Without
+        this, the boxes would silently keep showing the full lo/hi range
+        after a drag, which is worse than no number boxes at all -- it would
+        look like nothing is excluded when the slider is actually narrower.
+        Only one of these two callbacks fires per interaction (whichever
+        widget the user actually touched), so there's no update loop."""
+        current = st.session_state.get(slider_key, (lo, hi))
+        st.session_state[exact_min_key] = current[0]
+        st.session_state[exact_max_key] = current[1]
+
+    col_min, col_max = target.columns(2)
+    col_min.number_input(
+        f"{label} -- exact min", min_value=lo, max_value=hi, value=lo, step=float(step),
+        key=exact_min_key, on_change=_sync_slider_from_inputs, label_visibility="collapsed",
+    )
+    col_max.number_input(
+        f"{label} -- exact max", min_value=lo, max_value=hi, value=hi, step=float(step),
+        key=exact_max_key, on_change=_sync_slider_from_inputs, label_visibility="collapsed",
+    )
+
     widget = st.sidebar.slider if sidebar else st.slider
-    return widget(label, min_value=lo, max_value=hi, value=(lo, hi), step=float(step), key=key)
+    return widget(
+        label, min_value=lo, max_value=hi, value=(lo, hi), step=float(step),
+        key=slider_key, on_change=_sync_inputs_from_slider,
+    )
 
 
 @st.cache_data(ttl=300)
@@ -224,20 +285,41 @@ if S.SCAN_TIME in df.columns and not df[S.SCAN_TIME].dropna().empty:
 st.sidebar.header("Filters")
 st.sidebar.caption("Every slider below is bounded by today's actual data, not a fixed number.")
 
+# Deleting a widget's session_state entry and calling st.rerun() (the first
+# attempt here) resets the VALUE Streamlit computes, but not necessarily
+# what's painted on screen -- slider and text_input frontend components are
+# stateful and don't always repaint from a cleared key, so the widget can
+# keep showing its old handle position / old text even though the backend
+# value (and therefore the filtered data) has genuinely reset underneath it.
+# Confirmed live: after a reset, "Matching stocks" and the results table
+# both updated correctly, but the price slider stayed visually parked at
+# its narrowed position and the custom-query text box kept showing its old
+# query. The reliable fix is to change every filter widget's *key* on
+# reset, not just clear its value -- a new key makes Streamlit mount a
+# genuinely new widget instance with a clean default, which always repaints
+# correctly, instead of asking the old instance to reset itself.
+if "filter_reset_version" not in st.session_state:
+    st.session_state["filter_reset_version"] = 0
+if st.sidebar.button("Reset filters", help="Clears every filter below back to \"show everything\"."):
+    st.session_state["filter_reset_version"] += 1
+    st.rerun()
+_rv = st.session_state["filter_reset_version"]
+
 all_symbols = sorted(df[S.SYMBOL].dropna().unique()) if S.SYMBOL in df.columns else []
 search_symbols = st.sidebar.multiselect(
     "Search symbol", all_symbols, default=[], placeholder="Type to search...",
     help="Options are today's actual scanned symbols -- pulled live, never a fixed list.",
+    key=f"flt_search_symbols_{_rv}",
 )
 sectors = sorted(df[S.SECTOR].dropna().unique()) if S.SECTOR in df.columns else []
-selected_sectors = st.sidebar.multiselect("Sectors", sectors, default=sectors)
+selected_sectors = st.sidebar.multiselect("Sectors", sectors, default=sectors, key=f"flt_sectors_{_rv}")
 bands = sorted(df[S.SCORE_BAND].dropna().unique()) if S.SCORE_BAND in df.columns else []
-selected_bands = st.sidebar.multiselect("Score band", bands, default=bands)
+selected_bands = st.sidebar.multiselect("Score band", bands, default=bands, key=f"flt_bands_{_rv}")
 
-price_min, price_max = adaptive_slider("Current price", df.get(S.CURRENT_PRICE, pd.Series(dtype=float)), step=1.0, key="price")
-score_min, score_max = adaptive_slider("Final score", df.get(S.FINAL_SCORE, pd.Series(dtype=float)), step=1.0, key="score")
-risk_min, risk_max = adaptive_slider("Risk penalty", df.get(S.RISK_PENALTY, pd.Series(dtype=float)), step=1.0, key="risk")
-rsi_min, rsi_max = adaptive_slider("RSI", df.get(S.RSI, pd.Series(dtype=float)), step=0.5, key="rsi")
+price_min, price_max = adaptive_slider("Current price", df.get(S.CURRENT_PRICE, pd.Series(dtype=float)), step=1.0, key=f"price_{_rv}")
+score_min, score_max = adaptive_slider("Final score", df.get(S.FINAL_SCORE, pd.Series(dtype=float)), step=1.0, key=f"score_{_rv}")
+risk_min, risk_max = adaptive_slider("Risk penalty", df.get(S.RISK_PENALTY, pd.Series(dtype=float)), step=1.0, key=f"risk_{_rv}")
+rsi_min, rsi_max = adaptive_slider("RSI", df.get(S.RSI, pd.Series(dtype=float)), step=0.5, key=f"rsi_{_rv}")
 
 filtered = df.copy()
 if selected_sectors:
@@ -293,7 +375,7 @@ with tab_overview:
     )
     render_column_reference(filtered, "overview_custom_filter")
     custom_query = st.text_input(
-        "Filter expression", value="", key="overview_custom_query",
+        "Filter expression", value="", key=f"overview_custom_query_{_rv}",
         placeholder="e.g. dividend_yield > 2 and rsi > 55",
     )
     custom_filtered = filtered

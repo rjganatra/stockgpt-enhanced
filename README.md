@@ -187,7 +187,9 @@ src/stockgpt/
   schema.py          canonical column names -- import these, never type raw strings
   config.py           every weight/threshold/window, named and documented, in one place
   scanner.py           technical score (RSI, SMA, volume, price location)
-  universe.py           NSE universe fetch + fallback list
+  universe.py           NSE universe fetch + fallback list; sector base map now tries Nifty
+                          Total Market (~750 symbols) before falling back to Nifty 500 (~500) --
+                          same trusted niftyindices.com domain/format, just broader coverage
   fundamentals.py        fetch + sector-aware fundamental scoring
   relative_strength.py    1M/3M/6M returns, vs-Nifty, sector rank
   range_bound.py           adaptive support/resistance bands
@@ -216,10 +218,11 @@ scripts/
                                    strategies/watchlist and sends a summary via Telegram/email
   verify_against_real_data.py    the real-data verification described above
 
-tests/                 54 unit tests: scoring (incl. a regression test encoding the original's
+tests/                 59 unit tests: scoring (incl. a regression test encoding the original's
                           risk-penalty bug as an assertion), backtest engine correctness (hand-computed
                           expected returns), fundamentals, scanner, watchlist access control,
-                          signal catalog validity, alert detection + delivery (mocked network)
+                          signal catalog validity, alert detection + delivery (mocked network),
+                          sector-source fallback chain
 examples/                real 66-day sample dataset (see above) so the app works on first clone
 .github/workflows/         daily_pipeline.yml (includes the alerts step), weekly_fundamentals.yml, tests.yml
 ```
@@ -232,7 +235,7 @@ examples/                real 66-day sample dataset (see above) so the app works
    values as repository secrets in GitHub Actions / your Streamlit Cloud app settings. Everything is
    optional except that an unset `WATCHLIST_SECRET` makes the watchlist tab read-only everywhere,
    fail-closed, which is the intended default.
-4. `python -m pytest tests/ -q` to confirm everything passes (54 tests).
+4. `python -m pytest tests/ -q` to confirm everything passes (59 tests).
 5. `streamlit run dashboard/app.py` to run the dashboard locally against the sample data in `examples/`
    (copy `examples/sample_scan_latest.csv` to `data/scans/latest_scan.csv` and
    `examples/sample_history/*` to `data/history/` first, or just run `run_daily_pipeline.py` to fetch
