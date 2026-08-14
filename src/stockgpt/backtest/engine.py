@@ -152,13 +152,27 @@ def run_backtest(panel: pd.DataFrame, strategy: Strategy) -> list[Trade]:
         except Exception as e:  # noqa: BLE001
             raise ValueError(f"exit_query failed: {e}") from e
 
+    # Evaluated ONCE across the whole panel and then sliced per symbol, rather
+    # than calling .eval() separately inside the per-symbol loop below. Each
+    # .eval() call carries a fixed parsing/compile overhead independent of
+    # row count -- on a real production panel with ~1800 distinct symbols,
+    # calling it 1800 times (once per symbol) cost ~27s per strategy purely
+    # in that overhead, which multiplies badly once the Leaderboard tab runs
+    # several strategies back to back or walk-forward validation runs the
+    # same sweep twice (train + test). A single whole-panel eval is exactly
+    # equivalent row-for-row (these are all row-wise boolean expressions,
+    # no cross-row aggregation), just sliced by each symbol's own index
+    # before being reset alongside sdf so alignment is preserved exactly.
+    full_entry_mask = panel.eval(strategy.entry_query)
+    full_exit_mask = panel.eval(strategy.exit_query) if strategy.exit_query else None
+
     all_trades: list[Trade] = []
     for symbol, sdf in panel.groupby(S.SYMBOL, sort=False):
-        sdf = sdf.sort_values(S.SCAN_DATE).reset_index(drop=True)
-        # Evaluated per-symbol (not sliced from a whole-panel result) so the
-        # boolean mask's row order always matches sdf's row order exactly.
-        entry_mask = sdf.eval(strategy.entry_query)
-        exit_mask = sdf.eval(strategy.exit_query) if strategy.exit_query else None
+        sdf = sdf.sort_values(S.SCAN_DATE)
+        order = sdf.index
+        sdf = sdf.reset_index(drop=True)
+        entry_mask = full_entry_mask.loc[order].reset_index(drop=True)
+        exit_mask = full_exit_mask.loc[order].reset_index(drop=True) if full_exit_mask is not None else None
 
         entry_positions = _entry_dates(sdf, entry_mask)
         if not entry_positions:

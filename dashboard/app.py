@@ -33,8 +33,12 @@ import streamlit as st
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from stockgpt import schema as S
+from stockgpt import sector_rotation
 from stockgpt import watchlist as W
-from stockgpt.backtest import ExitMode, Strategy, run_backtest, summarize
+from stockgpt.backtest import (
+    ExitMode, Strategy, run_backtest, summarize,
+    split_panel_by_date, walk_forward_sweep, run_topk_backtest,
+)
 from stockgpt.backtest.engine import load_history_panel
 from stockgpt.backtest.strategy import PRESET_STRATEGIES
 from stockgpt.signal_catalog import SIGNAL_CATALOG, SIGNAL_DIRECTIONS
@@ -338,10 +342,10 @@ st.sidebar.metric("Matching stocks", len(filtered))
 # ---------------------------------------------------------------------------
 (tab_overview, tab_heatmap, tab_opportunities, tab_sectors, tab_explorer,
  tab_history, tab_watchlist, tab_fundamentals, tab_changes, tab_range,
- tab_signal_perf, tab_strategy) = st.tabs([
+ tab_signal_perf, tab_strategy, tab_leaderboard, tab_portfolio) = st.tabs([
     "Overview", "Heatmap", "Opportunities", "Sectors", "Stock Explorer",
     "History", "Watchlist", "Fundamentals", "Movers & Changes", "Range Bound",
-    "Signal Performance", "Strategy Lab",
+    "Signal Performance", "Strategy Lab", "Leaderboard", "Portfolio Backtest",
 ])
 
 # --- Overview ----------------------------------------------------------------
@@ -501,6 +505,33 @@ with tab_sectors:
                               title="Industry heatmap by average final score")
             st.plotly_chart(fig, width="stretch")
 
+        st.divider()
+        st.header("Sector Rotation")
+        st.caption(
+            "The table above is one day's snapshot -- it can't tell you whether a sector "
+            "is gaining or losing conviction. This compares each sector's average "
+            "final_score over the most recent stretch of history against the stretch "
+            "right before it, so a sector quietly climbing (or fading) shows up before "
+            "it's obvious from a single day's numbers."
+        )
+        rotation_panel = load_history_panel_cached()
+        rotation_df = sector_rotation.compute_sector_rotation(rotation_panel)
+        if rotation_df.empty:
+            st.caption("Not enough historical snapshots yet to compare two time windows.")
+        else:
+            gainers = rotation_df[rotation_df["change"] > 0]
+            losers = rotation_df[rotation_df["change"] < 0]
+            rc1, rc2 = st.columns(2)
+            rc1.metric("Sectors gaining", len(gainers))
+            rc2.metric("Sectors fading", len(losers))
+            st.dataframe(rotation_df, width="stretch")
+            rot_fig = px.bar(
+                rotation_df, x=S.SECTOR, y="change",
+                color="change", color_continuous_scale=["red", "yellow", "green"],
+                title="Change in average final_score, recent window vs prior window",
+            )
+            st.plotly_chart(rot_fig, width="stretch")
+
 # --- Stock Explorer ------------------------------------------------------
 with tab_explorer:
     if filtered.empty:
@@ -535,6 +566,38 @@ with tab_explorer:
                 st.markdown(f"**{label}:** {value}")
         if not any_reason:
             st.caption("No reason text recorded for this stock in today's scan.")
+
+        st.subheader("Score History")
+        st.caption(
+            "Today's numbers on their own don't say whether a stock is improving or "
+            "deteriorating -- this plots every score component for this symbol across "
+            "every daily snapshot on record, so a climb into High Conviction (or a quiet "
+            "slide out of it) shows up as a trend, not just a single day's value."
+        )
+        hist_panel = load_history_panel_cached()
+        if hist_panel.empty or S.SYMBOL not in hist_panel.columns:
+            st.caption("No historical snapshots available yet.")
+        else:
+            sym_hist = hist_panel[hist_panel[S.SYMBOL] == symbol].sort_values(S.SCAN_DATE)
+            if sym_hist.empty:
+                st.caption(f"No historical snapshots recorded for {symbol} yet.")
+            else:
+                score_cols = [c for c in [S.FINAL_SCORE, S.TECHNICAL_SCORE,
+                                           S.SECTOR_ADJUSTED_FUNDAMENTAL_SCORE,
+                                           S.RELATIVE_STRENGTH_SCORE, S.RISK_PENALTY]
+                              if c in sym_hist.columns]
+                if not score_cols:
+                    st.caption("No score columns found in the history panel.")
+                else:
+                    melted = sym_hist.melt(
+                        id_vars=[S.SCAN_DATE], value_vars=score_cols,
+                        var_name="metric", value_name="value",
+                    )
+                    hist_fig = px.line(
+                        melted, x=S.SCAN_DATE, y="value", color="metric", markers=True,
+                        title=f"{symbol} -- score components over {sym_hist[S.SCAN_DATE].nunique()} days",
+                    )
+                    st.plotly_chart(hist_fig, width="stretch")
 
         with st.expander("Full row data"):
             st.json(row.to_dict())
@@ -1025,3 +1088,247 @@ with tab_strategy:
                         fig = px.line(hz.sort_values("threshold"), x="threshold", y="avg_return_pct",
                                       markers=True, title=f"Avg return % vs threshold ({horizon})")
                         st.plotly_chart(fig, width="stretch")
+
+    st.divider()
+    st.subheader("Walk-forward validation")
+    st.caption(
+        "The sweep above picks the best threshold across your ENTIRE history at once -- which "
+        "risks just finding what happened to work in hindsight, not what's genuinely predictive. "
+        "This splits history into an earlier training window and a later testing window it never "
+        "saw during selection: picks the best threshold using only the training window, then "
+        "checks whether that SAME fixed threshold still performs on the testing window. If the "
+        "test result is close to (or better than) the training result, the edge looks real. If "
+        "training looked great and testing doesn't, that's the signature of curve-fitting to one "
+        "specific stretch of history rather than a genuine signal."
+    )
+    wf_template = st.text_input(
+        "Entry condition template (use {t} as the swept value)",
+        value="final_score >= {t}", key="wf_template",
+    )
+    wc1, wc2, wc3 = st.columns(3)
+    wf_min = wc1.number_input("Sweep from", value=50.0, step=5.0, key="wf_min")
+    wf_max = wc2.number_input("Sweep to", value=80.0, step=5.0, key="wf_max")
+    wf_step = wc3.number_input("Step", value=5.0, step=1.0, min_value=0.5, key="wf_step")
+    wf_days_text = st.text_input("Holding periods (days, comma separated)", value="15,30", key="wf_days")
+    wf_split_pct = st.slider(
+        "Training window size (% of days, earliest-first)",
+        min_value=50, max_value=90, value=70, step=5, key="wf_split_pct",
+        help="The remaining days become the test window. Coarse control, not data-bound -- "
+             "unlike the price/score sliders, there's no single extreme value this could silently "
+             "exclude, so it stays a normal draggable slider.",
+    )
+
+    if st.button("Run walk-forward validation", key="wf_run"):
+        st.session_state["wf_computed"] = True
+
+    if st.session_state.get("wf_computed"):
+        try:
+            wf_holding = tuple(int(x.strip()) for x in wf_days_text.split(",") if x.strip())
+            wf_thresholds = []
+            v = wf_min
+            while v <= wf_max + 1e-9:
+                wf_thresholds.append(round(v, 4))
+                v += wf_step
+            if not wf_thresholds:
+                raise ValueError("Sweep range produced no values -- check from/to/step.")
+        except ValueError as e:
+            st.error(f"Invalid settings: {e}")
+            wf_thresholds = []
+            wf_holding = ()
+
+        if wf_thresholds:
+            wf_panel = load_history_panel_cached()
+            if wf_panel.empty:
+                st.warning("No history snapshots found yet.")
+            else:
+                train_panel, test_panel = split_panel_by_date(wf_panel, wf_split_pct)
+                if train_panel.empty or test_panel.empty:
+                    st.warning(
+                        "Not enough distinct days of history to split into a training and "
+                        "testing window yet -- needs at least 2 days, and meaningfully more "
+                        "than that for the split to mean anything."
+                    )
+                else:
+                    train_dates = sorted(train_panel[S.SCAN_DATE].unique())
+                    test_dates = sorted(test_panel[S.SCAN_DATE].unique())
+                    st.caption(
+                        f"Training on {len(train_dates)} days "
+                        f"({pd.Timestamp(train_dates[0]).date()} to {pd.Timestamp(train_dates[-1]).date()}), "
+                        f"testing on {len(test_dates)} days "
+                        f"({pd.Timestamp(test_dates[0]).date()} to {pd.Timestamp(test_dates[-1]).date()})."
+                    )
+                    with st.spinner(f"Running {len(wf_thresholds)} thresholds on the training window, "
+                                     f"then re-testing the best one..."):
+                        wf_result = walk_forward_sweep(
+                            wf_panel, wf_template, wf_thresholds, wf_holding, wf_split_pct,
+                        )
+                    if wf_result.empty:
+                        st.info("No threshold produced any historical signal on the training window.")
+                    else:
+                        st.dataframe(wf_result, width="stretch")
+                        for _, row in wf_result.iterrows():
+                            train_ret = row["train_avg_return_pct"]
+                            test_ret = row["test_avg_return_pct"]
+                            if test_ret is None:
+                                st.caption(
+                                    f"'{row['horizon_label']}' (threshold {row['best_threshold']}): "
+                                    "no closed trades on the test window yet -- can't say whether "
+                                    "this generalizes."
+                                )
+                            elif row["test_low_sample_warning"]:
+                                st.caption(
+                                    f"'{row['horizon_label']}' (threshold {row['best_threshold']}): "
+                                    f"only {row['test_closed_trades']} closed test trades -- treat "
+                                    "the test result as a rough signal, not a reliable statistic."
+                                )
+                            elif test_ret < train_ret * 0.5 or (train_ret > 0 and test_ret < 0):
+                                st.warning(
+                                    f"'{row['horizon_label']}' (threshold {row['best_threshold']}): "
+                                    f"train showed {train_ret:.1f}% but test only {test_ret:.1f}% -- "
+                                    "looks like it may have been fit to the training window rather "
+                                    "than reflecting a genuine edge."
+                                )
+                            else:
+                                st.success(
+                                    f"'{row['horizon_label']}' (threshold {row['best_threshold']}): "
+                                    f"train {train_ret:.1f}% vs test {test_ret:.1f}% -- holds up "
+                                    "reasonably well on unseen data."
+                                )
+
+# --- Leaderboard -------------------------------------------------------------
+with tab_leaderboard:
+    st.caption(
+        "Every saved Strategy Lab strategy, plus every built-in preset, backtested and ranked "
+        "by real historical performance in one pass -- instead of testing them one at a time on "
+        "the Strategy Lab tab, see which of your ideas actually has the best track record."
+    )
+    st.caption(
+        "This runs every strategy through the backtest engine across all of history, so it's "
+        "gated behind a button rather than run on every page load, same reasoning as Signal "
+        "Performance."
+    )
+    if st.button("Compute leaderboard", key="leaderboard_run"):
+        st.session_state["leaderboard_computed"] = True
+
+    if not st.session_state.get("leaderboard_computed"):
+        st.info("Click 'Compute leaderboard' to backtest every saved + preset strategy.")
+    else:
+        lb_panel = load_history_panel_cached()
+        if lb_panel.empty:
+            st.warning("No history snapshots found yet.")
+        else:
+            lb_saved = load_saved_strategies()
+            # Saved strategies override presets of the same name -- identical
+            # merge logic to the "Start from a strategy" dropdown above, so
+            # the leaderboard and that dropdown never disagree about which
+            # version of a same-named strategy is current.
+            lb_strategies = {s.name: s for s in PRESET_STRATEGIES}
+            lb_strategies.update({s["name"]: Strategy.from_dict(s) for s in lb_saved})
+
+            lb_rows = []
+            lb_errors = []
+            with st.spinner(f"Backtesting {len(lb_strategies)} strategies..."):
+                for strat_name, strat in lb_strategies.items():
+                    try:
+                        lb_trades = run_backtest(lb_panel, strat)
+                    except ValueError as e:
+                        lb_errors.append(f"{strat_name}: {e}")
+                        continue
+                    if not lb_trades:
+                        continue
+                    lb_summary = summarize(lb_trades, strat_name)
+                    lb_rows.append(lb_summary)
+
+            if lb_errors:
+                with st.expander(f"{len(lb_errors)} strategy(ies) failed to backtest"):
+                    for e in lb_errors:
+                        st.caption(e)
+
+            if not lb_rows:
+                st.info("No strategy produced any historical signal.")
+            else:
+                board = pd.concat(lb_rows, ignore_index=True)
+                # Confident results (enough closed trades) ranked above thin
+                # ones, then by average return within each group -- so a
+                # strategy that "looks amazing" off 2 trades doesn't outrank
+                # one with a real, well-sampled track record.
+                board = board.sort_values(
+                    ["low_sample_warning", "avg_return_pct"], ascending=[True, False],
+                )
+                st.dataframe(board, width="stretch")
+                thin = board[board["low_sample_warning"]]
+                if not thin.empty:
+                    st.caption(
+                        f"{thin['strategy_name'].nunique()} strategy(ies) have at least one "
+                        "horizon with fewer than 10 closed trades -- ranked below the confident "
+                        "results above, not excluded, but treat those rows as rough signals."
+                    )
+
+# --- Portfolio Backtest -------------------------------------------------------
+with tab_portfolio:
+    st.caption(
+        "run_backtest treats every matching signal as an independent trade -- on a day where "
+        "40 stocks all cross your threshold at once, no real portfolio buys all 40. This "
+        "simulates picking only your top K highest-final_score signals on each entry day, "
+        "instead of taking every one, and shows how that changes the results."
+    )
+    st.caption(
+        "Scope, honestly: this is top-K signal SELECTION, not a full capital-tracked equity "
+        "curve. It doesn't model position sizing, capital limits across overlapping holding "
+        "periods, or compounding returns trade to trade. It answers 'does filtering to just my "
+        "best K picks per day change the numbers', not 'exactly how much money would this have "
+        "made me'. A true capital-tracked simulator is a meaningfully bigger project than was "
+        "asked for here."
+    )
+    pf_entry_query = st.text_area(
+        "Entry condition", value="final_score >= 65 and score_band == 'Strong'", key="pf_entry_query",
+    )
+    pfc1, pfc2 = st.columns(2)
+    pf_days_text = pfc1.text_input("Holding periods (days, comma separated)", value="15,30", key="pf_days")
+    pf_top_k = pfc2.number_input("Top K picks per day", min_value=1, value=5, step=1, key="pf_top_k")
+    pf_win_threshold = st.number_input(
+        "A trade counts as a win if return % is above", value=0.0, step=0.5, key="pf_win_threshold",
+    )
+
+    if st.button("Run portfolio backtest", key="pf_run"):
+        st.session_state["pf_computed"] = True
+
+    if st.session_state.get("pf_computed"):
+        try:
+            pf_holding = tuple(int(x.strip()) for x in pf_days_text.split(",") if x.strip())
+        except ValueError:
+            st.error("Holding periods must be comma-separated integers.")
+            pf_holding = ()
+
+        if pf_holding:
+            pf_panel = load_history_panel_cached()
+            if pf_panel.empty:
+                st.warning("No history snapshots found yet.")
+            else:
+                pf_strategy = Strategy(
+                    name="portfolio", entry_query=pf_entry_query,
+                    exit_mode=ExitMode.FIXED_HOLDING, fixed_holding_days=pf_holding,
+                )
+                try:
+                    baseline_trades = run_backtest(pf_panel, pf_strategy)
+                    topk_trades = run_topk_backtest(pf_panel, pf_strategy, int(pf_top_k))
+                except ValueError as e:
+                    st.error(str(e))
+                    baseline_trades = topk_trades = None
+
+                if baseline_trades is not None:
+                    if not baseline_trades:
+                        st.info("No historical signals matched this entry condition.")
+                    else:
+                        baseline_summary = summarize(baseline_trades, "Every signal", pf_win_threshold)
+                        topk_summary = summarize(topk_trades, f"Top {int(pf_top_k)}/day", pf_win_threshold)
+                        combined = pd.concat([baseline_summary, topk_summary], ignore_index=True)
+                        combined = combined.sort_values(["horizon_label", "strategy_name"])
+                        st.dataframe(combined, width="stretch")
+                        st.caption(
+                            "'Every signal' is the same as running this condition on the Strategy "
+                            "Lab tab -- every match, no filtering. The Top-K row is the same trades "
+                            "restricted to your best-ranked picks per day. Compare avg_return_pct "
+                            "and win_rate_pct between the two rows for each horizon to see whether "
+                            "being selective would have actually helped."
+                        )

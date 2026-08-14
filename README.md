@@ -138,6 +138,41 @@ trades = run_backtest(panel, strategy)
 print(summarize(trades, strategy.name))
 ```
 
+## Beyond parity: five more ways to read the same data
+
+Once feature parity and the core backtester were solid, five additions built on top of the existing
+scan/history data and backtest engine -- no new data sources:
+
+- **Score history** (Stock Explorer tab) -- every score component for one symbol, plotted across every
+  daily snapshot on record, so a climb into High Conviction (or a quiet slide out of it) shows up as a
+  trend instead of a single day's number.
+- **Sector rotation** (Sectors tab, `src/stockgpt/sector_rotation.py`) -- compares each sector's average
+  `final_score` over the most recent stretch of history against the stretch right before it, surfacing
+  sectors gaining or losing conviction before it's obvious from one day's snapshot.
+- **Leaderboard** (new tab) -- every saved Strategy Lab strategy plus every built-in preset, backtested
+  and ranked in one pass by average return (confident, well-sampled results ranked above thin ones,
+  never excluded outright).
+- **Walk-forward validation** (Strategy Lab tab addition, `src/stockgpt/backtest/walkforward.py`) --
+  the existing parameter sweep picks the best threshold across all of history at once, which risks
+  finding what happened to work in hindsight. This splits history into an earlier training window and a
+  later testing window, picks the best threshold using only the training window, then checks whether
+  that same fixed threshold still performs on the unseen test window -- the standard way to tell a real
+  edge from curve-fitting.
+- **Portfolio (top-K) backtest** (new tab, `src/stockgpt/backtest/portfolio.py`) -- `run_backtest`
+  treats every matching signal as its own independent trade, which doesn't reflect a real portfolio on a
+  day where 40 stocks cross the threshold at once. This filters to only the top-K highest-ranked signals
+  per entry day before simulating trades. Documented honestly in the module and the UI: it's top-K
+  *signal selection*, not a full capital-tracked equity curve (no position sizing, no overlapping-capital
+  modeling) -- a narrower, still-useful question about whether being selective would have helped.
+
+One performance note worth recording: the backtest engine originally re-evaluated each strategy's entry
+query once per symbol in a Python loop (`sdf.eval(...)` inside a `groupby`), which is fine for a single
+Strategy Lab run but multiplies badly once a single button click runs several strategies back to back
+(Leaderboard) or the same sweep twice (walk-forward's train + test). Switched to evaluating the query
+once across the whole panel and slicing the resulting mask per symbol -- identical row-for-row (these are
+row-wise boolean expressions, no cross-row aggregation), about 20x faster on the real production history
+panel (~1,800 symbols): a single strategy backtest went from ~27s to ~1.5s.
+
 ## Verified against real data, not just synthetic tests
 
 `scripts/verify_against_real_data.py` rebuilds this pipeline's output for all 66 real NSE trading days
@@ -159,9 +194,10 @@ a real-data fixture here, no original code involved). Worth knowing what it foun
   best/worst trades (including a couple of real ~90-95% smallcap drawdowns the backtester correctly
   captured rather than smoothed over).
 - The dashboard itself was run end to end against this real data via Streamlit's `AppTest` harness --
-  all 12 tabs render (including Signal Performance running all 11 catalog signals through the backtest
-  engine live), the Strategy Lab tab runs a live backtest through the actual UI and reproduces the same
-  numbers -- zero exceptions, zero warnings.
+  all 14 tabs render (including Signal Performance running all 11 catalog signals through the backtest
+  engine live, and the Leaderboard/walk-forward/portfolio-backtest sections added in a later pass), the
+  Strategy Lab tab runs a live backtest through the actual UI and reproduces the same numbers -- zero
+  exceptions, zero warnings.
 
 Run it yourself against a fresh checkout of the original repo:
 
@@ -199,16 +235,21 @@ src/stockgpt/
   signal_catalog.py             the original's ~12 signal types as backtestable Strategy objects
   alerts.py                      detection (new High Conviction / saved-strategy matches / sharp
                                    watchlist changes) + Telegram/email delivery
+  sector_rotation.py              recent-vs-prior-window average final_score per sector
   backtest/
     strategy.py                  Strategy definition (entry/exit rules)
     engine.py                     signal detection + trade simulation
     metrics.py                     win rate / return summary stats
+    walkforward.py                 train/test date split + walk-forward threshold sweep
+    portfolio.py                    top-K per-day signal-selection backtest
 
-dashboard/app.py     Streamlit dashboard, 12 tabs: Overview (incl. a live custom-filter query box),
-                       Heatmap, Opportunities, Sectors, Stock Explorer, History, Watchlist (incl.
-                       sector concentration check), Fundamentals, Movers & Changes, Range Bound,
-                       Signal Performance, Strategy Lab (incl. a parameter sweep) -- full parity
-                       with the original's 11 tabs plus the 2 new backtest-powered ones
+dashboard/app.py     Streamlit dashboard, 14 tabs: Overview (incl. a live custom-filter query box),
+                       Heatmap, Opportunities, Sectors (incl. sector rotation), Stock Explorer (incl.
+                       score history chart), History, Watchlist (incl. sector concentration check),
+                       Fundamentals, Movers & Changes, Range Bound, Signal Performance, Strategy Lab
+                       (incl. a parameter sweep + walk-forward validation), Leaderboard, Portfolio
+                       Backtest -- full parity with the original's 11 tabs plus 4 new backtest-powered
+                       ones and this pass's 2 new tabs (Leaderboard, Portfolio Backtest)
 
 scripts/
   run_daily_pipeline.py       universe -> scan -> relative strength -> range bound -> merge
@@ -218,11 +259,13 @@ scripts/
                                    strategies/watchlist and sends a summary via Telegram/email
   verify_against_real_data.py    the real-data verification described above
 
-tests/                 59 unit tests: scoring (incl. a regression test encoding the original's
+tests/                 80 unit tests: scoring (incl. a regression test encoding the original's
                           risk-penalty bug as an assertion), backtest engine correctness (hand-computed
                           expected returns), fundamentals, scanner, watchlist access control,
                           signal catalog validity, alert detection + delivery (mocked network),
-                          sector-source fallback chain
+                          sector-source fallback chain, sector rotation, walk-forward validation
+                          (synthetic panels with a known generalizing vs. overfit outcome),
+                          top-K portfolio backtest
 examples/                real 66-day sample dataset (see above) so the app works on first clone
 .github/workflows/         daily_pipeline.yml (includes the alerts step), weekly_fundamentals.yml, tests.yml
 ```
@@ -235,7 +278,7 @@ examples/                real 66-day sample dataset (see above) so the app works
    values as repository secrets in GitHub Actions / your Streamlit Cloud app settings. Everything is
    optional except that an unset `WATCHLIST_SECRET` makes the watchlist tab read-only everywhere,
    fail-closed, which is the intended default.
-4. `python -m pytest tests/ -q` to confirm everything passes (59 tests).
+4. `python -m pytest tests/ -q` to confirm everything passes (80 tests).
 5. `streamlit run dashboard/app.py` to run the dashboard locally against the sample data in `examples/`
    (copy `examples/sample_scan_latest.csv` to `data/scans/latest_scan.csv` and
    `examples/sample_history/*` to `data/history/` first, or just run `run_daily_pipeline.py` to fetch
