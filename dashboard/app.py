@@ -120,12 +120,11 @@ def adaptive_slider(label: str, series: pd.Series, step: float = 1.0,
         st.session_state[exact_min_key] = current[0]
         st.session_state[exact_max_key] = current[1]
 
-    col_min, col_max = target.columns(2)
-    col_min.number_input(
+    target.number_input(
         f"{label} -- exact min", min_value=lo, max_value=hi, value=lo, step=float(step),
         key=exact_min_key, on_change=_sync_slider_from_inputs, label_visibility="collapsed",
     )
-    col_max.number_input(
+    target.number_input(
         f"{label} -- exact max", min_value=lo, max_value=hi, value=hi, step=float(step),
         key=exact_max_key, on_change=_sync_slider_from_inputs, label_visibility="collapsed",
     )
