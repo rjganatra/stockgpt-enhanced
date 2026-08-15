@@ -274,6 +274,20 @@ if df.empty:
 if S.SCAN_TIME in df.columns and not df[S.SCAN_TIME].dropna().empty:
     st.caption(f"Last scanned: {df[S.SCAN_TIME].dropna().iloc[0]}")
 
+# Loaded ONCE per script run and reused by every tab below instead of each
+# tab calling load_history_panel_cached() independently. st.cache_data
+# returns a fresh COPY of the cached DataFrame on every call (by design, so
+# one session can't mutate another's cached data) -- with 8 call sites
+# across the tabs, and Streamlit re-running this whole script top-to-bottom
+# on every single widget interaction (every tab's code executes regardless
+# of which tab is visually active), that was materializing up to 8 fresh
+# copies of the full history panel (~125k rows in production) per rerun.
+# That's very likely what tipped the deployed app over Streamlit Cloud's
+# memory limit after this pass added 2 more unconditional call sites (score
+# history, sector rotation) on top of the pre-existing ones. One shared
+# variable = one copy per rerun, no matter how many tabs read it.
+history_panel = load_history_panel_cached()
+
 
 # ---------------------------------------------------------------------------
 # Sidebar filters (all adaptive -- see adaptive_slider docstring)
@@ -514,7 +528,7 @@ with tab_sectors:
             "right before it, so a sector quietly climbing (or fading) shows up before "
             "it's obvious from a single day's numbers."
         )
-        rotation_panel = load_history_panel_cached()
+        rotation_panel = history_panel
         rotation_df = sector_rotation.compute_sector_rotation(rotation_panel)
         if rotation_df.empty:
             st.caption("Not enough historical snapshots yet to compare two time windows.")
@@ -574,7 +588,7 @@ with tab_explorer:
             "every daily snapshot on record, so a climb into High Conviction (or a quiet "
             "slide out of it) shows up as a trend, not just a single day's value."
         )
-        hist_panel = load_history_panel_cached()
+        hist_panel = history_panel
         if hist_panel.empty or S.SYMBOL not in hist_panel.columns:
             st.caption("No historical snapshots available yet.")
         else:
@@ -907,7 +921,7 @@ with tab_strategy:
         "dropdown automatically, no other code changes needed. Same for the Signal Performance "
         "tab's catalog (src/stockgpt/signal_catalog.py)."
     )
-    _history_panel_for_ref = load_history_panel_cached()
+    _history_panel_for_ref = history_panel
     render_column_reference(_history_panel_for_ref if not _history_panel_for_ref.empty else df,
                              "strategy_lab_ref")
 
@@ -964,7 +978,7 @@ with tab_strategy:
             st.error(f"Could not save: {e}")
 
     if run_clicked:
-        panel = load_history_panel_cached()
+        panel = history_panel
         if panel.empty:
             st.warning("No history snapshots found yet -- the backtester needs at least a few "
                        "days of data/history/YYYY-MM-DD/scan.csv to test against.")
@@ -1030,7 +1044,7 @@ with tab_strategy:
             sweep_days = ()
 
         if thresholds:
-            panel = load_history_panel_cached()
+            panel = history_panel
             if panel.empty:
                 st.warning("No history snapshots found yet -- the backtester needs at least a few "
                            "days of data/history/YYYY-MM-DD/scan.csv to test against.")
@@ -1137,7 +1151,7 @@ with tab_strategy:
             wf_holding = ()
 
         if wf_thresholds:
-            wf_panel = load_history_panel_cached()
+            wf_panel = history_panel
             if wf_panel.empty:
                 st.warning("No history snapshots found yet.")
             else:
@@ -1213,7 +1227,7 @@ with tab_leaderboard:
     if not st.session_state.get("leaderboard_computed"):
         st.info("Click 'Compute leaderboard' to backtest every saved + preset strategy.")
     else:
-        lb_panel = load_history_panel_cached()
+        lb_panel = history_panel
         if lb_panel.empty:
             st.warning("No history snapshots found yet.")
         else:
@@ -1301,7 +1315,7 @@ with tab_portfolio:
             pf_holding = ()
 
         if pf_holding:
-            pf_panel = load_history_panel_cached()
+            pf_panel = history_panel
             if pf_panel.empty:
                 st.warning("No history snapshots found yet.")
             else:
