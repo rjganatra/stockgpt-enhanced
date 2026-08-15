@@ -106,6 +106,25 @@ def fetch_sector_map() -> dict[str, str]:
     return {}
 
 
+def fetch_nifty500_symbols() -> list[str]:
+    """Real Nifty 500 constituent list, for callers (the historical backfill
+    CLI) that want a mid-sized universe -- bigger than the 50-symbol pilot,
+    safer to hold in memory than the full ~2000-symbol universe -- without
+    hardcoding an unverifiable ticker list in the caller. Reuses the same
+    NIFTY_500_URL / _fetch_csv infrastructure fetch_sector_map() already
+    relies on. Returns [] on failure rather than raising, consistent with
+    the rest of this module's fallback-not-crash philosophy; callers should
+    fall back to something else (e.g. the pilot list) if this comes back empty."""
+    try:
+        df = _fetch_csv(NIFTY_500_URL)
+        symbols = df["Symbol"].astype(str).str.strip().tolist()
+        logger.info("Nifty 500 symbol list loaded (%d symbols)", len(symbols))
+        return symbols
+    except Exception as e:  # noqa: BLE001
+        logger.warning("Nifty 500 symbol fetch failed: %s", e)
+        return []
+
+
 def fallback_universe() -> pd.DataFrame:
     symbols, sectors = zip(*FALLBACK_UNIVERSE)
     return pd.DataFrame({

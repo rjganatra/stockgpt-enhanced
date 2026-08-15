@@ -47,6 +47,26 @@ class TestFetchSectorMap:
             assert mock_fetch.call_count == 1
 
 
+class TestFetchNifty500Symbols:
+    def test_returns_symbol_list_on_success(self):
+        nifty500 = _csv_df({"AAA": "Tech", "BBB": "Pharma", "CCC": "Financial Services"})
+        with patch("stockgpt.universe._fetch_csv", return_value=nifty500) as mock_fetch:
+            result = U.fetch_nifty500_symbols()
+            assert result == ["AAA", "BBB", "CCC"]
+            mock_fetch.assert_called_once_with(U.NIFTY_500_URL)
+
+    def test_strips_whitespace_from_symbols(self):
+        nifty500 = pd.DataFrame({"Symbol": [" AAA ", "BBB"], "Industry": ["Tech", "Pharma"]})
+        with patch("stockgpt.universe._fetch_csv", return_value=nifty500):
+            result = U.fetch_nifty500_symbols()
+            assert result == ["AAA", "BBB"]
+
+    def test_returns_empty_list_on_failure(self):
+        with patch("stockgpt.universe._fetch_csv", side_effect=Exception("boom")):
+            result = U.fetch_nifty500_symbols()
+            assert result == []
+
+
 class TestFetchUniverseUsesSectorMap:
     def test_universe_sector_falls_back_to_unknown_when_symbol_not_in_map(self):
         equity_l = pd.DataFrame({

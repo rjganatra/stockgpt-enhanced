@@ -208,6 +208,75 @@ python scripts/verify_against_real_data.py /path/to/StockGPT-main
 Sample output from that run is committed under `examples/` so the dashboard and Strategy Lab work
 immediately after cloning this repo, before you've run the pipeline once.
 
+## Historical backfill
+
+Every backtest feature above is only as good as how much real history it has to run against -- and a
+freshly-deployed instance only accumulates one day of real history per day, which is why most strategies
+start out flagged `low_sample_warning`. `scripts/backfill_history.py` fixes that by reconstructing years
+of past `data/history/YYYY-MM-DD/scan.csv` snapshots directly, using the exact same scoring engine the
+live pipeline uses.
+
+This works cleanly because `scanner.py`, `relative_strength.py`, `range_bound.py`, and
+`scoring.compute_final_scores` are all pure functions of whatever price-history window they're handed --
+none of them assume "today," they just look at the last row of whatever DataFrame they're given. None of
+that code changed for this. The one genuinely new problem is fundamentals: Yahoo's `.info` block (what
+`fundamentals.py` normally fetches) is a live snapshot with no "as of last year" mode -- there's no way to
+ask "what was this company's ROE a year ago" directly. `src/stockgpt/backfill.py` solves that by pulling
+each symbol's raw filed financial statements (balance sheet, income statement, cash flow -- which Yahoo
+does expose historically, several periods back) and deriving the same ratios `fundamentals.py` computes
+from `.info` (ROE, ROA, margins, growth, debt/equity, current/quick ratio, cash, debt, operating/free cash
+flow) directly from those statement line items, one set of ratios per real filing period, forward-filled
+day by day until the next filing -- so a trading day's fundamentals are always the most recently *actually
+filed* numbers as of that day, never a number from the future. Verified via `tests/test_backfill.py`
+against a synthetic multi-period statement with a hand-checked no-lookahead assertion: the day before a
+new filing still shows the OLD numbers, the filing's exact date is the first day the NEW numbers appear.
+
+Two honest limits, by design:
+- Valuation ratios that mix price with a per-share statement figure (PE, forward PE, price-to-book,
+  dividend yield) and beta are not derived historically -- forward PE is a forward-looking analyst
+  estimate with no historical record at all, and the others would need a separate shares-outstanding
+  history this pass doesn't fetch. These fall back to today's current value, held constant, for the whole
+  backfilled window.
+- If a symbol's statements are empty or unusable on Yahoo (thin coverage, delisted, etc.), its *entire*
+  fundamentals row falls back to today's current values held constant across the backfill window, rather
+  than leaving it with zero fundamentals data. Every fallback is visible in the run summary
+  (`derived_fundamentals` vs `fallback_fundamentals` counts) and in the code as
+  `FUNDAMENTALS_SOURCE_CURRENT_FALLBACK` -- never silently blended with the real per-period numbers.
+
+Also worth stating plainly: this backfills whatever symbols are in *today's* universe. Any company that
+delisted, merged, or was removed from the index during the backfill window is invisible to it -- only
+today's survivors get a multi-year history. That's a real survivorship bias in any backtest run against
+this data. A bias-free backfill would need a point-in-time universe snapshot per year, which is a
+separate, bigger project than this pass.
+
+Run the pilot first -- the 50 most liquid NSE names (Nifty 50), most likely to have complete data on
+both fronts, so you can check the real historical-fundamentals derivation actually works before spending
+hours on the full universe:
+
+```bash
+python scripts/backfill_history.py --pilot --years 3
+```
+
+It prints a summary (`derived_fundamentals` / `fallback_fundamentals` split, days written) at the end.
+Once that looks right, the recommended next step is `--nifty500` -- a real, live-fetched Nifty 500
+constituent list (via `universe.fetch_nifty500_symbols()`, same niftyindices.com source `fetch_sector_map()`
+already uses), not a hardcoded ticker list:
+
+```bash
+python scripts/backfill_history.py --nifty500 --years 3
+```
+
+This gives a meaningfully bigger backtest sample than the 50-symbol pilot (~500 vs 50 symbols) while
+staying well short of the memory footprint the full ~2,000-symbol universe would need once this data is
+loaded into the deployed dashboard. If the live fetch fails (network hiccup, or niftyindices.com changes
+its CSV format), the script falls back to the 50-symbol pilot list automatically rather than crashing.
+
+Beyond that, the full universe is available with the same command minus `--pilot`/`--nifty500`. It's safe
+to re-run any of these after a rate-limit interruption -- already-written days are skipped by default, not
+re-fetched (`--no-resume` forces a clean overwrite instead). The full universe can genuinely take hours for
+~2,000 symbols x 3+ years of price history and statements; Yahoo can throttle bulk requests partway
+through, which is exactly what the resumability is for.
+
 ## What's deliberately not here yet
 
 Telegram bot commands and the Mini App WebApp -- by design, this pass is core pipeline + fixed scoring
@@ -236,6 +305,9 @@ src/stockgpt/
   alerts.py                      detection (new High Conviction / saved-strategy matches / sharp
                                    watchlist changes) + Telegram/email delivery
   sector_rotation.py              recent-vs-prior-window average final_score per sector
+  backfill.py                      reconstructs years of historical scan.csv snapshots by deriving
+                                     point-in-time fundamentals from filed statements (see "Historical
+                                     backfill" above)
   backtest/
     strategy.py                  Strategy definition (entry/exit rules)
     engine.py                     signal detection + trade simulation
@@ -258,14 +330,16 @@ scripts/
   run_alerts.py                  runs after the daily pipeline; reads scan/changes/saved
                                    strategies/watchlist and sends a summary via Telegram/email
   verify_against_real_data.py    the real-data verification described above
+  backfill_history.py             multi-year historical backfill (see "Historical backfill" above)
 
-tests/                 80 unit tests: scoring (incl. a regression test encoding the original's
+tests/                 104 unit tests: scoring (incl. a regression test encoding the original's
                           risk-penalty bug as an assertion), backtest engine correctness (hand-computed
                           expected returns), fundamentals, scanner, watchlist access control,
                           signal catalog validity, alert detection + delivery (mocked network),
                           sector-source fallback chain, sector rotation, walk-forward validation
                           (synthetic panels with a known generalizing vs. overfit outcome),
-                          top-K portfolio backtest
+                          top-K portfolio backtest, historical backfill (ratio derivation from raw
+                          statements, no-lookahead as-of merge, fallback triggering)
 examples/                real 66-day sample dataset (see above) so the app works on first clone
 .github/workflows/         daily_pipeline.yml (includes the alerts step), weekly_fundamentals.yml, tests.yml
 ```
@@ -278,7 +352,7 @@ examples/                real 66-day sample dataset (see above) so the app works
    values as repository secrets in GitHub Actions / your Streamlit Cloud app settings. Everything is
    optional except that an unset `WATCHLIST_SECRET` makes the watchlist tab read-only everywhere,
    fail-closed, which is the intended default.
-4. `python -m pytest tests/ -q` to confirm everything passes (80 tests).
+4. `python -m pytest tests/ -q` to confirm everything passes (104 tests).
 5. `streamlit run dashboard/app.py` to run the dashboard locally against the sample data in `examples/`
    (copy `examples/sample_scan_latest.csv` to `data/scans/latest_scan.csv` and
    `examples/sample_history/*` to `data/history/` first, or just run `run_daily_pipeline.py` to fetch
