@@ -11,12 +11,12 @@ A2ZINFRA,Unknown,A2Z Infra Engineering Limited
 AAATECH,Unknown,AAA Technologies Limited
 AADHARHFC,Financial Services,Aadhar Housing Finance Limited
 AAKASH,Unknown,Aakash Exploration Services Limited
+AAREYDRUGS,Unknown,Aarey Drugs & Pharmaceuticals Limited
 AARNAV,Unknown,Aarnav Fashions Limited
 AARON,Unknown,Aaron Industries Limited
 AARTIDRUGS,Healthcare,Aarti Drugs Limited
 AARTIIND,Chemicals,Aarti Industries Limited
 AARTIPHARM,Healthcare,Aarti Pharmalabs Limited
-AARTISURF,Unknown,Aarti Surfactants Limited
 AARVI,Unknown,Aarvi Encon Limited
 AASTHA,Unknown,Aastha Spintex Limited
 AAVAS,Financial Services,Aavas Financiers Limited
@@ -37,6 +37,7 @@ ACC,Construction Materials,ACC Limited
 ACCELYA,Unknown,Accelya Solutions India Limited
 ACE,Capital Goods,Action Construction Equipment Limited
 ACEINTEG,Unknown,Ace Integrated Solutions Limited
+ACGL,Unknown,Automobile Corporation of Goa Limited
 ACI,Chemicals,Archean Chemical Industries Limited
 ACL,Unknown,Andhra Cements Limited
 ACMESOLAR,Power,Acme Solar Holdings Limited
@@ -47,6 +48,7 @@ ADANIENT,Metals & Mining,Adani Enterprises Limited
 ADANIGREEN,Power,Adani Green Energy Limited
 ADANIPORTS,Services,Adani Ports and Special Economic Zone Limited
 ADANIPOWER,Power,Adani Power Limited
+ADDIND,Unknown,Addi Industries Limited
 ADFFOODS,Unknown,ADF Foods Limited
 ADL,Unknown,Archidply Decor Limited
 ADOR,Unknown,Ador Welding Limited
@@ -57,6 +59,7 @@ ADVANCE,Unknown,Advance Agrolife Limited
 ADVANIHOTR,Unknown,Advani Hotels & Resorts (India) Limited
 ADVENTHTL,Unknown,Advent Hotels International Limited
 ADVENZYMES,Healthcare,Advanced Enzyme Technologies Limited
+ADVIKCA,Unknown,Advik Capital Limited
 AEGISLOG,Oil Gas & Consumable Fuels,Aegis Logistics Limited
 AEGISVOPAK,Oil Gas & Consumable Fuels,Aegis Vopak Terminals Limited
 AEPL,Unknown,Artemis Electricals and Projects Limited
@@ -98,6 +101,7 @@ AKUMS,Healthcare,Akums Drugs and Pharmaceuticals Limited
 ALANKIT,Unknown,Alankit Limited
 ALBERTDAVD,Unknown,Albert David Limited
 ALEMBICLTD,Unknown,Alembic Limited
+ALFREDHE,Unknown,Alfred Herbert India Limited
 ALGOQUANT,Unknown,Algoquant Fintech Limited
 ALICON,Unknown,Alicon Castalloy Limited
 ALIVUS,Healthcare,Alivus Life Sciences Limited
@@ -111,7 +115,10 @@ ALOKINDS,Textiles,Alok Industries Limited
 ALPA,Unknown,Alpa Laboratories Limited
 ALPHAGEO,Unknown,Alphageo (India) Limited
 ALPINETEX,Unknown,Alpine Texworld Limited
+ALUFLUOR,Unknown,Alufluoride Limited
 AMAGI,Unknown,Amagi Media Labs Limited
+AMAL,Unknown,Amal Limited
+AMARJOTHI,Unknown,Amarjothi Spinning Mills Limited
 AMBALALSA,Unknown,Ambalal Sarabhai Enterprises Limited
 AMBER,Consumer Durables,Amber Enterprises India Limited
 AMBICAAGAR,Unknown,Ambica Agarbathies & Aroma industries Limited
@@ -125,10 +132,12 @@ ANANDRATHI,Financial Services,Anand Rathi Wealth Limited
 ANANTRAJ,Realty,Anant Raj Limited
 ANDHRAPAP,Unknown,ANDHRA PAPER LIMITED
 ANDHRSUGAR,Unknown,The Andhra Sugars Limited
+ANDREWYU,Unknown,Andrew Yule & Company Limited
 ANGELONE,Financial Services,Angel One Limited
 ANIKINDS,Unknown,Anik Industries Limited
 ANMOL,Unknown,Anmol India Limited
 ANNAPURNA,Unknown,Annapurna Swadisht Limited
+ANSALBU,Unknown,Ansal Buildwell Limited
 ANTELOPUS,Unknown,Antelopus Selan Energy Limited
 ANTGRAPHIC,Unknown,Antarctica Limited
 ANTHEM,Healthcare,Anthem Biosciences Limited
@@ -146,10 +155,12 @@ APOLLOHOSP,Healthcare,Apollo Hospitals Enterprise Limited
 APOLLOPIPE,Unknown,Apollo Pipes Limited
 APOLLOTYRE,Automobile and Auto Components,Apollo Tyres Limited
 APOLSINHOT,Unknown,Apollo Sindoori Hotels Limited
+APOORVA,Unknown,Apoorva Leasing Finance and Investment Company Limited
 APTUS,Financial Services,Aptus Value Housing Finance India Limited
 AQYLON,Unknown,Aqylon Nexus Limited
 ARCHIDPLY,Unknown,Archidply Industries Limited
 ARCHIES,Unknown,Archies Limited
+ARCL,Unknown,ARCL Organics Limited
 ARDEE,Unknown,Ardee Industries Limited
 ARE&M,Automobile and Auto Components,Amara Raja Energy & Mobility Limited
 ARENTERP,Unknown,Rajdarshan Industries Limited
@@ -169,6 +180,7 @@ ARVEE,Unknown,Arvee Laboratories (India) Limited
 ARVIND,Textiles,Arvind Limited
 ARVINDFASN,Consumer Services,Arvind Fashions Limited
 ARVSMART,Unknown,Arvind SmartSpaces Limited
+ARYAMAN,Unknown,Aryaman Financial Services Limited
 ASAHIINDIA,Automobile and Auto Components,Asahi India Glass Limited
 ASAL,Unknown,Automotive Stampings and Assemblies Limited
 ASALCBR,Unknown,Associated Alcohols & Breweries Ltd.
@@ -182,8 +194,10 @@ ASIANENE,Unknown,Asian Energy Services Limited
 ASIANHOTNR,Unknown,Asian Hotels (North) Limited
 ASIANPAINT,Consumer Durables,Asian Paints Limited
 ASIANTILES,Unknown,Asian Granito India Limited
+ASIANTNE,Unknown,Asian Tea & Exports Limited
 ASKAUTOLTD,Automobile and Auto Components,ASK Automotive Limited
 ASPINWALL,Unknown,Aspinwall and Company Limited
+ASSAMENT,Unknown,Assam Entrade Limited
 ASTAR,Unknown,Asian Star Company Limited
 ASTEC,Unknown,Astec LifeSciences Limited
 ASTERDM,Healthcare,Aster DM Quality Care Limited
@@ -206,9 +220,11 @@ AUROPHARMA,Healthcare,Aurobindo Pharma Limited
 AURUM,Unknown,Aurum PropTech Limited
 AURUS,Unknown,AURUS GEM CORPORATION LIMITED
 AUSOMENT,Unknown,Ausom Enterprise Limited
+AUSTENG,Unknown,Austin Engineering Company  Limited
 AUTOAXLES,Unknown,Automotive Axles Limited
 AVADHSUGAR,Unknown,Avadh Sugar & Energy Limited
 AVALON,Capital Goods,Avalon Technologies Limited
+AVANCE,Unknown,Avance Technologies Limited
 AVANTEL,Unknown,Avantel Limited
 AVANTIFEED,Fast Moving Consumer Goods,Avanti Feeds Limited
 AVL,Consumer Services,Aditya Vision Limited
@@ -221,9 +237,11 @@ AWL,Fast Moving Consumer Goods,AWL Agri Business Limited
 AXISBANK,Financial Services,Axis Bank Limited
 AXISCADES,Capital Goods,AXISCADES Technologies Limited
 AXITA,Unknown,Axita Cotton Limited
+AXTEL,Unknown,Axtel Industries Limited
 AYE,Unknown,Aye Finance Limited
 AYMSYNTEX,Unknown,AYM Syntex Limited
 AZAD,Capital Goods,Azad Engineering Limited
+AZADIND,Unknown,Azad India Mobility Limited
 BAGFILMS,Unknown,B.A.G Films and Media Limited
 BAIDFIN,Unknown,Baid Finserv Limited
 BAJAJ-AUTO,Automobile and Auto Components,Bajaj Auto Limited
@@ -279,6 +297,7 @@ BEL,Capital Goods,Bharat Electronics Limited
 BELLACASA,Unknown,Bella Casa Fashion & Retail Limited
 BELRISE,Automobile and Auto Components,Belrise Industries Limited
 BEML,Capital Goods,BEML Limited
+BENARAS,Unknown,Benares Hotels Limited
 BENGALASM,Unknown,Bengal & Assam Company Limited
 BEPL,Unknown,Bhansali Engineering Polymers Limited
 BERGEPAINT,Consumer Durables,Berger Paints (I) Limited
@@ -288,6 +307,7 @@ BFINVEST,Unknown,BF Investment Limited
 BFUTILITIE,Unknown,BF Utilities Limited
 BHAGCHEM,Unknown,Bhagiradha Chemicals & Industries Limited
 BHAGYANGR,Unknown,Bhagyanagar India Limited
+BHANDARI,Unknown,Bhandari Hosiery Exports Limited
 BHARATCOAL,Unknown,Bharat Coking Coal Limited
 BHARATFORG,Automobile and Auto Components,Bharat Forge Limited
 BHARATRAS,Unknown,Bharat Rasayan Limited
@@ -315,6 +335,7 @@ BLKASHYAP,Unknown,B. L. Kashyap and Sons Limited
 BLS,Consumer Services,BLS International Services Limited
 BLSE,Unknown,BLS E-Services Limited
 BLUECHIP,Unknown,Blue Chip India Limited
+BLUECLOUDS,Unknown,Blue Cloud Softech Solutions Limited
 BLUEDART,Services,Blue Dart Express Limited
 BLUEJET,Healthcare,Blue Jet Healthcare Limited
 BLUESTARCO,Consumer Durables,Blue Star Limited
@@ -333,17 +354,22 @@ BOSCH-HCIL,Unknown,BOSCH HOME COMFORT INDIA LIMITED
 BOSCHLTD,Automobile and Auto Components,Bosch Limited
 BPCL,Oil Gas & Consumable Fuels,Bharat Petroleum Corporation Limited
 BPL,Unknown,BPL Limited
+BPLPHARMA,Unknown,Bharat Parenterals Limited
+BRAHMINFRA,Unknown,Brahmaputra Infrastructure Limited
 BRIGADE,Realty,Brigade Enterprises Limited
 BRIGHOTEL,Unknown,Brigade Hotel Ventures Limited
+BRIGHTBR,Unknown,Bright Brothers Limited
 BRITANNIA,Fast Moving Consumer Goods,Britannia Industries Limited
 BRNL,Unknown,Bharat Road Network Limited
 BSE,Financial Services,BSE Limited
+BSHSL,Unknown,Bombay Super Hybrid Seeds Limited
 BSL,Unknown,BSL Limited
 BSOFT,Information Technology,BIRLASOFT LIMITED
 BTML,Unknown,Bodhi Tree Multimedia Limited
 BUILDPRO,Unknown,Shankara Buildpro Limited
 BUTTERFLY,Unknown,Butterfly Gandhimathi Appliances Limited
 BVCL,Unknown,Barak Valley Cements Limited
+CALSOFT,Unknown,California Software Company Limited
 CAMLINFINE,Unknown,Camlin Fine Sciences Limited
 CAMPUS,Consumer Durables,Campus Activewear Limited
 CAMS,Financial Services,Computer Age Management Services Limited
@@ -381,10 +407,15 @@ CENTURYPLY,Consumer Durables,Century Plyboards (India) Limited
 CERA,Consumer Durables,Cera Sanitaryware Limited
 CESC,Power,CESC Limited
 CEWATER,Unknown,Concord Enviro Systems Limited
+CFEL,Unknown,Confidence Futuristic Energetech Limited
 CGCL,Financial Services,Capri Global Capital Limited
 CGPOWER,Capital Goods,CG Power and Industrial Solutions Limited
+CGVAK,Unknown,CG Vak Software & Exports Limited
 CHALET,Consumer Services,Chalet Hotels Limited
 CHAMBLFERT,Chemicals,Chambal Fertilizers & Chemicals Limited
+CHEMBOND,Unknown,Chembond Material Technologies Limited
+CHEMCRUX,Unknown,Chemcrux Enterprises Limited
+CHEMFAB,Unknown,Chemfab Alkalis Limited
 CHEMPLASTS,Unknown,Chemplast Sanmar Limited
 CHENNPETRO,Oil Gas & Consumable Fuels,Chennai Petroleum Corporation Limited
 CHEVIOT,Unknown,Cheviot Company Limited
@@ -412,6 +443,7 @@ COFORGE,Information Technology,Coforge Limited
 COHANCE,Healthcare,Cohance Lifesciences Limited
 COLPAL,Fast Moving Consumer Goods,Colgate Palmolive (India) Limited
 COMFINTE,Unknown,Comfort Intech Limited
+COMPEAU,Unknown,Competent Automobiles Company Limited
 COMPUSOFT,Unknown,Compucom Software Limited
 COMSYN,Unknown,Commercial Syn Bags Limited
 CONCOR,Services,Container Corporation of India Limited
@@ -429,6 +461,7 @@ CPL,Unknown,Captain Polyplast Limited
 CPPLUS,Capital Goods,Aditya Infotech Limited
 CRAFTSMAN,Automobile and Auto Components,Craftsman Automation Limited
 CRAMC,Financial Services,Canara Robeco Asset Management Company Limited
+CRAVATEX,Unknown,Cravatex Limited
 CREATIVEYE,Unknown,Creative Eye Limited
 CREDITACC,Financial Services,CREDITACCESS GRAMEEN LIMITED
 CREST,Unknown,Crest Ventures Limited
@@ -436,6 +469,7 @@ CRISIL,Financial Services,Crisil Limited
 CRIZAC,Consumer Services,Crizac Limited
 CROMPTON,Consumer Durables,Crompton Greaves Consumer Electricals Limited
 CROWN,Unknown,Crown Lifters Limited
+CRSL,Unknown,Cressanda Railway Solutions Limited
 CSBBANK,Financial Services,CSB Bank Limited
 CSLFINANCE,Unknown,CSL Finance Limited
 CSM,Unknown,CSM Technologies Limited
@@ -445,6 +479,7 @@ CUBEXTUB,Unknown,Cubex Tubings Limited
 CUMMINSIND,Capital Goods,Cummins India Limited
 CUPID,Fast Moving Consumer Goods,Cupid Limited
 CURAA,Unknown,Cura Technologies Limited
+CYBERMEDIA,Unknown,Cyber Media (India) Limited
 CYIENT,Information Technology,Cyient Limited
 CYIENTDLM,Unknown,Cyient DLM Limited
 DABUR,Fast Moving Consumer Goods,Dabur India Limited
@@ -466,6 +501,7 @@ DCI,Unknown,Dc Infotech And Communication Limited
 DCMFINSERV,Unknown,DCM Financial Services Limited
 DCMNVL,Unknown,DCM Nouvelle Limited
 DCMSHRIRAM,Diversified,DCM Shriram Limited
+DCMSIL,Unknown,DCM Shriram International Limited
 DCMSRIND,Unknown,DCM Shriram Industries Limited
 DCW,Unknown,DCW Limited
 DCXINDIA,Unknown,DCX Systems Limited
@@ -473,6 +509,7 @@ DDEVPLSTIK,Unknown,Ddev Plastiks Industries Limited
 DECCANCE,Unknown,Deccan Cements Limited
 DECNGOLD,Unknown,Deccan Gold Mines Limited
 DEEDEV,Unknown,DEE Development Engineers Limited
+DEEP,Unknown,Deep Polymers Limited
 DEEPAKFERT,Chemicals,Deepak Fertilizers and Petrochemicals Corporation Limited
 DEEPAKNTR,Chemicals,Deepak Nitrite Limited
 DEEPINDS,Unknown,Deep Industries Limited
@@ -486,10 +523,13 @@ DEVIT,Unknown,Dev Information Technology Limited
 DEVX,Unknown,Dev Accelerator Limited
 DEVYANI,Consumer Services,Devyani International Limited
 DGCONTENT,Unknown,Digicontent Limited
+DHABRIYA,Unknown,Dhabriya Polywood Limited
 DHAMPURSUG,Unknown,Dhampur Sugar Mills Limited
 DHANBANK,Unknown,Dhanlaxmi Bank Limited
 DHANUKA,Unknown,Dhanuka Agritech Limited
 DHARMAJ,Unknown,Dharmaj Crop Guard Limited
+DHATRE,Unknown,Dhatre Udyog Limited
+DHOOTTRANS,Unknown,Dhoot Transmission Limited
 DHRUV,Unknown,Dhruv Consultancy Services Limited
 DHUNINV,Unknown,Dhunseri Investments Limited
 DIAMINESQ,Unknown,Diamines & Chemicals Limited
@@ -532,8 +572,11 @@ DYCL,Unknown,Dynamic Cables Limited
 DYNAMATECH,Capital Goods,Dynamatic Technologies Limited
 DYNPRO,Unknown,Dynemic Products Limited
 EASEMYTRIP,Unknown,Easy Trip Planners Limited
+EASTWEST,Unknown,East West Freight Carriers Limited
 EBGNG,Unknown,GNG Electronics Limited
+EBIX,Unknown,EBIX Limited
 ECLERX,Services,eClerx Services Limited
+ECORECO,Unknown,Eco Recycling Limited
 EDELWEISS,Financial Services,Edelweiss Financial Services Limited
 EFCIL,Unknown,EFC (I) Limited
 EICHERMOT,Automobile and Auto Components,Eicher Motors Limited
@@ -543,6 +586,7 @@ EIHAHOTELS,Unknown,EIH Associated Hotels Limited
 EIHOTEL,Consumer Services,EIH Limited
 EIMCOELECO,Unknown,Eimco Elecon (India) Limited
 EKC,Unknown,Everest Kanto Cylinder Limited
+EKI,Unknown,EKI Energy Services Limited
 ELANTAS,Unknown,Elantas Beck India Limited
 ELCIDIN,Unknown,EL CID Investments Limited
 ELDEHSG,Unknown,Eldeco Housing And Industries Limited
@@ -562,12 +606,15 @@ EMCURE,Healthcare,Emcure Pharmaceuticals Limited
 EMIL,Consumer Services,Electronics Mart India Limited
 EMKAY,Unknown,Emkay Global Financial Services Limited
 EMMVEE,Capital Goods,Emmvee Photovoltaic Power Limited
+EMPIND,Unknown,Empire Industries Limited
+EMPOWER,Unknown,Empower India Limited
 EMSLIMITED,Unknown,EMS Limited
 EMUDHRA,Unknown,eMudhra Limited
 ENDURANCE,Automobile and Auto Components,Endurance Technologies Limited
 ENERGYDEV,Unknown,Energy Development Company Limited
 ENGINERSIN,Construction,Engineers India Limited
 ENIL,Unknown,Entertainment Network (India) Limited
+ENKEIWHEL,Unknown,Enkei Wheels (India) Limited
 ENRIN,Capital Goods,Siemens Energy India Limited
 ENTERO,Consumer Services,Entero Healthcare Solutions Limited
 EPACK,Unknown,EPACK Durable Limited
@@ -623,6 +670,7 @@ FORCEMOT,Automobile and Auto Components,FORCE MOTORS LTD
 FORTIS,Healthcare,Fortis Healthcare Limited
 FOSECOIND,Unknown,Foseco India Limited
 FRACTAL,Unknown,Fractal Analytics Limited
+FREDUN,Unknown,Fredun Pharmaceuticals Limited
 FRONTSP,Unknown,Frontier Springs Limited
 FSL,Services,Firstsource Solutions Limited
 FUSION,Unknown,Fusion Finance Limited
@@ -661,6 +709,7 @@ GICRE,Financial Services,General Insurance Corporation of India
 GILLANDERS,Unknown,Gillanders Arbuthnot & Company Limited
 GILLETTE,Fast Moving Consumer Goods,Gillette India Limited
 GIPCL,Unknown,Gujarat Industries Power Company Limited
+GKB,Unknown,GKB Ophthalmics Limited
 GKENERGY,Unknown,GK Energy Limited
 GKSL,Unknown,Gujarat Kidney And Super Speciality Limited
 GKWLIMITED,Unknown,GKW Limited
@@ -748,6 +797,7 @@ GYFTR,Unknown,Gyftr Limited
 HAL,Capital Goods,Hindustan Aeronautics Limited
 HALDER,Unknown,Halder Venture Limited
 HALEOSLABS,Unknown,HALEOS LABS LIMITED
+HAMPTON,Unknown,Hampton Sky Realty Limited
 HAPPSTMNDS,Information Technology,Happiest Minds Technologies Limited
 HAPPYFORGE,Unknown,Happy Forgings Limited
 HARDWYN,Unknown,Hardwyn India Limited
@@ -759,8 +809,10 @@ HATSUN,Unknown,Hatsun Agro Product Limited
 HAVELLS,Consumer Durables,Havells India Limited
 HAVISHA,Unknown,Sri Havisha Hospitality and Infrastructure Limited
 HAWKINCOOK,Unknown,Hawkins Cookers Limited
+HAZOOR,Unknown,Hazoor Multi Projects Limited
 HBESD,Unknown,HB Estate Developers Limited
 HBLENGINE,Capital Goods,HBL Engineering Limited
+HBPOR,Unknown,HB Portfolio Limited
 HBSL,Unknown,HB Stockholdings Limited
 HCC,Construction,Hindustan Construction Company Limited
 HCG,Healthcare,Healthcare Global Enterprises Limited
@@ -789,7 +841,9 @@ HGS,Unknown,Hinduja Global Solutions Limited
 HIKAL,Unknown,Hikal Limited
 HILINFRA,Unknown,Highway Infrastructure Limited
 HIMATSEIDE,Unknown,Himatsingka Seide Limited
+HINDADH,Unknown,Hindustan Adhesives Limited
 HINDALCO,Metals & Mining,Hindalco Industries Limited
+HINDALUMI,Unknown,Hind Aluminium Industries Limited
 HINDCOMPOS,Unknown,Hindustan Composites Limited
 HINDCON,Unknown,Hindcon Chemicals Limited
 HINDCOPPER,Metals & Mining,Hindustan Copper Limited
@@ -812,6 +866,7 @@ HONDAPOWER,Unknown,Honda India Power Products Limited
 HPAL,Unknown,HP Adhesives Limited
 HPIL,Unknown,Hindprakash Industries Limited
 HPL,Unknown,HPL Electric & Power Limited
+HRYNSHP,Unknown,Hariyana Ship Breakers Limited
 HSCL,Chemicals,Himadri Speciality Chemical Limited
 HTMEDIA,Unknown,HT Media Limited
 HUBTOWN,Unknown,Hubtown Limited
@@ -832,6 +887,7 @@ IDEA,Telecommunication,Vodafone Idea Limited
 IDEAFORGE,Unknown,Ideaforge Technology Limited
 IDFCFIRSTB,Financial Services,IDFC First Bank Limited
 IEX,Financial Services,Indian Energy Exchange Limited
+IFBAGRO,Unknown,IFB Agro Industries Limited
 IFBIND,Consumer Durables,IFB Industries Limited
 IFCI,Financial Services,IFCI Limited
 IFGLEXPOR,Unknown,IFGL Refractories Limited
@@ -867,6 +923,7 @@ INDNIPPON,Unknown,India Nippon Electricals Limited
 INDOBORAX,Unknown,Indo Borax & Chemicals Limited
 INDOCO,Unknown,Indoco Remedies Limited
 INDOFARM,Unknown,Indo Farm Equipment Limited
+INDOKEM,Unknown,Indokem Limited
 INDOMIM,Unknown,INDO-MIM Limited
 INDORAMA,Unknown,Indo Rama Synthetics (India) Limited
 INDOSTAR,Unknown,IndoStar Capital Finance Limited
@@ -902,6 +959,7 @@ IOLCP,Unknown,IOL Chemicals and Pharmaceuticals Limited
 IONEXCHANG,Utilities,ION Exchange (India) Limited
 IPCALAB,Healthcare,IPCA Laboratories Limited
 IPL,Unknown,India Pesticides Limited
+IPRINGLTD,Unknown,IP Rings Limited
 IRB,Construction,IRB Infrastructure Developers Limited
 IRCON,Construction,Ircon International Limited
 IRCTC,Consumer Services,Indian Railway Catering And Tourism Corporation Limited
@@ -913,10 +971,12 @@ IRMENERGY,Unknown,IRM Energy Limited
 ISFT,Unknown,Intrasoft Technologies Limited
 ISGEC,Unknown,Isgec Heavy Engineering Limited
 ISHANCH,Unknown,Ishan Dyes and Chemicals Limited
+ISTLTD,Unknown,I S T Limited
 ITC,Fast Moving Consumer Goods,ITC Limited
 ITCHOTELS,Consumer Services,ITC Hotels Limited
 ITDC,Unknown,India Tourism Development Corporation Limited
 ITI,Telecommunication,ITI Limited
+ITL,Unknown,ITL Industries Limited
 IVALUE,Unknown,Ivalue Infosolutions Limited
 IVC,Unknown,IL&FS Investment Managers Limited
 IWP,Unknown,The Indian Wood Products Company Limited
@@ -938,6 +998,7 @@ JAYKAY,Unknown,Jaykay Enterprises Limited
 JAYNECOIND,Capital Goods,Jayaswal Neco Industries Limited
 JAYSREETEA,Unknown,Jayshree Tea & Industries Limited
 JBMA,Automobile and Auto Components,JBM Auto Limited
+JENBURPH,Unknown,Jenburkt Pharmaceuticals Limited
 JETFREIGHT,Unknown,Jet Freight Logistics Limited
 JGCHEM,Unknown,J.G.Chemicals Limited
 JHS,Unknown,JHS Svendgaard Laboratories Limited
@@ -984,6 +1045,7 @@ JUSTDIAL,Consumer Services,Just Dial Limited
 JWL,Capital Goods,Jupiter Wagons Limited
 JYOTHYLAB,Fast Moving Consumer Goods,Jyothy Labs Limited
 JYOTICNC,Capital Goods,Jyoti CNC Automation Limited
+JYOTIRES,Unknown,Jyoti Resins & Adhesives Limited
 JYOTISTRUC,Unknown,Jyoti Structures Limited
 KABRAEXTRU,Unknown,Kabra Extrusion Technik Limited
 KAJARIACER,Consumer Durables,Kajaria Ceramics Limited
@@ -993,10 +1055,12 @@ KALPATARU,Unknown,Kalpataru Limited
 KALYANIFRG,Unknown,Kalyani Forge Limited
 KALYANKJIL,Consumer Durables,Kalyan Jewellers India Limited
 KAMAHOLD,Unknown,Kama Holdings Limited
+KAMANWALA,Unknown,Kamanwala Housing Construction Limited
 KAMATHOTEL,Unknown,Kamat Hotels (I) Limited
 KAMOPAINTS,Unknown,Kamdhenu Ventures Limited
 KANANIIND,Unknown,Kanani Industries Limited
 KANCHI,Unknown,Kanchi Karpooram Limited
+KANCOTEA,Unknown,Kanco Tea & Industries Limited
 KANPRPLA,Unknown,Kanpur Plastipack Limited
 KANSAINER,Consumer Durables,Kansai Nerolac Paints Limited
 KAPSTON,Unknown,Kapston Services Limited
@@ -1032,8 +1096,10 @@ KIRLOSIND,Unknown,Kirloskar Industries Limited
 KIRLPNU,Capital Goods,Kirloskar Pneumatic Company Limited
 KISSHT,Unknown,OnEMI Technology Solutions Limited
 KITEX,Textiles,Kitex Garments Limited
+KJMCFIN,Unknown,KJMC Financial Services Limited
 KKCL,Unknown,Kewal Kiran Clothing Limited
 KLBRENG-B,Unknown,Kilburn Engineering Limited
+KMCSHIL,Unknown,K M C Speciality Hospitals (India) Limited
 KMEW,Unknown,Knowledge Marine & Engineering Works Limited
 KMSUGAR,Unknown,K.M.Sugar Mills Limited
 KNACK,Unknown,Knack Packaging Limited
@@ -1069,6 +1135,7 @@ KRSNAA,Unknown,Krsnaa Diagnostics Limited
 KRYSTAL,Unknown,Krystal Integrated Services Limited
 KSB,Capital Goods,Ksb Limited
 KSCL,Fast Moving Consumer Goods,Kaveri Seed Company Limited
+KSE,Unknown,KSE Limited
 KSHINTL,Unknown,KSH International Limited
 KSHITIJPOL,Unknown,Kshitij Polyline Limited
 KSL,Unknown,Kalyani Steels Limited
@@ -1078,11 +1145,14 @@ KTKBANK,Financial Services,The Karnataka Bank Limited
 KUANTUM,Unknown,Kuantum Papers Limited
 KUSUMGAR,Unknown,Kusumgar Limited
 KWIL,Unknown,Kwality Wall's (India) Limited
+LADDERUP,Unknown,Ladderup Finance Limited
 LAGNAM,Unknown,Lagnam Spintex Limited
 LAHOTIOV,Unknown,Lahoti Overseas Limited
+LAKSHMIMIL,Unknown,Lakshmi Mills Company Limited
 LAL,Unknown,Lorenzini Apparels Limited
 LALPATHLAB,Healthcare,Dr. Lal Path Labs Ltd.
 LAMBODHARA,Unknown,Lambodhara Textiles Limited
+LANCER,Unknown,Lancer Container Lines Limited
 LANCORHOL,Unknown,Lancor Holdings Limited
 LANDMARK,Unknown,Landmark Cars Limited
 LANDSMILL,Unknown,Landsmill Green Limited
@@ -1090,12 +1160,15 @@ LAOPALA,Unknown,La Opala RG Limited
 LASA,Unknown,Lasa Supergenerics Limited
 LASERPOWER,Unknown,Laser Power & Infra Limited
 LATENTVIEW,Information Technology,Latent View Analytics Limited
+LATTEYS,Unknown,Latteys Industries Limited
 LAURUSLABS,Healthcare,Laurus Labs Limited
 LAXMICOT,Unknown,Laxmi Cotspin Limited
 LAXMIDENTL,Unknown,Laxmi Dental Limited
+LAXMIINDIA,Unknown,Laxmi India Finance Limited
 LCCINFOTEC,Unknown,LCC Infotech Limited
 LCL,Unknown,Lohia Corp Limited
 LEAPIND,Unknown,LEAP India Limited
+LEENEE,Unknown,Lee & Nee Softwares Exports Limited
 LEMERITE,Unknown,Le Merite Exports Limited
 LEMONTREE,Consumer Services,Lemon Tree Hotels Limited
 LENSKART,Consumer Services,Lenskart Solutions Limited
@@ -1112,12 +1185,14 @@ LIKHITHA,Unknown,Likhitha Infrastructure Limited
 LINC,Unknown,Linc Limited
 LINCOLN,Unknown,Lincoln Pharmaceuticals Limited
 LINDEINDIA,Chemicals,Linde India Limited
+LKPSEC,Unknown,LKP Securities Limited
 LLOYDSENGG,Capital Goods,LLOYDS ENGINEERING WORKS LIMITED
 LLOYDSENT,Metals & Mining,Lloyds Enterprises Limited
 LLOYDSME,Metals & Mining,Lloyds Metals And Energy Limited
 LMW,Unknown,LMW Limited
 LODHA,Realty,Lodha Developers Limited
 LORDSCHLO,Unknown,Lords Chloro Alkali Limited
+LOTUSCHO,Unknown,Lotus Chocolate Company Limited
 LOTUSEYE,Unknown,Lotus Eye Hospital and Institute Limited
 LOVABLE,Unknown,Lovable Lingerie Limited
 LOYALTEX,Unknown,Loyal Textile Mills Limited
@@ -1150,6 +1225,7 @@ MAHLOG,Unknown,Mahindra Logistics Limited
 MAHSCOOTER,Financial Services,Maharashtra Scooters Limited
 MAHSEAMLES,Capital Goods,Maharashtra Seamless Limited
 MAITHANALL,Unknown,Maithan Alloys Limited
+MAKERSL,Unknown,Makers Laboratories Limited
 MALLCOM,Unknown,Mallcom (India) Limited
 MALUPAPER,Unknown,Malu Paper Mills Limited
 MAMATA,Unknown,Mamata Machinery Limited
@@ -1160,6 +1236,7 @@ MANAKSTEEL,Unknown,Manaksia Steels Limited
 MANALIPETC,Unknown,Manali Petrochemicals Limited
 MANAPPURAM,Financial Services,Manappuram Finance Limited
 MANBA,Unknown,Manba Finance Limited
+MANBRO,Unknown,Manbro Industries Limited
 MANCREDIT,Unknown,Mangal Credit and Fincorp Limited
 MANGALAM,Unknown,Mangalam Drugs And Organics Limited
 MANGLMCEM,Unknown,Mangalam Cement Limited
@@ -1172,6 +1249,7 @@ MANORAMA,Fast Moving Consumer Goods,Manorama Industries Limited
 MANORG,Unknown,Mangalam Organics Limited
 MANYAVAR,Consumer Services,Vedant Fashions Limited
 MAPMYINDIA,Information Technology,C.E. Info Systems Limited
+MARALOVER,Unknown,Maral Overseas Limited
 MARATHON,Unknown,Marathon Nextgen Realty Limited
 MARICO,Fast Moving Consumer Goods,Marico Limited
 MARINE,Unknown,Marine Electricals (India) Limited
@@ -1201,6 +1279,7 @@ MCX,Financial Services,Multi Commodity Exchange of India Limited
 MEDANTA,Healthcare,Global Health Limited
 MEDIASSIST,Unknown,Medi Assist Healthcare Services Limited
 MEDICAMEQ,Unknown,Medicamen Biotech Limited
+MEDICAPQ,Unknown,Medi Caps Limited
 MEDICO,Unknown,Medico Remedies Limited
 MEDPLUS,Consumer Services,Medplus Health Services Limited
 MEESHO,Consumer Services,Meesho Limited
@@ -1219,11 +1298,15 @@ MHLXMIRU,Unknown,Mahalaxmi Rubtech Limited
 MHRIL,Unknown,Mahindra Holidays & Resorts India Limited
 MIDHANI,Capital Goods,Mishra Dhatu Nigam Limited
 MIDWESTLTD,Unknown,Midwest Limited
+MIIL,Unknown,Meghna Infracon Infrastructure Limited
+MINALIND,Unknown,Minal Industries Limited
 MINDACORP,Automobile and Auto Components,Minda Corporation Limited
 MINDTECK,Unknown,Mindteck (India) Limited
 MIRZAINT,Unknown,Mirza International Limited
 MITTAL,Unknown,Mittal Life Style Limited
+MKEXIM,Unknown,M.K. Exim (India) Limited
 MKPL,Unknown,M K Proteins Limited
+MLKFOOD,Unknown,Milkfood Limited
 MMFL,Unknown,MM Forgings Limited
 MMP,Unknown,MMP Industries Limited
 MMTC,Services,MMTC Limited
@@ -1232,10 +1315,12 @@ MOBIKWIK,Unknown,One Mobikwik Systems Limited
 MODIRUBBER,Unknown,Modi Rubber Limited
 MODIS,Unknown,Modis Navnirman Limited
 MODTHREAD,Unknown,Modern Threads (India) Limited
+MOHITE,Unknown,Mohite Industries Limited
 MOHITIND,Unknown,Mohit Industries Limited
 MOIL,Metals & Mining,MOIL Limited
 MOKSH,Unknown,Moksh Ornaments Limited
 MOL,Unknown,Meghmani Organics Limited
+MOLBIO,Unknown,Molbio Diagnostics Limited
 MOLDTKPAC,Unknown,Mold-Tek Packaging Limited
 MONARCH,Unknown,Monarch Networth Capital Limited
 MONEYBOXX,Unknown,Moneyboxx Finance Limited
@@ -1245,10 +1330,12 @@ MOSCHIP,Unknown,Moschip Technologies Limited
 MOTHERSON,Automobile and Auto Components,Samvardhana Motherson International Limited
 MOTILALOFS,Financial Services,Motilal Oswal Financial Services Limited
 MOTISONS,Unknown,Motisons Jewellers Limited
+MPDL,Unknown,MPDL Limited
 MPHASIS,Information Technology,MphasiS Limited
 MPSLTD,Unknown,MPS Limited
 MRF,Automobile and Auto Components,MRF Limited
 MRPL,Oil Gas & Consumable Fuels,Mangalore Refinery and Petrochemicals Limited
+MSL,Unknown,Mangalam Seeds Limited
 MSPL,Unknown,MSP Steel & Power Limited
 MSTCLTD,Services,Mstc Limited
 MSUMI,Automobile and Auto Components,Motherson Sumi Wiring India Limited
@@ -1256,6 +1343,7 @@ MTNL,Unknown,Mahanagar Telephone Nigam Limited
 MUFIN,Unknown,Mufin Green Finance Limited
 MUFTI,Unknown,Credo Brands Marketing Limited
 MUKANDLTD,Unknown,Mukand Limited
+MUKESHB,Unknown,Mukesh Babu Financial Services Limited
 MUKKA,Unknown,Mukka Proteins Limited
 MUNJALAU,Unknown,Munjal Auto Industries Limited
 MUNJALSHOW,Unknown,Munjal Showa Limited
@@ -1266,6 +1354,7 @@ MUTHOOTMF,Unknown,Muthoot Microfin Limited
 MVELECTRO,Unknown,MV Electrosystems Limited
 MVGJL,Unknown,Manoj Vaibhav Gems N Jewellers Limited
 MWL,Unknown,Mangalam Worldwide Limited
+MYSORPETRO,Unknown,Mysore Petro Chemicals Limited
 NACLIND,Unknown,NACL Industries Limited
 NAGREEKCAP,Unknown,Nagreeka Capital & Infrastructure Limited
 NAGREEKEXP,Unknown,Nagreeka Exports Limited
@@ -1296,6 +1385,7 @@ NDLVENTURE,Unknown,NDL Ventures Limited
 NDRAUTO,Unknown,Ndr Auto Components Limited
 NDTV,Unknown,New Delhi Television Limited
 NEAGI,Unknown,Neelamalai Agro Industries Limited
+NECLIFE,Unknown,Nectar Lifesciences Limited
 NELCAST,Unknown,Nelcast Limited
 NELCO,Unknown,NELCO Limited
 NEOGEN,Chemicals,Neogen Chemicals Limited
@@ -1314,6 +1404,7 @@ NHPC,Power,NHPC Limited
 NIACL,Financial Services,The New India Assurance Company Limited
 NIBE,Unknown,NIBE Limited
 NIBL,Unknown,NRB Industrial Bearings Limited
+NICCOPAR,Unknown,Nicco Parks & Resorts Limited
 NIITLTD,Unknown,NIIT Limited
 NIITMTS,Unknown,NIIT Learning Systems Limited
 NILAINFRA,Unknown,Nila Infrastructures Limited
@@ -1323,6 +1414,7 @@ NILKAMAL,Unknown,Nilkamal Limited
 NIMBSPROJ,Unknown,Nimbus Projects Limited
 NINSYS,Unknown,NINtec Systems Limited
 NIPPOBATRY,Unknown,Indo-National Limited
+NIRAJ,Unknown,Niraj Cement Structurals Limited
 NIRAJISPAT,Unknown,Niraj Ispat Industries Limited
 NIRLON,Unknown,Nirlon Limited
 NITCO,Unknown,Nitco Limited
@@ -1342,6 +1434,7 @@ NRAIL,Unknown,N R Agarwal Industries Limited
 NRBBEARING,Unknown,NRB Bearing Limited
 NSIL,Unknown,Nalwa Sons Investments Limited
 NSLNISP,Metals & Mining,NMDC Steel Limited
+NTCIND,Unknown,NTC Industries Limited
 NTPC,Power,NTPC Limited
 NTPCGREEN,Power,NTPC Green Energy Limited
 NUCLEUS,Unknown,Nucleus Software Exports Limited
@@ -1352,6 +1445,7 @@ OAL,Unknown,Oriental Aromatics Limited
 OBCL,Unknown,OBCL Limited
 OBEROIRLTY,Realty,Oberoi Realty Limited
 ODIGMA,Unknown,Odigma Consultancy Solutions Limited
+ODYCORP,Unknown,Odyssey Corporation Limited
 OFSS,Information Technology,Oracle Financial Services Software Limited
 OIL,Oil Gas & Consumable Fuels,Oil India Limited
 OLAELEC,Automobile and Auto Components,Ola Electric Mobility Limited
@@ -1361,12 +1455,15 @@ OMAXE,Unknown,Omaxe Limited
 OMINFRAL,Unknown,OM INFRA LIMITED
 OMNI,Unknown,Omnitech Engineering Limited
 OMPOWER,Unknown,Om Power Transmission Limited
+ONEGLOBAL,Unknown,One Global Service Provider Limited
 ONEPOINT,Unknown,One Point One Solutions Limited
 ONESOURCE,Healthcare,Onesource Specialty Pharma Limited
 ONGC,Oil Gas & Consumable Fuels,Oil & Natural Gas Corporation Limited
 ONIDA,Unknown,Onida Electronics Limited
+ONIXSOLAR,Unknown,Onix Solar Energy Limited
 ONWARDTEC,Unknown,Onward Technologies Limited
 OPTIEMUS,Telecommunication,Optiemus Infracom Limited
+OPTIFIN,Unknown,Optimus Finance Limited
 ORCHASP,Unknown,Orchasp Limited
 ORCHPHARMA,Unknown,Orchid Pharma Limited
 ORICONENT,Unknown,Oricon Enterprises Limited
@@ -1378,6 +1475,7 @@ ORIENTELEC,Unknown,Orient Electric Limited
 ORIENTHOT,Unknown,Oriental Hotels Limited
 ORIENTPPR,Unknown,Orient Paper & Industries Limited
 ORIENTTECH,Unknown,Orient Technologies Limited
+ORIRAIL,Unknown,Oriental Rail Infrastructure Limited
 ORISSAMINE,Unknown,The Orissa Minerals Development Company Limited
 ORKLAINDIA,Fast Moving Consumer Goods,Orkla India Limited
 ORTINGLOBE,Unknown,ORTIN GLOBAL LIMITED
@@ -1386,12 +1484,15 @@ OSWALGREEN,Unknown,Oswal Greentech Limited
 OSWALPUMPS,Capital Goods,Oswal Pumps Limited
 OSWALSEEDS,Unknown,ShreeOswal Seeds And Chemicals Limited
 PACEDIGITK,Unknown,Pace Digitek Limited
+PACIFICI,Unknown,Pacific Industries Limited
 PAGEIND,Textiles,Page Industries Limited
 PAISALO,Unknown,Paisalo Digital Limited
 PAKKA,Unknown,PAKKA LIMITED
 PALASHSECU,Unknown,Palash Securities Limited
 PANACEABIO,Unknown,Panacea Biotec Limited
 PANAMAPET,Unknown,Panama Petrochem Limited
+PANCHMAHQ,Unknown,Panchmahal Steel Limited
+PANORAMA,Unknown,Panorama Studios International Limited
 PANSARI,Unknown,Pansari Developers Limited
 PAR,Unknown,Par Drugs And Chemicals Limited
 PARACABLES,Unknown,Paramount Communications Limited
@@ -1401,6 +1502,7 @@ PARAS,Capital Goods,Paras Defence and Space Technologies Limited
 PARASPETRO,Unknown,Paras Petrofils Limited
 PARKHOSPS,Healthcare,Park Medi World Limited
 PARKHOTELS,Unknown,Apeejay Surrendra Park Hotels Limited
+PARNAXLAB,Unknown,Parnax Lab Limited
 PASHUPATI,Unknown,Pashupati Cotspin Limited
 PATANJALI,Fast Moving Consumer Goods,Patanjali Foods Limited
 PATELENG,Unknown,Patel Engineering Limited
@@ -1408,12 +1510,14 @@ PATELRMART,Unknown,Patel Retail Limited
 PAUSHAKLTD,Unknown,Paushak Limited
 PAVNAIND,Unknown,Pavna Industries Limited
 PAYTM,Financial Services,One 97 Communications Limited
+PBMPOLY,Unknown,PBM Polytex Limited
 PCBL,Chemicals,PCBL Chemical Limited
 PCJEWELLER,Consumer Durables,PC Jeweller Limited
 PDMJEPAPER,Unknown,Pudumjee Paper Products Limited
 PDSL,Unknown,PDS Limited
 PEARLPOLY,Unknown,Pearl Polymers Limited
 PENIND,Unknown,Pennar Industries Limited
+PERMAGN,Unknown,Permanent Magnets Limited
 PERSISTENT,Information Technology,Persistent Systems Limited
 PETRONET,Oil Gas & Consumable Fuels,Petronet LNG Limited
 PFC,Financial Services,Power Finance Corporation Limited
@@ -1425,6 +1529,7 @@ PGHH,Unknown,Procter & Gamble Hygiene and Health Care Limited
 PGHL,Unknown,Procter & Gamble Health Limited
 PGIL,Textiles,Pearl Global Industries Limited
 PHOENIXLTD,Realty,The Phoenix Mills Limited
+PHOENXINTL,Unknown,Phoenix International Limited
 PICCADIL,Fast Moving Consumer Goods,Piccadily Agro Industries Limited
 PIDILITIND,Chemicals,Pidilite Industries Limited
 PIGL,Unknown,Power & Instrumentation (Gujarat) Limited
@@ -1450,11 +1555,13 @@ PNGJL,Consumer Durables,P N Gadgil Jewellers Limited
 PNGSREVA,Unknown,PNGS Reva Diamond Jewellery Limited
 POCL,Unknown,Pondy Oxides & Chemicals Limited
 PODDARMENT,Unknown,Poddar Pigments Limited
+POEL,Unknown,POCL Enterprises Limited
 POKARNA,Unknown,Pokarna Limited
 POLICYBZR,Financial Services,PB Fintech Limited
 POLYCAB,Capital Goods,Polycab India Limited
 POLYMED,Healthcare,Poly Medicure Limited
 POLYPLEX,Unknown,Polyplex Corporation Limited
+POLYSPIN,Unknown,Polyspin Exports Limited
 PONNIERODE,Unknown,Ponni Sugars (Erode) Limited
 POONAWALLA,Financial Services,Poonawalla Fincorp Limited
 POWERGRID,Power,Power Grid Corporation of India Limited
@@ -1481,6 +1588,7 @@ PRICOLLTD,Automobile and Auto Components,Pricol Limited
 PRIMESECU,Unknown,Prime Securities Limited
 PRIMO,Unknown,Primo Chemicals Limited
 PRINCEPIPE,Unknown,Prince Pipes And Fittings Limited
+PRISMX,Unknown,Prismx Global Ventures Limited
 PRIVISCL,Chemicals,Privi Speciality Chemicals Limited
 PROSTARM,Unknown,Prostarm Info Systems Limited
 PROTEAN,Unknown,Protean eGov Technologies Limited
@@ -1544,6 +1652,7 @@ RECLTD,Financial Services,REC Limited
 REDINGTON,Services,Redington Limited
 REDTAPE,Consumer Durables,Redtape Limited
 REFEX,Utilities,Refex Industries Limited
+REGAAL,Unknown,Regaal Resources Limited
 REGENCERAM,Unknown,Regency Ceramics Limited
 RELAXO,Consumer Durables,Relaxo Footwears Limited
 RELCHEMQ,Unknown,Reliance Chemotex Industries Limited
@@ -1588,6 +1697,7 @@ RPOWER,Power,Reliance Power Limited
 RPPINFRA,Unknown,R.P.P. Infra Projects Limited
 RPSGVENT,Unknown,RPSG VENTURES LIMITED
 RPTECH,Unknown,Rashi Peripherals Limited
+RRECL,Unknown,RDB Real Estate Constructions Limited
 RRIL,Unknown,RRIL Limited
 RRKABEL,Capital Goods,R R Kabel Limited
 RSL,Unknown,Rajputana Stainless Limited
@@ -1595,6 +1705,7 @@ RSSOFTWARE,Unknown,R. S. Software (India) Limited
 RSYSTEMS,Unknown,R Systems International Limited
 RTNINDIA,Consumer Services,RattanIndia Enterprises Limited
 RTNPOWER,Power,RattanIndia Power Limited
+RTSPOWR,Unknown,RTS Power Corporation Limited
 RUBFILA,Unknown,Rubfila International Limited
 RUBICON,Healthcare,Rubicon Research Limited
 RUCHINFRA,Unknown,Ruchi Infrastructure Limited
@@ -1608,6 +1719,7 @@ RVNL,Construction,Rail Vikas Nigam Limited
 RVTH,Unknown,Revathi Equipment India Limited
 S&SPOWER,Unknown,S&S Power Switchgears Limited
 SAATVIKGL,Capital Goods,Saatvik Green Energy Limited
+SAB,Unknown,SAB Industries Limited
 SADBHAV,Unknown,Sadbhav Engineering Limited
 SAFARI,Consumer Durables,Safari Industries (India) Limited
 SAGARDEEP,Unknown,Sagardeep Alloys Limited
@@ -1615,6 +1727,7 @@ SAGCEM,Unknown,Sagar Cements Limited
 SAGILITY,Information Technology,SAGILITY LIMITED
 SAHLIBHFI,Unknown,Shalibhadra Finance Limited
 SAHYADRI,Unknown,Sahyadri Industries Limited
+SAICAPI,Unknown,Sai Capital Limited
 SAIL,Metals & Mining,Steel Authority of India Limited
 SAILIFE,Healthcare,Sai Life Sciences Limited
 SAIPARENT,Unknown,Sai Parenterals Limited
@@ -1626,6 +1739,7 @@ SALASAR,Unknown,Salasar Techno Engineering Limited
 SALONA,Unknown,Salona Cotspin Limited
 SALSTEEL,Unknown,S.A.L. Steel Limited
 SALZERELEC,Unknown,Salzer Electronics Limited
+SAMBANDAM,Unknown,Sambandam Spinning Mills Limited
 SAMBHAAV,Unknown,Sambhaav Media Limited
 SAMBHV,Unknown,Sambhv Steel Tubes Limited
 SAMHI,Consumer Services,Samhi Hotels Limited
@@ -1652,6 +1766,7 @@ SATIA,Unknown,Satia Industries Limited
 SATIN,Unknown,Satin Creditcare Network Limited
 SAURASHCEM,Unknown,Saurashtra Cement Limited
 SAYAJIHOTL,Unknown,Sayaji Hotels Limited
+SAYAJIIND,Unknown,Sayaji Industries Limited
 SBC,Unknown,SBC Exports Limited
 SBCL,Unknown,Shivalik Bimetal Controls Limited
 SBFC,Financial Services,SBFC Finance Limited
@@ -1674,7 +1789,9 @@ SECURKLOUD,Unknown,SECUREKLOUD TECHNOLOGIES LIMITED
 SEDEMAC,Unknown,SEDEMAC Mechatronics Limited
 SEIL,Unknown,Shanti Educational Initiatives Limited
 SEJALLTD,Unknown,Sejal Glass Limited
+SEKURITIND,Unknown,Saint Gobain Sekurit India Limited
 SELMC,Unknown,SEL Manufacturing Company Limited
+SEMAC,Unknown,Semac Construction Limited
 SENCO,Consumer Durables,Senco Gold Limited
 SENORES,Unknown,Senores Pharmaceuticals Limited
 SEPC,Unknown,SEPC Limited
@@ -1685,7 +1802,9 @@ SFL,Consumer Durables,Sheela Foam Limited
 SGFIN,Unknown,SG Finserve Limited
 SGIL,Unknown,Synergy Green Industries Limited
 SGL,Unknown,STL Global Limited
+SGLRES,Unknown,SGL Resources Limited
 SGMART,Unknown,SG Mart Limited
+SGRL,Unknown,Shree Ganesh Remedies Limited
 SHADOWFAX,Unknown,Shadowfax Technologies Limited
 SHAH,Unknown,Shah Metacorp Limited
 SHAHALLOYS,Unknown,Shah Alloys Limited
@@ -1700,15 +1819,19 @@ SHARDACROP,Chemicals,Sharda Cropchem Limited
 SHARDAMOTR,Unknown,Sharda Motor Industries Limited
 SHAREINDIA,Financial Services,Share India Securities Limited
 SHBAJRG,Unknown,Shri Bajrang Alliance Limited
-SHEKHAWATI,Unknown,Shekhawati Industries Limited
+SHERVANI,Unknown,Shervani Industrial Syndicate Limited
 SHILCTECH,Unknown,Shilchar Technologies Limited
+SHILGRAVQ,Unknown,Shilp Gravures Limited
 SHILPAMED,Healthcare,Shilpa Medicare Limited
 SHINDL,Unknown,Sharat Industries Limited
+SHIVAAGRO,Unknown,Shiva Global Agro Industries Limited
+SHIVACEM,Unknown,Shiva Cement Limited
 SHIVAMILLS,Unknown,Shiva Mills Limited
 SHIVATEX,Unknown,Shiva Texyarn Limited
 SHIVAUM,Unknown,Shiv Aum Steels Limited
 SHK,Unknown,S H Kelkar and Company Limited
 SHOPERSTOP,Unknown,Shoppers Stop Limited
+SHRADDHA,Unknown,Shraddha Prime Projects Limited
 SHRADHA,Unknown,Shradha Realty Limited
 SHREDIGCEM,Unknown,Shree Digvijay Cement Co.Ltd
 SHREECEM,Construction Materials,SHREE CEMENT LIMITED
@@ -1721,12 +1844,17 @@ SHRINGARMS,Unknown,Shringar House of Mangalsutra Limited
 SHRIPISTON,Automobile and Auto Components,SPR Auto Technologies Limited
 SHRIRAMFIN,Financial Services,Shriram Finance Limited
 SHRIRAMPPS,Unknown,Shriram Properties Limited
+SHRJAGP,Unknown,Shri Jagdamba Polymers Limited
 SHUKRAPHAR,Unknown,Shukra Pharmaceuticals Limited
 SHYAMMETL,Capital Goods,Shyam Metalics and Energy Limited
+SHYAMTEL,Unknown,Shyam Telecom Limited
 SICAGEN,Unknown,Sicagen India Limited
+SIEL,Unknown,Superior Industrial Enterprises Limited
 SIEMENS,Capital Goods,Siemens Limited
+SIGACHI,Unknown,Sigachi Industries Limited
 SIGIND,Unknown,Signet Industries Limited
 SIGMA,Unknown,Sigma Solve Limited
+SIGMAADV,Unknown,SIGMA ADVANCED SYSTEMS LIMITED
 SIGNATURE,Realty,Signatureglobal (India) Limited
 SIGNPOST,Unknown,Signpost India Limited
 SIKA,Unknown,Sika Interplant Systems Limited
@@ -1736,6 +1864,7 @@ SILINV,Unknown,SIL Investments Limited
 SILLYMONKS,Unknown,Silly Monks Entertainment Limited
 SILVERTUC,Unknown,Silver Touch Technologies Limited
 SIMPLEXINF,Unknown,Simplex Infrastructures Limited
+SIMPLXREA,Unknown,Simplex Realty Limited
 SINCLAIR,Unknown,Sinclairs Hotels Limited
 SINDHUTRAD,Unknown,Sindhu Trade Links Limited
 SINGERIND,Unknown,Singer India Limited
@@ -1776,6 +1905,7 @@ SPAL,Unknown,S. P. Apparels Limited
 SPANDANA,Unknown,Spandana Sphoorty Financial Limited
 SPARC,Healthcare,Sun Pharma Advanced Research Company Limited
 SPCENET,Unknown,Spacenet Enterprises India Limited
+SPELS,Unknown,SPEL Semiconductor Limited
 SPENCERS,Unknown,Spencer's Retail Limited
 SPIC,Unknown,Southern Petrochemicals Industries Corporation  Limited
 SPLIL,Unknown,SPL Industries Limited
@@ -1787,6 +1917,7 @@ SREEL,Unknown,Sreeleathers Limited
 SRF,Chemicals,SRF Limited
 SRGHFL,Unknown,SRG Housing Finance Limited
 SRHHYPOLTD,Unknown,Sree Rayalaseema Hi-Strength Hypo Limited
+SRIKPRIND,Unknown,Sri KPR Industries Limited
 SRM,Unknown,SRM Contractors Limited
 SRTL,Unknown,Shree Ram Twistex Limited
 SSDL,Unknown,Saraswati Saree Depot Limited
@@ -1803,18 +1934,21 @@ STEELCITY,Unknown,Steel City Securities Limited
 STEELXIND,Unknown,STEEL EXCHANGE INDIA LIMITED
 STEL,Unknown,Stel Holdings Limited
 STLNETWORK,Unknown,STL Networks Limited
+STLSTRINF,Unknown,Steel Strips Infrastructures Limited
 STOVEKRAFT,Unknown,Stove Kraft Limited
 STUDDS,Unknown,Studds Accessories Limited
 STYL,Financial Services,Seshaasai Technologies Limited
 STYLAMIND,Unknown,Stylam Industries Limited
 STYLEBAAZA,Unknown,Baazar Style Retail Limited
 STYRENIX,Chemicals,Styrenix Performance Materials Limited
+SUBEXLTD,Unknown,Subex Limited
 SUBROS,Capital Goods,Subros Limited
 SUDARCOLOR,Unknown,Sudarshan Colorants India Limited
 SUDARSCHEM,Chemicals,Sudarshan Chemical Industries Limited
 SUDEEPPHRM,Chemicals,Sudeep Pharma Limited
 SUKHJITS,Unknown,Sukhjit Starch & Chemicals Limited
 SULA,Unknown,Sula Vineyards Limited
+SUMEDHA,Unknown,Sumedha Fiscal Services Limited
 SUMEETINDS,Unknown,Sumeet Industries Limited
 SUMICHEM,Chemicals,Sumitomo Chemical India Limited
 SUMIT,Unknown,Sumit Woods Limited
@@ -1825,7 +1959,10 @@ SUNDARMFIN,Financial Services,Sundaram Finance Limited
 SUNDRMFAST,Unknown,Sundram Fasteners Limited
 SUNDROP,Unknown,Sundrop Brands Limited
 SUNFLAG,Unknown,Sunflag Iron And Steel Company Limited
+SUNLOC,Unknown,Sunil Healthcare Limited
 SUNPHARMA,Healthcare,Sun Pharmaceutical Industries Limited
+SUNRAKSHAK,Unknown,Sunrakshakk Industries India Limited
+SUNSHIEL,Unknown,Sunshield Chemicals Limited
 SUNTECK,Realty,Sunteck Realty Limited
 SUNTV,Media Entertainment & Publication,Sun TV Network Limited
 SUPERHOUSE,Unknown,Superhouse Limited
@@ -1834,6 +1971,7 @@ SUPREME,Unknown,Supreme Holdings & Hospitality (India) Limited
 SUPREMEIND,Capital Goods,Supreme Industries Limited
 SUPREMEINF,Unknown,Supreme Infrastructure India Limited
 SUPRIYA,Healthcare,Supriya Lifescience Limited
+SUPTANERY,Unknown,Super Tannery Limited
 SURAJEST,Unknown,Suraj Estate Developers Limited
 SURAJLTD,Unknown,Suraj Limited
 SURAKSHA,Unknown,Suraksha Diagnostic Limited
@@ -1847,11 +1985,15 @@ SUVEN,Unknown,Suven Life Sciences Limited
 SUVIDHAA,Unknown,Suvidhaa Infoserve Limited
 SUYOG,Unknown,Suyog Telematics Limited
 SUZLON,Capital Goods,Suzlon Energy Limited
+SVGLOBAL,Unknown,S V Global Mill Limited
+SVPGLOB,Unknown,SVP GLOBAL TEXTILES LIMITED
 SWANCORP,Chemicals,SWAN CORP LIMITED
 SWARAJ,Unknown,Swaraj Suiting Limited
 SWARAJENG,Unknown,Swaraj Engines Limited
+SWARNSAR,Unknown,Swarnsarita Jewels India Limited
 SWELECTES,Unknown,Swelect Energy Systems Limited
 SWIGGY,Consumer Services,Swiggy Limited
+SWISSMLTRY,Unknown,Swiss Military Consumer Goods Limited
 SWSOLAR,Construction,Sterling and Wilson Renewable Energy Limited
 SYMPHONY,Unknown,Symphony Limited
 SYNCOMF,Unknown,Syncom Formulations (India) Limited
@@ -1862,6 +2004,7 @@ TAINWALCHM,Unknown,Tainwala Chemical and Plastic (I) Limited
 TAJGVK,Unknown,Taj GVK Hotels & Resorts Limited
 TAKE,Unknown,TAKE Limited
 TALBROAUTO,Unknown,Talbros Automotive Components Limited
+TANAA,Unknown,Taneja Aerospace & Aviation Limited
 TANLA,Information Technology,Tanla Platforms Limited
 TARACHAND,Unknown,Tara Chand InfraLogistic Solutions Limited
 TARAPUR,Unknown,Tarapur Transformers Limited
@@ -1899,6 +2042,7 @@ TEGA,Capital Goods,Tega Industries Limited
 TEJASNET,Telecommunication,Tejas Networks Limited
 TEMBO,Unknown,Tembo Global Industries Limited
 TENNIND,Automobile and Auto Components,Tenneco Clean Air India Limited
+TERAI,Unknown,Terai Tea Company Limited
 TERASOFT,Unknown,Tera Software Limited
 TEXINFRA,Unknown,Texmaco Infrastructure & Holdings Limited
 TEXMOPIPES,Unknown,Texmo Pipes and Products Limited
@@ -1906,6 +2050,7 @@ TEXRAIL,Capital Goods,Texmaco Rail & Engineering Limited
 TFCILTD,Unknown,Tourism Finance Corporation of India Limited
 TFL,Unknown,Transwarranty Finance Limited
 TGBHOTELS,Unknown,TGB Banquets And Hotels Limited
+TGVSL,Unknown,TGV Sraac Limited
 THAKDEV,Unknown,Thakkers Developers Limited
 THANGAMAYL,Consumer Durables,Thangamayil Jewellery Limited
 THEINVEST,Unknown,The Investment Trust Of India Limited
@@ -1917,6 +2062,7 @@ THOMASCOOK,Consumer Services,Thomas Cook  (India)  Limited
 THOMASCOTT,Unknown,Thomas Scott (India) Limited
 THYROCARE,Healthcare,Thyrocare Technologies Limited
 TI,Fast Moving Consumer Goods,Tilaknagar Industries Limited
+TIGERLOGS,Unknown,Tiger Logistics (India) Limited
 TIIL,Unknown,Technocraft Industries (India) Limited
 TIINDIA,Automobile and Auto Components,Tube Investments of India Limited
 TIJARIA,Unknown,Tijaria Polypipes Limited
@@ -1941,9 +2087,11 @@ TORNTPHARM,Healthcare,Torrent Pharmaceuticals Limited
 TORNTPOWER,Power,Torrent Power Limited
 TOTAL,Unknown,Total Transport Systems Limited
 TOUCHWOOD,Unknown,Touchwood Entertainment Limited
+TOYAMSL,Unknown,Toyam Sports Limited
 TPHQ,Unknown,Teamo Productions HQ Limited
 TPLPLASTEH,Unknown,TPL Plastech Limited
 TRACXN,Unknown,Tracxn Technologies Limited
+TRANSCOR,Unknown,Transcorp International Limited
 TRANSRAILL,Capital Goods,Transrail Lighting Limited
 TRAVELFOOD,Consumer Services,Travel Food Services Limited
 TREEHOUSE,Unknown,Tree House Education & Accessories Limited
@@ -1953,6 +2101,7 @@ TRENT,Consumer Services,Trent Limited
 TRF,Unknown,TRF Limited
 TRIDENT,Textiles,Trident Limited
 TRIGYN,Unknown,Trigyn Technologies Limited
+TRITONV,Unknown,Triton Valves Limited
 TRITURBINE,Capital Goods,Triveni Turbine Limited
 TRIVENI,Fast Moving Consumer Goods,Triveni Engineering & Industries Limited
 TRU,Unknown,TruCap Finance Limited
@@ -1963,6 +2112,7 @@ TTKPRESTIG,Unknown,TTK Prestige Limited
 TTL,Unknown,T T Limited
 TTML,Telecommunication,Tata Teleservices (Maharashtra) Limited
 TURTLEMINT,Unknown,Turtlemint Fintech Solutions Limited
+TUTIALKA,Unknown,Tuticorin Alkali Chemicals & Fertilizers Limited
 TVSELECT,Unknown,TVS Electronics Limited
 TVSHLTD,Unknown,TVS Holdings Limited
 TVSMOTOR,Automobile and Auto Components,TVS Motor Company Limited
@@ -1972,6 +2122,7 @@ TVTODAY,Unknown,TV Today Network Limited
 UBL,Fast Moving Consumer Goods,United Breweries Limited
 UCAL,Unknown,UCAL LIMITED
 UCOBANK,Financial Services,UCO Bank
+UDAYJEW,Unknown,Uday Jewellery Industries Limited
 UDS,Unknown,Updater Services Limited
 UEL,Unknown,Ujaas Energy Limited
 UFLEX,Unknown,UFLEX Limited
@@ -1995,6 +2146,7 @@ UNITECH,Unknown,Unitech Limited
 UNITEDTEA,Unknown,The United Nilgiri Tea Estates Company Limited
 UNIVCABLES,Unknown,Universal Cables Limited
 UNOMINDA,Automobile and Auto Components,UNO Minda Limited
+UPHOT,Unknown,U P Hotels Limited
 UPL,Chemicals,UPL Limited
 URBANCO,Consumer Services,Urban Company Limited
 URJA,Unknown,Urja Global Limited
@@ -2006,6 +2158,7 @@ UTLSOLAR,Capital Goods,Fujiyama Power Systems Limited
 UTTAMSUGAR,Unknown,Uttam Sugar Mills Limited
 V2RETAIL,Consumer Services,V2 Retail Limited
 VADILALIND,Unknown,Vadilal Industries Limited
+VADILENT,Unknown,Vadilal Enterprises Limited
 VAIBHAVGBL,Consumer Durables,Vaibhav Global Limited
 VAISHALI,Unknown,Vaishali Pharma Limited
 VAKRANGEE,Unknown,Vakrangee Limited
@@ -2014,9 +2167,11 @@ VAML,Unknown,Vedanta Aluminium Metal Limited
 VARDMNPOLY,Unknown,Vardhman Polytex Limited
 VARROC,Automobile and Auto Components,Varroc Engineering Limited
 VASCONEQ,Unknown,Vascon Engineers Limited
+VASUPRADA,Unknown,Shri Vasuprada Plantations Limited
 VASWANI,Unknown,Vaswani Industries Limited
 VBL,Fast Moving Consumer Goods,Varun Beverages Limited
 VCL,Unknown,Vaxtex Cotfab Limited
+VEDAVAAG,Unknown,VEDAVAAG Systems Limited
 VEDL,Metals & Mining,Vedanta Limited
 VEDPOWER,Unknown,Vedanta Power Limited
 VEEDOL,Unknown,Veedol Corporation Limited
@@ -2025,12 +2180,14 @@ VENTIVE,Unknown,Ventive Hospitality Limited
 VENUSPIPES,Unknown,Venus Pipes & Tubes Limited
 VERANDA,Unknown,Veranda Learning Solutions Limited
 VESUVIUS,Unknown,Vesuvius India Limited
+VGCL,Unknown,Vibrant Global Capital Limited
 VGL,Unknown,VARVEE GLOBAL LIMITED
 VGUARD,Consumer Durables,V-Guard Industries Limited
 VHL,Unknown,Vardhman Holdings Limited
 VIDHIING,Unknown,Vidhi Specialty Food Ingredients Limited
 VIDYAWIRES,Unknown,Vidya Wires Limited
 VIJAYA,Healthcare,Vijaya Diagnostic Centre Limited
+VIJSOLX,Unknown,Vijay Solvex Limited
 VIKASECO,Unknown,Vikas EcoTech Limited
 VIKASLIFE,Unknown,Vikas Lifecare Limited
 VIKRAMSOLR,Capital Goods,Vikram Solar Limited
@@ -2042,13 +2199,19 @@ VINDHYATEL,Unknown,Vindhya Telelinks Limited
 VINEETLAB,Unknown,Vineet Laboratories Limited
 VINNY,Unknown,Vinny Overseas Limited
 VINYLINDIA,Unknown,Vinyl Chemicals (India) Limited
+VIPCLOTHNG,Unknown,VIP Clothing Limited
 VIPIND,Consumer Durables,VIP Industries Limited
+VIRAT,Unknown,Virat Industries Limited
 VIRINCHI,Unknown,Virinchi Limited
+VIRTUALG,Unknown,Virtual Global Education Limited
+VISACHROME,Unknown,VISA Chrome Limited
 VISAKAIND,Unknown,Visaka Industries Limited
+VISHAL,Unknown,Vishal Fabrics Limited
 VISHNU,Unknown,Vishnu Chemicals Limited
 VISHWARAJ,Unknown,Vishwaraj Sugar Industries Limited
 VISL,Unknown,Vedanta Iron and Steel Limited
 VIVIDHA,Unknown,Visagar Polytex Limited
+VIVOBIOT,Unknown,Vivo Bio Tech Limited
 VIYASH,Healthcare,Viyash Scientific Limited
 VLSFINANCE,Unknown,VLS Finance Limited
 VMART,Consumer Services,V-Mart Retail Limited
@@ -2056,6 +2219,7 @@ VMM,Consumer Services,Vishal Mega Mart Limited
 VMSTMT,Unknown,VMS TMT Limited
 VOEPL,Unknown,Virtuoso Optoelectronics Limited
 VOGL,Unknown,Vedanta Oil and Gas Limited
+VOITHPAPR,Unknown,Voith Paper Fabrics India Limited
 VOLTAMP,Capital Goods,Voltamp Transformers Limited
 VOLTAS,Consumer Durables,Voltas Limited
 VPRPL,Unknown,Vishnu Prakash R Punglia Limited
@@ -2066,6 +2230,7 @@ VSTIND,Unknown,VST Industries Limited
 VSTL,Unknown,Vibhor Steel Tubes Limited
 VSTTILLERS,Unknown,V.S.T Tillers Tractors Limited
 VTL,Textiles,Vardhman Textiles Limited
+VTMLTD,Unknown,VTM Limited
 WAAREEENER,Capital Goods,Waaree Energies Limited
 WAAREEINDO,Unknown,Indosolar Limited
 WAAREERTL,Capital Goods,Waaree Renewable Technologies Limited
@@ -2073,6 +2238,8 @@ WABAG,Utilities,VA Tech Wabag Limited
 WAKEFIT,Consumer Durables,Wakefit Innovations Limited
 WALCHANNAG,Unknown,Walchandnagar Industries Limited
 WANBURY,Unknown,Wanbury Limited
+WARDINMOBI,Unknown,Wardwizard Innovations & Mobility Limited
+WATERBASE,Unknown,Waterbase Limited
 WCIL,Unknown,Western Carriers (India) Limited
 WEALTH,Unknown,Wealth First Portfolio Managers Limited
 WEBELSOLAR,Capital Goods,Websol Energy System Limited
@@ -2084,7 +2251,9 @@ WELSPLSOL,Unknown,Welspun Specialty Solutions Limited
 WELSPUNLIV,Textiles,Welspun Living Limited
 WENDT,Unknown,Wendt (India) Limited
 WESTLIFE,Consumer Services,WESTLIFE FOODWORLD LIMITED
+WEWIN,Unknown,WE WIN LIMITED
 WEWORK,Services,WeWork India Management Limited
+WHBRADY,Unknown,WH Brady & Company Limited
 WHEELS,Unknown,Wheels India Limited
 WHIRLPOOL,Consumer Durables,Whirlpool of India Limited
 WILLAMAGOR,Unknown,Williamson Magor & Company Limited
@@ -2107,6 +2276,7 @@ YASHO,Unknown,Yasho Industries Limited
 YATHARTH,Healthcare,Yatharth Hospital & Trauma Care Services Limited
 YATRA,Unknown,Yatra Online Limited
 YESBANK,Financial Services,Yes Bank Limited
+YOGI,Unknown,Yogi Limited
 YUKEN,Unknown,Yuken India Limited
 ZAGGLE,Information Technology,Zaggle Prepaid Ocean Services Limited
 ZEEL,Media Entertainment & Publication,Zee Entertainment Enterprises Limited
@@ -2117,6 +2287,7 @@ ZENSARTECH,Information Technology,Zensar Technologies Limited
 ZENTEC,Capital Goods,Zen Technologies Limited
 ZFCVINDIA,Automobile and Auto Components,ZF Commercial Vehicle Control Systems India Limited
 ZFSTEERING,Unknown,ZF Steering Gear (India) Limited
+ZIMLAB,Unknown,Zim Laboratories Limited
 ZODIAC,Unknown,Zodiac Energy Limited
 ZODIACLOTH,Unknown,Zodiac Clothing Company Limited
 ZOTA,Unknown,Zota Health Care LImited
