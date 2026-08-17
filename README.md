@@ -1,3 +1,14 @@
+---
+title: StockGPT Enhanced
+emoji: 📈
+colorFrom: blue
+colorTo: green
+sdk: streamlit
+sdk_version: 1.61.1
+app_file: dashboard/app.py
+pinned: false
+---
+
 # StockGPT Enhanced
 
 A ground-up rewrite of [StockGPT](https://github.com/rjganatra/StockGPT), the NSE market-intelligence
@@ -359,8 +370,27 @@ examples/                real 66-day sample dataset (see above) so the app works
    live data).
 6. Enable GitHub Actions on the new repo -- `daily_pipeline.yml` and `weekly_fundamentals.yml` will
    start populating `data/` on their schedules (or trigger them manually via `workflow_dispatch`).
-7. Deploy `dashboard/app.py` on Streamlit Community Cloud (or anywhere else that runs Streamlit) for a
-   shareable link, same as the original.
+7. Deploy `dashboard/app.py` somewhere that runs Streamlit for a shareable link. Streamlit Community
+   Cloud is the simplest option but caps memory at ~1GB, which the full historical backfill (see below)
+   comfortably exceeds. Hugging Face Spaces' free CPU tier gives 16GB instead -- see the next section.
+
+## Deploying on Hugging Face Spaces (recommended once you've run the historical backfill)
+
+This repo's `README.md` already has the YAML metadata block Hugging Face Spaces looks for at the very
+top (`sdk: streamlit`, `app_file: dashboard/app.py`, etc.) -- no extra config file needed.
+
+1. Create a free account at [huggingface.co](https://huggingface.co) if you don't have one.
+2. Create a new Space: choose the **Streamlit** SDK and the **free CPU basic** hardware tier (2 vCPU /
+   16GB RAM).
+3. Connect it to this GitHub repo. Hugging Face Spaces can either host its own git remote (you push
+   directly to it) or sync from GitHub automatically via a GitHub Action -- either way, once connected,
+   pushes to `main` redeploy the Space the same way pushes redeploy a Streamlit Community Cloud app.
+4. Add any secrets (`WATCHLIST_SECRET`, `TELEGRAM_BOT_TOKEN`, etc.) under the Space's **Settings ->
+   Variables and secrets** -- same idea as Streamlit Cloud's secrets.toml, different place to paste
+   them. The app reads them via `st.secrets` / `os.environ` either way, no code changes needed.
+5. The Space gets a `huggingface.co/spaces/<you>/<space-name>` URL. Free-tier Spaces sleep after a
+   period with no visitors, same as Streamlit Community Cloud's 12-hour sleep -- the memory ceiling is
+   what actually changes, not the sleep behavior.
 
 ## Alerts
 
