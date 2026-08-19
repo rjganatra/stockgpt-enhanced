@@ -49,35 +49,64 @@ _JS_FILES = ["query_parser.js", "backtest_engine.js", "panel_loader.js", "widget
 
 _CSS = """
 <style>
+  /* Hardcoded to match this dashboard's actual deployed theme (dark --
+     see .streamlit/config.toml / the live screenshots), not adaptive to
+     the visitor's Streamlit theme setting. st.iframe's srcdoc iframe has
+     no access to the parent page's CSS variables or theme, so "adapt to
+     whatever theme the visitor has" would need a postMessage handshake
+     this embed doesn't have -- out of scope. Explicit dark colors here
+     instead of relying on default/inherited backgrounds is also the fix
+     for the real bug this replaces: the previous version set dark text
+     (#262730) with no background color declared, which is fine on a
+     plain white page but unreadable/low-contrast once the iframe's actual
+     background turned out not to be reliably white in the deployed app. */
+  :root {
+    --sl-bg: #0e1117;
+    --sl-bg-secondary: #262730;
+    --sl-border: #3b3f4a;
+    --sl-text: #fafafa;
+    --sl-text-dim: #b0b3bd;
+    --sl-accent: #ff4b4b;
+  }
+  html, body { background: var(--sl-bg); }
   body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-         margin: 0; padding: 0; color: #262730; }
+         margin: 0; padding: 12px; color: var(--sl-text); }
   .sl-section { margin-bottom: 28px; }
-  .sl-status-bar { background: #f0f2f6; border-radius: 6px; padding: 10px 14px;
-                    margin-bottom: 16px; font-size: 0.9em; display: flex;
-                    align-items: center; justify-content: space-between; gap: 12px; }
+  .sl-status-bar { background: var(--sl-bg-secondary); border: 1px solid var(--sl-border);
+                    border-radius: 6px; padding: 10px 14px; margin-bottom: 16px;
+                    font-size: 0.9em; display: flex; align-items: center;
+                    justify-content: space-between; gap: 12px; color: var(--sl-text); }
   .sl-status-bar span { flex: 1; }
-  h2 { font-size: 1.15em; margin: 0 0 6px 0; }
-  h3 { font-size: 1.0em; margin: 18px 0 6px 0; }
-  p.sl-caption { color: #555; font-size: 0.88em; margin: 4px 0 10px 0; }
-  label { display: block; font-size: 0.85em; font-weight: 600; margin: 10px 0 4px 0; }
+  h2 { font-size: 1.15em; margin: 0 0 6px 0; color: var(--sl-text); }
+  h3 { font-size: 1.0em; margin: 18px 0 6px 0; color: var(--sl-text); }
+  p.sl-caption { color: var(--sl-text-dim); font-size: 0.88em; margin: 4px 0 10px 0; }
+  label { display: block; font-size: 0.85em; font-weight: 600; margin: 10px 0 4px 0;
+          color: var(--sl-text); }
   input[type=text], input[type=number], textarea, select {
     width: 100%; box-sizing: border-box; padding: 6px 8px; font-size: 0.9em;
-    border: 1px solid #ccc; border-radius: 4px; font-family: inherit;
+    border: 1px solid var(--sl-border); border-radius: 4px; font-family: inherit;
+    background: var(--sl-bg-secondary); color: var(--sl-text);
   }
+  input[readonly] { color: var(--sl-text-dim); }
   textarea { min-height: 56px; font-family: monospace; }
+  select option { background: var(--sl-bg-secondary); color: var(--sl-text); }
   .sl-row { display: flex; gap: 12px; }
   .sl-row > div { flex: 1; }
   button { margin-top: 12px; padding: 8px 16px; font-size: 0.9em; font-weight: 600;
-           border: none; border-radius: 4px; cursor: pointer; background: #FF4B4B;
-           color: white; }
-  button:disabled { background: #ccc; cursor: not-allowed; }
-  button.sl-secondary { background: #f0f2f6; color: #262730; }
-  table.sl-table { border-collapse: collapse; width: 100%; margin-top: 12px; font-size: 0.85em; }
-  table.sl-table th, table.sl-table td { border: 1px solid #e0e0e0; padding: 5px 8px; text-align: left; }
-  table.sl-table th { background: #f0f2f6; }
-  p.sl-empty { color: #888; font-style: italic; }
-  p.sl-error { color: #c0392b; }
-  hr { border: none; border-top: 1px solid #e0e0e0; margin: 24px 0; }
+           border: none; border-radius: 4px; cursor: pointer; background: var(--sl-accent);
+           color: #ffffff; }
+  button:disabled { background: var(--sl-border); color: var(--sl-text-dim); cursor: not-allowed; }
+  button.sl-secondary { background: var(--sl-bg-secondary); color: var(--sl-text);
+                         border: 1px solid var(--sl-border); }
+  table.sl-table { border-collapse: collapse; width: 100%; margin-top: 12px; font-size: 0.85em;
+                    color: var(--sl-text); }
+  table.sl-table th, table.sl-table td { border: 1px solid var(--sl-border); padding: 5px 8px;
+                                          text-align: left; }
+  table.sl-table th { background: var(--sl-bg-secondary); color: var(--sl-text); }
+  table.sl-table td { background: var(--sl-bg); }
+  p.sl-empty { color: var(--sl-text-dim); font-style: italic; }
+  p.sl-error { color: #ff6b6b; }
+  hr { border: none; border-top: 1px solid var(--sl-border); margin: 24px 0; }
 </style>
 """
 

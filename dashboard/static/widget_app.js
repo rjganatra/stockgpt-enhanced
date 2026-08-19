@@ -136,18 +136,19 @@
     setStatus(`Loading ${remaining.length} more quarter(s)...`);
     const db = await openDb();
     try {
-      const raws = await loadQuartersCached(db, remaining, (q) => setStatus(`Loading ${q}...`));
+      // Fetch just the NEW quarters (loadQuartersCached only touches
+      // IndexedDB/network for what isn't already cached), then rebuild the
+      // full panel by re-reading every quarter -- including the 4 already
+      // in `panel` -- from cache in chronological order. Re-reading the
+      // already-loaded ones costs an IndexedDB lookup, not a re-download
+      // (isCurrentQuarter's per-quarter cache check already makes that
+      // free), and it's simpler and less error-prone than trying to splice
+      // the new raws into the existing panel's parallel column arrays by
+      // hand -- concatPanels() staying the single source of truth for how
+      // panels combine is worth the redundant reads.
+      await loadQuartersCached(db, remaining, (q) => setStatus(`Loading ${q}...`));
       loadedQuarters = allQuarters.slice();
-      panel = concatPanels(loadedQuarters.map((q, i) => {
-        const idx = remaining.indexOf(q);
-        return idx >= 0 ? rawShardToPanel(raws[idx]) : null;
-      }).filter(Boolean).length === remaining.length
-        ? [...loadedQuarters.slice(0, loadedQuarters.length - remaining.length).map(() => null), ...raws].filter(Boolean)
-        : raws); // fallback path below is the real one used
-      // Simpler and correct: just refetch-concat everything we now have
-      // cached, in order, rather than trying to splice partial arrays.
-      const db2 = db;
-      const allRaws = await loadQuartersCached(db2, allQuarters, null);
+      const allRaws = await loadQuartersCached(db, allQuarters, null);
       panel = concatPanels(allRaws.map(rawShardToPanel));
       const rowCount = panel.data[panel.columns[0]] ? panel.data[panel.columns[0]].length : 0;
       setStatus(`Ready -- full history loaded (${loadedQuarters.length} quarters, ${rowCount.toLocaleString()} rows).`);
