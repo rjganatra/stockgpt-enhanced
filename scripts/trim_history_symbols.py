@@ -17,8 +17,20 @@ This is destructive -- it overwrites data/history in place. If you want to
 keep the full untrimmed dataset for local-only use, copy data/history
 somewhere else first.
 
+IMPORTANT -- for ongoing/daily use, always pass --latest-only. Without it,
+this re-ranks by *today's* market cap and re-filters every single day in
+data/history, including days that were already trimmed under a slightly
+different top-N set in the past. Since the top-N-by-market-cap membership
+drifts day to day, re-running the untargeted version later would silently
+drop symbols from already-trimmed historical snapshots that don't happen
+to be in today's top-N -- corrupting point-in-time backtest data that was
+already correct. --latest-only restricts the trim to only the single most
+recently written day folder, which is the one actually new since the last
+run and the only one that's still untrimmed.
+
 Usage:
-    python scripts/trim_history_symbols.py --keep-top 250
+    python scripts/trim_history_symbols.py --keep-top 250            # one-off, full history
+    python scripts/trim_history_symbols.py --keep-top 250 --latest-only  # daily pipeline use
 """
 
 from __future__ import annotations
@@ -58,19 +70,27 @@ def main() -> None:
                          help="Directory of YYYY-MM-DD/scan.csv folders to trim in place (default data/history).")
     parser.add_argument("--dry-run", action="store_true",
                          help="Report what would change without writing anything.")
+    parser.add_argument("--latest-only", action="store_true",
+                         help="Only trim the single most recently written YYYY-MM-DD day folder, "
+                              "instead of re-processing the entire history. Use this for daily/ongoing "
+                              "runs (see the module docstring for why re-trimming old days is unsafe).")
     args = parser.parse_args()
 
     keep = set(top_symbols_by_market_cap(args.keep_top))
     print(f"Keeping top {len(keep)} symbols by market cap.")
 
     history_dir = Path(args.history_dir)
+    day_folders = sorted(f for f in history_dir.iterdir() if f.is_dir())
+    if args.latest_only:
+        day_folders = day_folders[-1:]
+        if day_folders:
+            print(f"--latest-only: restricting to {day_folders[0].name}")
+
     days_touched = 0
     rows_before_total = 0
     rows_after_total = 0
 
-    for folder in sorted(history_dir.iterdir()):
-        if not folder.is_dir():
-            continue
+    for folder in day_folders:
         scan_path = folder / "scan.csv"
         if not scan_path.exists():
             continue

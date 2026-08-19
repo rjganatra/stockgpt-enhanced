@@ -145,8 +145,21 @@ def load_scan() -> pd.DataFrame:
     return df
 
 
-@st.cache_data(ttl=600)
+@st.cache_resource(ttl=600)
 def load_history_panel_cached() -> pd.DataFrame:
+    # cache_resource, not cache_data, deliberately: cache_data returns a
+    # fresh COPY of the cached object on every single call (by design, so
+    # one caller can't accidentally mutate another's copy), which is
+    # exactly what caused the "8 copies of the history panel in memory at
+    # once" bug earlier -- even after consolidating to one shared variable
+    # per script rerun, every rerun (every click, every widget change) was
+    # still paying for a fresh ~500MB copy, and concurrent user sessions on
+    # the same deployed process each got their own copy too. Nothing
+    # downstream ever mutates this panel in place (verified: it's only
+    # ever filtered/sliced via .loc/.eval, which return new objects) so
+    # there's nothing for copy-on-call to protect against here.
+    # cache_resource hands back the exact same in-memory object to every
+    # caller instead -- computed once, shared by reference from then on.
     return load_history_panel(DATA_DIR / "history")
 
 
