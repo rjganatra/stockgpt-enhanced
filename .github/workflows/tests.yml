@@ -49,6 +49,13 @@ jobs:
           python tests/js/gen_fixture.py
           node tests/js/crossverify.node.js
 
+      - name: Unit-test the browser widget's data-shaping helpers
+        # dashboard/static/panel_loader.js is the pure (no fetch/DOM/IndexedDB)
+        # data-shaping layer widget_app.js builds on -- quarter-range math and
+        # the JSON null->NaN conversion the shard files require. Uses Node's
+        # built-in test runner, no extra dependency.
+        run: node --test tests/js/panel_loader.test.js
+
       - name: Stage sample data for the dashboard smoke test
         run: |
           mkdir -p data/scans data/history
