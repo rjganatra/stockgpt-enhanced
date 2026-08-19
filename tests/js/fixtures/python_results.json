@@ -1,0 +1,215 @@
+{
+  "results": {
+    "fixed_basic": [
+      {
+        "strategy_name": "fixed_basic",
+        "horizon_label": "15D",
+        "total_signals": 23,
+        "closed_trades": 16,
+        "open_trades": 7,
+        "win_rate_pct": 56.25,
+        "avg_return_pct": 13.33,
+        "median_return_pct": 7.08,
+        "best_return_pct": 65.26,
+        "worst_return_pct": -28.51,
+        "avg_holding_days": 15.0,
+        "low_sample_warning": false
+      },
+      {
+        "strategy_name": "fixed_basic",
+        "horizon_label": "3D",
+        "total_signals": 23,
+        "closed_trades": 21,
+        "open_trades": 2,
+        "win_rate_pct": 76.19,
+        "avg_return_pct": 3.77,
+        "median_return_pct": 2.61,
+        "best_return_pct": 14.36,
+        "worst_return_pct": -6.67,
+        "avg_holding_days": 3.0,
+        "low_sample_warning": false
+      },
+      {
+        "strategy_name": "fixed_basic",
+        "horizon_label": "7D",
+        "total_signals": 23,
+        "closed_trades": 20,
+        "open_trades": 3,
+        "win_rate_pct": 80.0,
+        "avg_return_pct": 7.15,
+        "median_return_pct": 6.86,
+        "best_return_pct": 34.78,
+        "worst_return_pct": -19.52,
+        "avg_holding_days": 7.0,
+        "low_sample_warning": false
+      }
+    ],
+    "fixed_and_or_not": [
+      {
+        "strategy_name": "fixed_and_or_not",
+        "horizon_label": "5D",
+        "total_signals": 10,
+        "closed_trades": 10,
+        "open_trades": 0,
+        "win_rate_pct": 90.0,
+        "avg_return_pct": 9.52,
+        "median_return_pct": 7.28,
+        "best_return_pct": 23.87,
+        "worst_return_pct": -10.91,
+        "avg_holding_days": 5.0,
+        "low_sample_warning": false
+      }
+    ],
+    "fixed_in_list": [
+      {
+        "strategy_name": "fixed_in_list",
+        "horizon_label": "10D",
+        "total_signals": 12,
+        "closed_trades": 10,
+        "open_trades": 2,
+        "win_rate_pct": 80.0,
+        "avg_return_pct": 12.56,
+        "median_return_pct": 10.82,
+        "best_return_pct": 48.89,
+        "worst_return_pct": -24.44,
+        "avg_holding_days": 10.0,
+        "low_sample_warning": false
+      },
+      {
+        "strategy_name": "fixed_in_list",
+        "horizon_label": "5D",
+        "total_signals": 12,
+        "closed_trades": 12,
+        "open_trades": 0,
+        "win_rate_pct": 83.33,
+        "avg_return_pct": 6.94,
+        "median_return_pct": 6.14,
+        "best_return_pct": 23.87,
+        "worst_return_pct": -12.53,
+        "avg_holding_days": 5.0,
+        "low_sample_warning": false
+      }
+    ],
+    "fixed_risk_nan": [
+      {
+        "strategy_name": "fixed_risk_nan",
+        "horizon_label": "5D",
+        "total_signals": 60,
+        "closed_trades": 56,
+        "open_trades": 4,
+        "win_rate_pct": 76.79,
+        "avg_return_pct": 9.55,
+        "median_return_pct": 9.32,
+        "best_return_pct": 29.9,
+        "worst_return_pct": -15.18,
+        "avg_holding_days": 5.0,
+        "low_sample_warning": false
+      }
+    ],
+    "condition_exit_basic": [
+      {
+        "strategy_name": "condition_exit_basic",
+        "horizon_label": "condition_exit",
+        "total_signals": 23,
+        "closed_trades": 21,
+        "open_trades": 2,
+        "win_rate_pct": 80.95,
+        "avg_return_pct": 4.35,
+        "median_return_pct": 3.28,
+        "best_return_pct": 18.2,
+        "worst_return_pct": -4.21,
+        "avg_holding_days": 2.9,
+        "low_sample_warning": false
+      }
+    ],
+    "condition_exit_explicit": [
+      {
+        "strategy_name": "condition_exit_explicit",
+        "horizon_label": "condition_exit",
+        "total_signals": 16,
+        "closed_trades": 12,
+        "open_trades": 4,
+        "win_rate_pct": 100.0,
+        "avg_return_pct": 39.55,
+        "median_return_pct": 45.48,
+        "best_return_pct": 76.28,
+        "worst_return_pct": 3.06,
+        "avg_holding_days": 14.5,
+        "low_sample_warning": false
+      }
+    ],
+    "str_contains": [
+      {
+        "strategy_name": "str_contains",
+        "horizon_label": "5D",
+        "total_signals": 2,
+        "closed_trades": 2,
+        "open_trades": 0,
+        "win_rate_pct": 50.0,
+        "avg_return_pct": 0.51,
+        "median_return_pct": 0.51,
+        "best_return_pct": 11.93,
+        "worst_return_pct": -10.91,
+        "avg_holding_days": 5.0,
+        "low_sample_warning": true
+      }
+    ],
+    "topk": [
+      {
+        "strategy_name": "topk",
+        "horizon_label": "10D",
+        "total_signals": 9,
+        "closed_trades": 7,
+        "open_trades": 2,
+        "win_rate_pct": 85.71,
+        "avg_return_pct": 9.85,
+        "median_return_pct": 9.31,
+        "best_return_pct": 48.63,
+        "worst_return_pct": -24.44,
+        "avg_holding_days": 10.0,
+        "low_sample_warning": true
+      },
+      {
+        "strategy_name": "topk",
+        "horizon_label": "5D",
+        "total_signals": 9,
+        "closed_trades": 9,
+        "open_trades": 0,
+        "win_rate_pct": 88.89,
+        "avg_return_pct": 7.05,
+        "median_return_pct": 7.96,
+        "best_return_pct": 20.06,
+        "worst_return_pct": -10.91,
+        "avg_holding_days": 5.0,
+        "low_sample_warning": true
+      }
+    ],
+    "walk_forward": [
+      {
+        "horizon_label": "10D",
+        "best_threshold": 65.0,
+        "train_avg_return_pct": 6.63,
+        "train_closed_trades": 13,
+        "test_avg_return_pct": 17.08,
+        "test_closed_trades": 6,
+        "test_win_rate_pct": 100.0,
+        "test_low_sample_warning": true
+      },
+      {
+        "horizon_label": "5D",
+        "best_threshold": 65.0,
+        "train_avg_return_pct": 5.85,
+        "train_closed_trades": 13,
+        "test_avg_return_pct": 5.84,
+        "test_closed_trades": 8,
+        "test_win_rate_pct": 100.0,
+        "test_low_sample_warning": true
+      }
+    ],
+    "_split_check": {
+      "train_days": 39,
+      "test_days": 21
+    }
+  },
+  "errors": {}
+}

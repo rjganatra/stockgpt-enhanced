@@ -32,6 +32,23 @@ jobs:
       - name: Run unit tests
         run: python -m pytest tests/ -q
 
+      - name: Setup Node (for the JS backtest engine port)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Cross-verify JS backtest engine against the Python engine
+        # dashboard/static/{query_parser,backtest_engine}.js is a from-scratch
+        # port of src/stockgpt/backtest/{engine,metrics,walkforward,portfolio}.py
+        # that runs client-side (Strategy Lab, sweep, walk-forward, portfolio
+        # backtest). This regenerates a synthetic fixture, runs it through the
+        # REAL Python engine, then runs the JS engine on the identical panel
+        # and diffs every number -- catches a silent logic drift between the
+        # two engines, not just "does the JS file parse".
+        run: |
+          python tests/js/gen_fixture.py
+          node tests/js/crossverify.node.js
+
       - name: Stage sample data for the dashboard smoke test
         run: |
           mkdir -p data/scans data/history
