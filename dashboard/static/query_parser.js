@@ -342,4 +342,13 @@ function evalQueryMask(panel, queryString) {
 
 if (typeof module !== "undefined" && module.exports) {
   module.exports = { parseQuery, evalQueryMask, evalNode, truthy, compareValues, QueryParseError, tokenize };
+} else if (typeof window !== "undefined") {
+  // Browser build (widget_strategy_lab.py concatenates this file with
+  // backtest_engine.js/panel_loader.js/widget_app.js into one inline
+  // <script>): `function` declarations above (evalQueryMask, tokenize, ...)
+  // already land on `window` automatically, but `class QueryParseError`
+  // does NOT -- class declarations are lexically scoped only, unlike
+  // function declarations. backtest_engine.js's own browser fallback reads
+  // QueryParseError off `window`, so it must be attached explicitly here.
+  window.QueryParseError = QueryParseError;
 }

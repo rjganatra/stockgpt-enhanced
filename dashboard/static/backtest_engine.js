@@ -31,9 +31,22 @@
  */
 
 /* global require, module */
-const { evalQueryMask, QueryParseError } = (typeof require !== "undefined")
-  ? require("./query_parser.js")
-  : window;
+// Deliberately NOT named `evalQueryMask`/`QueryParseError` here: in the
+// browser build, widget_strategy_lab.py concatenates this file with
+// query_parser.js into ONE inline <script>, so they share a single
+// top-level scope. query_parser.js already declares `function
+// evalQueryMask` and `class QueryParseError` at that same top level --
+// redeclaring either name here (even as `var`, which normally coexists
+// fine with a `function` of the same name) throws a SyntaxError for the
+// `class`-declared one ("Identifier 'QueryParseError' has already been
+// declared"), since class declarations can't share a name with a second
+// var/let/const/class/function anywhere in the same scope. Using unique
+// local names sidesteps the collision entirely while still resolving to
+// the exact same function/class either way (Node's require(), or the
+// window properties query_parser.js's own browser-build branch attaches).
+const _qp = (typeof require !== "undefined") ? require("./query_parser.js") : window;
+const _evalQueryMask = _qp.evalQueryMask;
+const _QueryParseError = _qp.QueryParseError;
 
 const MIN_SIGNALS_FOR_CONFIDENCE = 10; // BACKTEST_DEFAULTS.min_signals_for_confidence
 
@@ -191,8 +204,8 @@ function runBacktest(panel, strategy) {
   const n = panel.data[panel.columns[0]] ? panel.data[panel.columns[0]].length : 0;
   if (n === 0) return [];
 
-  const fullEntryMask = evalQueryMask(panel, strategy.entryQuery);
-  const fullExitMask = strategy.exitQuery ? evalQueryMask(panel, strategy.exitQuery) : null;
+  const fullEntryMask = _evalQueryMask(panel, strategy.entryQuery);
+  const fullExitMask = strategy.exitQuery ? _evalQueryMask(panel, strategy.exitQuery) : null;
 
   const groups = groupBySymbol(panel);
   const allTrades = [];
@@ -314,7 +327,7 @@ function walkForwardSweep(panel, template, thresholds, holdingDays, splitPct = 7
     try {
       trades = runBacktest(train, strategy);
     } catch (e) {
-      if (e instanceof QueryParseError) continue;
+      if (e instanceof _QueryParseError) continue;
       throw e;
     }
     if (trades.length === 0) continue;
@@ -347,7 +360,7 @@ function walkForwardSweep(panel, template, thresholds, holdingDays, splitPct = 7
     try {
       testTrades = runBacktest(test, testStrategy);
     } catch (e) {
-      if (!(e instanceof QueryParseError)) throw e;
+      if (!(e instanceof _QueryParseError)) throw e;
     }
 
     let testRow = null;
@@ -391,7 +404,7 @@ function runTopKBacktest(panel, strategy, topK, rankColumn = "final_score") {
   }
   if (topK < 1) throw new Error("topK must be at least 1.");
 
-  const fullEntryMask = evalQueryMask(panel, strategy.entryQuery);
+  const fullEntryMask = _evalQueryMask(panel, strategy.entryQuery);
   const groups = groupBySymbol(panel);
   const rankArr = panel.data[rankColumn];
   const dates = panel.data.scan_date;

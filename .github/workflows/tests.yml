@@ -56,6 +56,18 @@ jobs:
         # built-in test runner, no extra dependency.
         run: node --test tests/js/panel_loader.test.js
 
+      - name: Test the ACTUAL concatenated browser build (catches cross-file scope bugs)
+        # crossverify.node.js and panel_loader.test.js both load these files via
+        # Node's require(), which gives each file its own isolated module scope --
+        # that never exercises the browser-fallback code path (concatenated into
+        # ONE inline <script> by widget_strategy_lab.py, sharing one top-level
+        # scope) that a real deployed page actually runs. A real bug shipped and
+        # broke live because of exactly this gap: a `SyntaxError` from a
+        # redeclared identifier across files, invisible to every check above.
+        # This test builds the real concatenated string and runs it in a `vm`
+        # sandbox with `require` unavailable, forcing the browser-fallback path.
+        run: node --test tests/js/browser_build.test.js
+
       - name: Stage sample data for the dashboard smoke test
         run: |
           mkdir -p data/scans data/history
