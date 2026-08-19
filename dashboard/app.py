@@ -33,7 +33,6 @@ import streamlit as st
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from stockgpt import schema as S
-from stockgpt import sector_rotation
 from stockgpt import watchlist as W
 from stockgpt.backtest import (
     ExitMode, Strategy, run_backtest, summarize,
@@ -41,10 +40,10 @@ from stockgpt.backtest import (
 )
 from stockgpt.backtest.engine import load_history_panel
 from stockgpt.backtest.strategy import PRESET_STRATEGIES
-from stockgpt.signal_catalog import SIGNAL_CATALOG, SIGNAL_DIRECTIONS
 
 DATA_DIR = Path("data")
 STRATEGIES_PATH = DATA_DIR / "backtest" / "saved_strategies.json"
+EXPORT_DIR = DATA_DIR / "exports"
 
 st.set_page_config(page_title="StockGPT Enhanced", layout="wide")
 st.title("StockGPT Enhanced -- NSE Market Intelligence")
@@ -145,45 +144,60 @@ def load_scan() -> pd.DataFrame:
     return df
 
 
+@st.cache_data(ttl=300)
+def load_export(filename: str) -> pd.DataFrame:
+    """Reads one of scripts/export_dashboard_data.py's precomputed CSVs from
+    data/exports/. Small files (a few KB to low hundreds of KB), nothing
+    like the multi-year history panel -- cache_data's per-call copy cost is
+    negligible here, unlike it was for the full panel. Returns an empty
+    DataFrame (not an error) if the export hasn't run yet, same "not ready
+    yet" handling as the rest of this dashboard uses for missing files."""
+    path = EXPORT_DIR / filename
+    if not path.exists():
+        return pd.DataFrame()
+    try:
+        return pd.read_csv(path, low_memory=False)
+    except pd.errors.EmptyDataError:
+        return pd.DataFrame()
+
+
+def load_score_history(symbol: str) -> pd.DataFrame:
+    """One symbol's precomputed score-history file -- not cached, since a
+    different symbol is a different file and Stock Explorer only ever needs
+    the one currently selected; the OS file cache already makes repeat
+    reads of the same small file cheap."""
+    path = EXPORT_DIR / "score_history" / f"{symbol}.csv"
+    if not path.exists():
+        return pd.DataFrame()
+    try:
+        df = pd.read_csv(path, low_memory=False)
+    except pd.errors.EmptyDataError:
+        return pd.DataFrame()
+    if S.SCAN_DATE in df.columns:
+        df[S.SCAN_DATE] = pd.to_datetime(df[S.SCAN_DATE])
+    return df
+
+
 @st.cache_resource(ttl=600)
 def load_history_panel_cached() -> pd.DataFrame:
     # cache_resource, not cache_data, deliberately: cache_data returns a
     # fresh COPY of the cached object on every single call (by design, so
-    # one caller can't accidentally mutate another's copy), which is
-    # exactly what caused the "8 copies of the history panel in memory at
-    # once" bug earlier -- even after consolidating to one shared variable
-    # per script rerun, every rerun (every click, every widget change) was
-    # still paying for a fresh ~500MB copy, and concurrent user sessions on
-    # the same deployed process each got their own copy too. Nothing
-    # downstream ever mutates this panel in place (verified: it's only
-    # ever filtered/sliced via .loc/.eval, which return new objects) so
-    # there's nothing for copy-on-call to protect against here.
-    # cache_resource hands back the exact same in-memory object to every
-    # caller instead -- computed once, shared by reference from then on.
+    # one caller can't accidentally mutate another's copy); cache_resource
+    # hands back the exact same in-memory object to every caller instead.
+    # Nothing downstream mutates this panel in place (verified: only ever
+    # filtered/sliced via .loc/.eval, which return new objects).
+    #
+    # ONLY called from inside Strategy Lab's and Portfolio Backtest's own
+    # gated "Run" button blocks now -- NOT at module level anymore. Those
+    # two tabs are the only remaining thing that needs the full raw panel
+    # server-side (an ad-hoc query typed at read time can't be
+    # precomputed); everything else that used to call this now reads a
+    # small precomputed file from data/exports/ instead (see
+    # scripts/export_dashboard_data.py). Calling this only inside an
+    # on-click block means the full panel is loaded into server memory
+    # only for the seconds someone is actually running a custom backtest,
+    # not held resident for every page view from every visitor.
     return load_history_panel(DATA_DIR / "history")
-
-
-@st.cache_data(ttl=600)
-def compute_signal_catalog_performance() -> pd.DataFrame:
-    """Runs every catalog signal through the real backtest engine, once,
-    cached -- this is the Signal Performance tab's data source."""
-    panel = load_history_panel_cached()
-    if panel.empty:
-        return pd.DataFrame()
-    rows = []
-    for strategy in SIGNAL_CATALOG:
-        try:
-            trades = run_backtest(panel, strategy)
-        except ValueError:
-            continue
-        if not trades:
-            continue
-        summary = summarize(trades, strategy.name)
-        summary["direction"] = SIGNAL_DIRECTIONS.get(strategy.name, "Bullish")
-        rows.append(summary)
-    if not rows:
-        return pd.DataFrame()
-    return pd.concat(rows, ignore_index=True)
 
 
 def get_secret(name: str, default: str = "") -> str:
@@ -287,19 +301,24 @@ if df.empty:
 if S.SCAN_TIME in df.columns and not df[S.SCAN_TIME].dropna().empty:
     st.caption(f"Last scanned: {df[S.SCAN_TIME].dropna().iloc[0]}")
 
-# Loaded ONCE per script run and reused by every tab below instead of each
-# tab calling load_history_panel_cached() independently. st.cache_data
-# returns a fresh COPY of the cached DataFrame on every call (by design, so
-# one session can't mutate another's cached data) -- with 8 call sites
-# across the tabs, and Streamlit re-running this whole script top-to-bottom
-# on every single widget interaction (every tab's code executes regardless
-# of which tab is visually active), that was materializing up to 8 fresh
-# copies of the full history panel (~125k rows in production) per rerun.
-# That's very likely what tipped the deployed app over Streamlit Cloud's
-# memory limit after this pass added 2 more unconditional call sites (score
-# history, sector rotation) on top of the pre-existing ones. One shared
-# variable = one copy per rerun, no matter how many tabs read it.
-history_panel = load_history_panel_cached()
+# NOT loaded here anymore, deliberately. This used to be one unconditional
+# `history_panel = load_history_panel_cached()` call at the top of the
+# script -- and because Streamlit re-executes the whole script top-to-bottom
+# on every single widget interaction (every tab's code runs regardless of
+# which tab is visually active), that one line kept the ENTIRE multi-year
+# history panel resident in the server's shared RAM essentially all the
+# time, for every visitor. That's the actual root cause of this app's
+# recurring memory crashes, not any one tab's fault.
+#
+# The fix: four tabs that used to read this panel live (Sectors' rotation,
+# Stock Explorer's score history, Signal Performance, Leaderboard) now read
+# small precomputed files instead -- see scripts/export_dashboard_data.py,
+# which runs once daily via GitHub Actions and writes data/exports/. The
+# server never has to load the full panel to answer those. Strategy Lab and
+# Portfolio Backtest are different: they answer a query typed by a visitor
+# at read time, which can't be precomputed, so they still load the panel --
+# but only inside their own gated "Run" button blocks below, on demand, not
+# unconditionally for every page view.
 
 
 # ---------------------------------------------------------------------------
@@ -539,10 +558,11 @@ with tab_sectors:
             "is gaining or losing conviction. This compares each sector's average "
             "final_score over the most recent stretch of history against the stretch "
             "right before it, so a sector quietly climbing (or fading) shows up before "
-            "it's obvious from a single day's numbers."
+            "it's obvious from a single day's numbers. Recomputed once daily (see "
+            "data/exports/meta.json for when), not live -- comparing two multi-day "
+            "windows doesn't change between one page view and the next."
         )
-        rotation_panel = history_panel
-        rotation_df = sector_rotation.compute_sector_rotation(rotation_panel)
+        rotation_df = load_export("sector_rotation.csv")
         if rotation_df.empty:
             st.caption("Not enough historical snapshots yet to compare two time windows.")
         else:
@@ -599,32 +619,29 @@ with tab_explorer:
             "Today's numbers on their own don't say whether a stock is improving or "
             "deteriorating -- this plots every score component for this symbol across "
             "every daily snapshot on record, so a climb into High Conviction (or a quiet "
-            "slide out of it) shows up as a trend, not just a single day's value."
+            "slide out of it) shows up as a trend, not just a single day's value. "
+            "Recomputed once daily, not live -- see data/exports/meta.json for when."
         )
-        hist_panel = history_panel
-        if hist_panel.empty or S.SYMBOL not in hist_panel.columns:
-            st.caption("No historical snapshots available yet.")
+        sym_hist = load_score_history(symbol)
+        if sym_hist.empty:
+            st.caption(f"No historical snapshots recorded for {symbol} yet.")
         else:
-            sym_hist = hist_panel[hist_panel[S.SYMBOL] == symbol].sort_values(S.SCAN_DATE)
-            if sym_hist.empty:
-                st.caption(f"No historical snapshots recorded for {symbol} yet.")
+            score_cols = [c for c in [S.FINAL_SCORE, S.TECHNICAL_SCORE,
+                                       S.SECTOR_ADJUSTED_FUNDAMENTAL_SCORE,
+                                       S.RELATIVE_STRENGTH_SCORE, S.RISK_PENALTY]
+                          if c in sym_hist.columns]
+            if not score_cols:
+                st.caption("No score columns found in the history panel.")
             else:
-                score_cols = [c for c in [S.FINAL_SCORE, S.TECHNICAL_SCORE,
-                                           S.SECTOR_ADJUSTED_FUNDAMENTAL_SCORE,
-                                           S.RELATIVE_STRENGTH_SCORE, S.RISK_PENALTY]
-                              if c in sym_hist.columns]
-                if not score_cols:
-                    st.caption("No score columns found in the history panel.")
-                else:
-                    melted = sym_hist.melt(
-                        id_vars=[S.SCAN_DATE], value_vars=score_cols,
-                        var_name="metric", value_name="value",
-                    )
-                    hist_fig = px.line(
-                        melted, x=S.SCAN_DATE, y="value", color="metric", markers=True,
-                        title=f"{symbol} -- score components over {sym_hist[S.SCAN_DATE].nunique()} days",
-                    )
-                    st.plotly_chart(hist_fig, width="stretch")
+                melted = sym_hist.melt(
+                    id_vars=[S.SCAN_DATE], value_vars=score_cols,
+                    var_name="metric", value_name="value",
+                )
+                hist_fig = px.line(
+                    melted, x=S.SCAN_DATE, y="value", color="metric", markers=True,
+                    title=f"{symbol} -- score components over {sym_hist[S.SCAN_DATE].nunique()} days",
+                )
+                st.plotly_chart(hist_fig, width="stretch")
 
         with st.expander("Full row data"):
             st.json(row.to_dict())
@@ -880,46 +897,38 @@ with tab_signal_perf:
         "for those, a negative return means the warning was right."
     )
     st.caption(
-        "This runs every catalog signal through the backtest engine across all of history, which "
-        "gets slower as more daily snapshots accumulate -- gated behind a button rather than run "
-        "on every page load, both so other tabs aren't stuck waiting on it (Streamlit executes "
-        "every tab's code on every rerun, not just the one you're looking at) and so a full page "
-        "load stays fast."
+        "Recomputed once daily by the export pipeline, not live -- running every catalog "
+        "signal through the backtest engine across all of history is too heavy to redo on "
+        "every page view, so it's precomputed server-side once a day instead (see "
+        "data/exports/meta.json for exactly when this last ran)."
     )
-    if st.button("Compute signal performance", key="signal_perf_run"):
-        st.session_state["signal_perf_computed"] = True
+    perf_df = load_export("signal_performance.csv")
 
-    if not st.session_state.get("signal_perf_computed"):
-        st.info("Click 'Compute signal performance' to run the backtest across all catalog signals.")
+    if perf_df.empty:
+        st.info("No exported signal performance yet -- run scripts/export_dashboard_data.py.")
     else:
-        with st.spinner("Running every catalog signal through the backtest engine..."):
-            perf_df = compute_signal_catalog_performance()
+        p1, p2 = st.columns(2)
+        with p1:
+            signal_options = sorted(perf_df["strategy_name"].unique())
+            chosen_signals = st.multiselect("Signal type", signal_options, default=[], placeholder="All")
+        with p2:
+            horizon_options = sorted(perf_df["horizon_label"].unique())
+            chosen_horizons = st.multiselect("Horizon", horizon_options, default=[], placeholder="All")
 
-        if perf_df.empty:
-            st.info("No history snapshots to backtest against yet.")
-        else:
-            p1, p2 = st.columns(2)
-            with p1:
-                signal_options = sorted(perf_df["strategy_name"].unique())
-                chosen_signals = st.multiselect("Signal type", signal_options, default=[], placeholder="All")
-            with p2:
-                horizon_options = sorted(perf_df["horizon_label"].unique())
-                chosen_horizons = st.multiselect("Horizon", horizon_options, default=[], placeholder="All")
+        pf = perf_df.copy()
+        if chosen_signals:
+            pf = pf[pf["strategy_name"].isin(chosen_signals)]
+        if chosen_horizons:
+            pf = pf[pf["horizon_label"].isin(chosen_horizons)]
 
-            pf = perf_df.copy()
-            if chosen_signals:
-                pf = pf[pf["strategy_name"].isin(chosen_signals)]
-            if chosen_horizons:
-                pf = pf[pf["horizon_label"].isin(chosen_horizons)]
-
-            st.dataframe(
-                pf.sort_values(["avg_return_pct", "win_rate_pct"], ascending=[False, False]),
-                width="stretch",
-            )
-            for _, row in pf.iterrows():
-                if row.get("low_sample_warning"):
-                    st.caption(f"'{row['strategy_name']}' / {row['horizon_label']}: only "
-                               f"{row['closed_trades']} closed trades -- treat as a rough signal.")
+        st.dataframe(
+            pf.sort_values(["avg_return_pct", "win_rate_pct"], ascending=[False, False]),
+            width="stretch",
+        )
+        for _, row in pf.iterrows():
+            if row.get("low_sample_warning"):
+                st.caption(f"'{row['strategy_name']}' / {row['horizon_label']}: only "
+                           f"{row['closed_trades']} closed trades -- treat as a rough signal.")
 
 # --- Strategy Lab ------------------------------------------------------------
 with tab_strategy:
@@ -934,9 +943,12 @@ with tab_strategy:
         "dropdown automatically, no other code changes needed. Same for the Signal Performance "
         "tab's catalog (src/stockgpt/signal_catalog.py)."
     )
-    _history_panel_for_ref = history_panel
-    render_column_reference(_history_panel_for_ref if not _history_panel_for_ref.empty else df,
-                             "strategy_lab_ref")
+    # Today's scan has the exact same columns the history panel does (the
+    # panel is just every day's scan stacked together) -- using `df` here
+    # instead of loading the full panel just to list its column names/value
+    # ranges avoids paying for the panel load on every Strategy Lab page
+    # view, not just when someone actually clicks Run.
+    render_column_reference(df, "strategy_lab_ref")
 
     saved = load_saved_strategies()
     all_strategies = {s.name: s for s in PRESET_STRATEGIES}
@@ -991,7 +1003,7 @@ with tab_strategy:
             st.error(f"Could not save: {e}")
 
     if run_clicked:
-        panel = history_panel
+        panel = load_history_panel_cached()
         if panel.empty:
             st.warning("No history snapshots found yet -- the backtester needs at least a few "
                        "days of data/history/YYYY-MM-DD/scan.csv to test against.")
@@ -1057,7 +1069,7 @@ with tab_strategy:
             sweep_days = ()
 
         if thresholds:
-            panel = history_panel
+            panel = load_history_panel_cached()
             if panel.empty:
                 st.warning("No history snapshots found yet -- the backtester needs at least a few "
                            "days of data/history/YYYY-MM-DD/scan.csv to test against.")
@@ -1164,7 +1176,7 @@ with tab_strategy:
             wf_holding = ()
 
         if wf_thresholds:
-            wf_panel = history_panel
+            wf_panel = load_history_panel_cached()
             if wf_panel.empty:
                 st.warning("No history snapshots found yet.")
             else:
@@ -1230,66 +1242,30 @@ with tab_leaderboard:
         "the Strategy Lab tab, see which of your ideas actually has the best track record."
     )
     st.caption(
-        "This runs every strategy through the backtest engine across all of history, so it's "
-        "gated behind a button rather than run on every page load, same reasoning as Signal "
-        "Performance."
+        "Recomputed once daily by the export pipeline, not live -- running every saved + "
+        "preset strategy through the backtest engine across all of history is too heavy to "
+        "redo on every page view (see data/exports/meta.json for exactly when this last ran). "
+        "Note: a strategy saved from the Strategy Lab tab just now won't appear here until "
+        "tomorrow's export run picks it up."
     )
-    if st.button("Compute leaderboard", key="leaderboard_run"):
-        st.session_state["leaderboard_computed"] = True
+    board = load_export("leaderboard.csv")
 
-    if not st.session_state.get("leaderboard_computed"):
-        st.info("Click 'Compute leaderboard' to backtest every saved + preset strategy.")
+    if board.empty:
+        st.info("No exported leaderboard yet -- run scripts/export_dashboard_data.py.")
     else:
-        lb_panel = history_panel
-        if lb_panel.empty:
-            st.warning("No history snapshots found yet.")
-        else:
-            lb_saved = load_saved_strategies()
-            # Saved strategies override presets of the same name -- identical
-            # merge logic to the "Start from a strategy" dropdown above, so
-            # the leaderboard and that dropdown never disagree about which
-            # version of a same-named strategy is current.
-            lb_strategies = {s.name: s for s in PRESET_STRATEGIES}
-            lb_strategies.update({s["name"]: Strategy.from_dict(s) for s in lb_saved})
-
-            lb_rows = []
-            lb_errors = []
-            with st.spinner(f"Backtesting {len(lb_strategies)} strategies..."):
-                for strat_name, strat in lb_strategies.items():
-                    try:
-                        lb_trades = run_backtest(lb_panel, strat)
-                    except ValueError as e:
-                        lb_errors.append(f"{strat_name}: {e}")
-                        continue
-                    if not lb_trades:
-                        continue
-                    lb_summary = summarize(lb_trades, strat_name)
-                    lb_rows.append(lb_summary)
-
-            if lb_errors:
-                with st.expander(f"{len(lb_errors)} strategy(ies) failed to backtest"):
-                    for e in lb_errors:
-                        st.caption(e)
-
-            if not lb_rows:
-                st.info("No strategy produced any historical signal.")
-            else:
-                board = pd.concat(lb_rows, ignore_index=True)
-                # Confident results (enough closed trades) ranked above thin
-                # ones, then by average return within each group -- so a
-                # strategy that "looks amazing" off 2 trades doesn't outrank
-                # one with a real, well-sampled track record.
-                board = board.sort_values(
-                    ["low_sample_warning", "avg_return_pct"], ascending=[True, False],
-                )
-                st.dataframe(board, width="stretch")
-                thin = board[board["low_sample_warning"]]
-                if not thin.empty:
-                    st.caption(
-                        f"{thin['strategy_name'].nunique()} strategy(ies) have at least one "
-                        "horizon with fewer than 10 closed trades -- ranked below the confident "
-                        "results above, not excluded, but treat those rows as rough signals."
-                    )
+        # Already sorted (low_sample_warning, avg_return_pct) by the export
+        # script, same ordering the live version used: confident results
+        # (enough closed trades) ranked above thin ones, then by average
+        # return within each group, so a strategy that "looks amazing" off
+        # 2 trades doesn't outrank one with a real, well-sampled track record.
+        st.dataframe(board, width="stretch")
+        thin = board[board["low_sample_warning"]]
+        if not thin.empty:
+            st.caption(
+                f"{thin['strategy_name'].nunique()} strategy(ies) have at least one "
+                "horizon with fewer than 10 closed trades -- ranked below the confident "
+                "results above, not excluded, but treat those rows as rough signals."
+            )
 
 # --- Portfolio Backtest -------------------------------------------------------
 with tab_portfolio:
@@ -1328,7 +1304,7 @@ with tab_portfolio:
             pf_holding = ()
 
         if pf_holding:
-            pf_panel = history_panel
+            pf_panel = load_history_panel_cached()
             if pf_panel.empty:
                 st.warning("No history snapshots found yet.")
             else:

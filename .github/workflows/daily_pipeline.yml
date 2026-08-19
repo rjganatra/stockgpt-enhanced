@@ -55,6 +55,17 @@ jobs:
         # own, one ordinary day at a time, years from now.
         run: python scripts/prune_history.py --keep-years 3
 
+      - name: Export precomputed dashboard data
+        # Sector rotation, per-symbol score history, signal performance, and
+        # the strategy leaderboard used to be computed live in the Streamlit
+        # process, which meant loading the ENTIRE multi-year history panel
+        # into server RAM on every page view -- the actual root cause of
+        # this app's recurring memory crashes. This computes all four here,
+        # once, and writes small files under data/exports/ that the
+        # dashboard just reads. See scripts/export_dashboard_data.py's
+        # module docstring for the full reasoning.
+        run: python scripts/export_dashboard_data.py
+
       - name: Commit updated data
         run: |
           git config --global user.name "github-actions"
