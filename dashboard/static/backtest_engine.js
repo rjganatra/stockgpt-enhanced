@@ -49,6 +49,57 @@ const _evalQueryMask = _qp.evalQueryMask;
 const _QueryParseError = _qp.QueryParseError;
 
 const MIN_SIGNALS_FOR_CONFIDENCE = 10; // BACKTEST_DEFAULTS.min_signals_for_confidence
+const PRICE_JUMP_THRESHOLD_PCT = 35.0; // BACKTEST_DEFAULTS.price_jump_threshold_pct
+
+/**
+ * Line-for-line port of corporate_actions.py::flag_price_jumps -- see that
+ * file's module docstring for the full reasoning (demergers/other
+ * corporate actions produce a real, permanent price discontinuity that
+ * current_price/day_change_pct don't get adjusted for, so a trade whose
+ * holding window spans one gets a contaminated return). Returns a
+ * Uint8Array aligned with `panel`'s row order (1 = flagged), not a
+ * per-symbol array -- callers index it the same way they already index
+ * panel.data.current_price/scan_date, via a global row number.
+ */
+function computePriceJumpFlags(panel, thresholdPct = PRICE_JUMP_THRESHOLD_PCT) {
+  const n = panel.data[panel.columns[0]] ? panel.data[panel.columns[0]].length : 0;
+  const flags = new Uint8Array(n);
+  const dayChange = panel.data.day_change_pct;
+  if (!dayChange) return flags; // column missing -> nothing flagged, matches the Python fallback
+  const dates = panel.data.scan_date;
+
+  // Cross-sectional median day_change_pct per date -- a cheap proxy for
+  // "how the market moved that day" computed straight from the panel
+  // already in memory, no external index feed needed. NaN values are
+  // excluded from the median itself (matches pandas' skipna=True default),
+  // not coerced to 0.
+  const byDate = new Map();
+  for (let i = 0; i < n; i++) {
+    const v = dayChange[i];
+    if (Number.isNaN(v)) continue;
+    const d = dates[i];
+    if (!byDate.has(d)) byDate.set(d, []);
+    byDate.get(d).push(v);
+  }
+  const medianByDate = new Map();
+  for (const [d, vals] of byDate) {
+    vals.sort((a, b) => a - b);
+    const mid = Math.floor(vals.length / 2);
+    medianByDate.set(d, vals.length % 2 === 0 ? (vals[mid - 1] + vals[mid]) / 2 : vals[mid]);
+  }
+
+  for (let i = 0; i < n; i++) {
+    const v = dayChange[i];
+    // Missing day_change_pct (a symbol's first-ever row in the panel --
+    // new listing, or start of this data's coverage) is flagged as
+    // "unsafe", the same deliberate choice corporate_actions.py makes, not
+    // silently treated as "no jump happened".
+    if (Number.isNaN(v)) { flags[i] = 1; continue; }
+    const market = medianByDate.has(dates[i]) ? medianByDate.get(dates[i]) : 0;
+    flags[i] = Math.abs(v - market) >= thresholdPct ? 1 : 0;
+  }
+  return flags;
+}
 
 function pyRound(value, decimals = 0) {
   // Matches Python's built-in round() (banker's / round-half-to-even)
@@ -118,12 +169,13 @@ function entryPositions(indices, maskAtPosition) {
   return positions;
 }
 
-function runFixedHolding(symbol, indices, panel, positions, holdingDays) {
+function runFixedHolding(symbol, indices, panel, positions, holdingDays, jumpFlags) {
   const trades = [];
   const price = panel.data.current_price;
   const dates = panel.data.scan_date;
   const n = indices.length;
   for (const pos of positions) {
+    if (jumpFlags && jumpFlags[indices[pos]]) continue; // don't even open on a flagged day
     const entryRow = indices[pos];
     const entryDate = dates[entryRow];
     const entryPrice = Number(price[entryRow]);
@@ -132,6 +184,17 @@ function runFixedHolding(symbol, indices, panel, positions, holdingDays) {
       const exitPos = pos + days;
       const label = `${days}D`;
       if (exitPos < n) {
+        // Excluded, not just re-priced, if ANY day from entry through exit
+        // (inclusive) was flagged -- see computePriceJumpFlags's comment
+        // and corporate_actions.py's module docstring for why a clean
+        // entry/exit price pair doesn't mean the return between them is.
+        let spansJump = false;
+        if (jumpFlags) {
+          for (let k = pos; k <= exitPos; k++) {
+            if (jumpFlags[indices[k]]) { spansJump = true; break; }
+          }
+        }
+        if (spansJump) continue;
         const exitRow = indices[exitPos];
         const exitPrice = Number(price[exitRow]);
         if (!(exitPrice > 0)) continue;
@@ -151,7 +214,7 @@ function runFixedHolding(symbol, indices, panel, positions, holdingDays) {
   return trades;
 }
 
-function runConditionExit(symbol, indices, panel, positions, entryMaskAtPosition, exitMaskAtPosition) {
+function runConditionExit(symbol, indices, panel, positions, entryMaskAtPosition, exitMaskAtPosition, jumpFlags) {
   const trades = [];
   const price = panel.data.current_price;
   const dates = panel.data.scan_date;
@@ -162,6 +225,7 @@ function runConditionExit(symbol, indices, panel, positions, entryMaskAtPosition
   const stopAtPosition = exitMaskAtPosition || ((pos) => !entryMaskAtPosition(pos));
 
   for (const pos of positions) {
+    if (jumpFlags && jumpFlags[indices[pos]]) continue;
     const entryRow = indices[pos];
     const entryDate = dates[entryRow];
     const entryPrice = Number(price[entryRow]);
@@ -178,6 +242,13 @@ function runConditionExit(symbol, indices, panel, positions, entryMaskAtPosition
       });
       continue;
     }
+    let spansJump = false;
+    if (jumpFlags) {
+      for (let k = pos; k <= exitPos; k++) {
+        if (jumpFlags[indices[k]]) { spansJump = true; break; }
+      }
+    }
+    if (spansJump) continue;
     const exitRow = indices[exitPos];
     const exitPrice = Number(price[exitRow]);
     if (!(exitPrice > 0)) continue;
@@ -206,6 +277,8 @@ function runBacktest(panel, strategy) {
 
   const fullEntryMask = _evalQueryMask(panel, strategy.entryQuery);
   const fullExitMask = strategy.exitQuery ? _evalQueryMask(panel, strategy.exitQuery) : null;
+  // Strategy-independent, computed once per call -- see computePriceJumpFlags.
+  const jumpFlags = computePriceJumpFlags(panel);
 
   const groups = groupBySymbol(panel);
   const allTrades = [];
@@ -215,10 +288,10 @@ function runBacktest(panel, strategy) {
     if (positions.length === 0) continue;
 
     if (strategy.exitMode === EXIT_MODE.FIXED_HOLDING) {
-      allTrades.push(...runFixedHolding(symbol, indices, panel, positions, strategy.fixedHoldingDays));
+      allTrades.push(...runFixedHolding(symbol, indices, panel, positions, strategy.fixedHoldingDays, jumpFlags));
     } else {
       const exitAtPos = fullExitMask ? (pos) => !!fullExitMask[indices[pos]] : null;
-      allTrades.push(...runConditionExit(symbol, indices, panel, positions, entryAtPos, exitAtPos));
+      allTrades.push(...runConditionExit(symbol, indices, panel, positions, entryAtPos, exitAtPos, jumpFlags));
     }
   }
   return allTrades;
@@ -405,6 +478,7 @@ function runTopKBacktest(panel, strategy, topK, rankColumn = "final_score") {
   if (topK < 1) throw new Error("topK must be at least 1.");
 
   const fullEntryMask = _evalQueryMask(panel, strategy.entryQuery);
+  const jumpFlags = computePriceJumpFlags(panel);
   const groups = groupBySymbol(panel);
   const rankArr = panel.data[rankColumn];
   const dates = panel.data.scan_date;
@@ -434,7 +508,7 @@ function runTopKBacktest(panel, strategy, topK, rankColumn = "final_score") {
 
   const allTrades = [];
   for (const { symbol, indices, pos } of kept) {
-    allTrades.push(...runFixedHolding(symbol, indices, panel, [pos], strategy.fixedHoldingDays));
+    allTrades.push(...runFixedHolding(symbol, indices, panel, [pos], strategy.fixedHoldingDays, jumpFlags));
   }
   return allTrades;
 }
@@ -444,5 +518,6 @@ if (typeof module !== "undefined" && module.exports) {
     EXIT_MODE, pyRound, mean, median, groupBySymbol, entryPositions,
     runFixedHolding, runConditionExit, runBacktest, summarize,
     subPanel, splitPanelByDate, walkForwardSweep, runTopKBacktest, formatThreshold,
+    computePriceJumpFlags, PRICE_JUMP_THRESHOLD_PCT,
   };
 }

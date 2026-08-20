@@ -14,9 +14,11 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
 
+import numpy as np
 import pandas as pd
 
 from .. import schema as S
+from .corporate_actions import flag_price_jumps
 from .strategy import ExitMode, Strategy
 
 
@@ -114,10 +116,13 @@ def _entry_dates(symbol_df: pd.DataFrame, mask: pd.Series) -> list[int]:
 
 
 def _run_fixed_holding(symbol: str, sdf: pd.DataFrame, entry_positions: list[int],
-                        holding_days: tuple[int, ...], strategy: Strategy) -> list[Trade]:
+                        holding_days: tuple[int, ...], strategy: Strategy,
+                        jump_flags: np.ndarray) -> list[Trade]:
     trades: list[Trade] = []
     n = len(sdf)
     for pos in entry_positions:
+        if jump_flags[pos]:
+            continue  # see corporate_actions.py -- don't even open on a flagged day
         entry_date = sdf[S.SCAN_DATE].iloc[pos]
         entry_price = float(sdf[S.CURRENT_PRICE].iloc[pos])
         if entry_price <= 0:
@@ -126,6 +131,15 @@ def _run_fixed_holding(symbol: str, sdf: pd.DataFrame, entry_positions: list[int
             exit_pos = pos + days
             label = f"{days}D"
             if exit_pos < n:
+                # A trade is excluded, not just re-priced, if ANY day from
+                # entry through exit (inclusive) was flagged -- a
+                # demerger's price effect is a permanent step-change baked
+                # into every later day's current_price, not just the one
+                # day it happened, so entry_price/exit_price themselves
+                # being clean doesn't mean the return between them is. See
+                # corporate_actions.py's module docstring.
+                if jump_flags[pos:exit_pos + 1].any():
+                    continue
                 exit_row = sdf.iloc[exit_pos]
                 exit_price = float(exit_row[S.CURRENT_PRICE])
                 if exit_price <= 0:
@@ -140,13 +154,16 @@ def _run_fixed_holding(symbol: str, sdf: pd.DataFrame, entry_positions: list[int
 
 
 def _run_condition_exit(symbol: str, sdf: pd.DataFrame, entry_positions: list[int],
-                         entry_mask: pd.Series, exit_mask: Optional[pd.Series]) -> list[Trade]:
+                         entry_mask: pd.Series, exit_mask: Optional[pd.Series],
+                         jump_flags: np.ndarray) -> list[Trade]:
     trades: list[Trade] = []
     n = len(sdf)
     stop_mask = exit_mask if exit_mask is not None else ~entry_mask.fillna(False)
     stop_arr = stop_mask.fillna(False).to_numpy()
 
     for pos in entry_positions:
+        if jump_flags[pos]:
+            continue
         entry_date = sdf[S.SCAN_DATE].iloc[pos]
         entry_price = float(sdf[S.CURRENT_PRICE].iloc[pos])
         if entry_price <= 0:
@@ -159,6 +176,8 @@ def _run_condition_exit(symbol: str, sdf: pd.DataFrame, entry_positions: list[in
         if exit_pos is None:
             trades.append(Trade(symbol, entry_date, entry_price, None, None,
                                  None, None, True, "condition_exit"))
+            continue
+        if jump_flags[pos:exit_pos + 1].any():
             continue
         exit_row = sdf.iloc[exit_pos]
         exit_price = float(exit_row[S.CURRENT_PRICE])
@@ -207,6 +226,11 @@ def run_backtest(panel: pd.DataFrame, strategy: Strategy) -> list[Trade]:
     # before being reset alongside sdf so alignment is preserved exactly.
     full_entry_mask = panel.eval(strategy.entry_query)
     full_exit_mask = panel.eval(strategy.exit_query) if strategy.exit_query else None
+    # Strategy-independent (depends only on the panel's own price data, not
+    # on entry_query/exit_query), so this is exactly as cheap per call as
+    # entry_mask/exit_mask above -- one whole-panel vectorized pass, not a
+    # per-symbol loop. See corporate_actions.py for what this flags and why.
+    full_jump_flags = flag_price_jumps(panel)
 
     all_trades: list[Trade] = []
     for symbol, sdf in panel.groupby(S.SYMBOL, sort=False):
@@ -215,6 +239,7 @@ def run_backtest(panel: pd.DataFrame, strategy: Strategy) -> list[Trade]:
         sdf = sdf.reset_index(drop=True)
         entry_mask = full_entry_mask.loc[order].reset_index(drop=True)
         exit_mask = full_exit_mask.loc[order].reset_index(drop=True) if full_exit_mask is not None else None
+        jump_flags = full_jump_flags.loc[order].to_numpy()
 
         entry_positions = _entry_dates(sdf, entry_mask)
         if not entry_positions:
@@ -222,8 +247,8 @@ def run_backtest(panel: pd.DataFrame, strategy: Strategy) -> list[Trade]:
 
         if strategy.exit_mode == ExitMode.FIXED_HOLDING:
             all_trades.extend(_run_fixed_holding(symbol, sdf, entry_positions,
-                                                   strategy.fixed_holding_days, strategy))
+                                                   strategy.fixed_holding_days, strategy, jump_flags))
         else:
-            all_trades.extend(_run_condition_exit(symbol, sdf, entry_positions, entry_mask, exit_mask))
+            all_trades.extend(_run_condition_exit(symbol, sdf, entry_positions, entry_mask, exit_mask, jump_flags))
 
     return all_trades

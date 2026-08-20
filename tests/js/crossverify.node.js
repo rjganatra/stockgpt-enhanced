@@ -16,10 +16,23 @@ const path = require("path");
 const {
   runBacktest, summarize, walkForwardSweep, splitPanelByDate, runTopKBacktest, EXIT_MODE,
 } = require("../../dashboard/static/backtest_engine.js");
+const { rawShardToPanel } = require("../../dashboard/static/panel_loader.js");
 
 const xverifyDir = process.argv[2] || path.join(__dirname, "fixtures");
 
-const panel = JSON.parse(fs.readFileSync(path.join(xverifyDir, "panel.json"), "utf8"));
+// rawShardToPanel converts JSON `null` -> JS `NaN` for numeric columns (JSON
+// can't encode NaN, so gen_fixture.py writes missing numeric values as
+// `null`, exactly like a real quarterly shard file does -- see
+// panel_loader.js's module comment). Every numeric-column engine
+// computation (query comparisons AND, since the corporate-action jump
+// heuristic was added, the day_change_pct median/deviation arithmetic)
+// requires real `NaN`, not `null`: `Math.abs(null - x)` silently coerces
+// null to 0 instead of propagating "missing", which is a different (wrong)
+// answer, not just a different representation of the same one. Skipping
+// this conversion here would test the engine against data shaped
+// differently from what the real browser widget ever actually feeds it.
+const rawPanel = JSON.parse(fs.readFileSync(path.join(xverifyDir, "panel.json"), "utf8"));
+const panel = rawShardToPanel(rawPanel);
 const pyOut = JSON.parse(fs.readFileSync(path.join(xverifyDir, "python_results.json"), "utf8"));
 
 let failures = 0;

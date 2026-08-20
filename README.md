@@ -117,12 +117,19 @@ historically meant anything. `src/stockgpt/backtest/` adds a real backtester:
 - Get back win rate, average/median return, best/worst trade, and sample size, computed from your
   actual historical daily snapshots -- not eyeballed, not simulated.
 
-Two correctness details that matter for trusting the numbers: a condition that stays true for 40
-consecutive days counts as **one** entry (rising-edge detection), not 40 inflated signals; and a trade
+Three correctness details that matter for trusting the numbers: a condition that stays true for 40
+consecutive days counts as **one** entry (rising-edge detection), not 40 inflated signals; a trade
 still open at the end of your data is excluded from win-rate math and marked `is_open`, never silently
-dropped or scored as a fake 0%. Below `BacktestDefaults.min_signals_for_confidence` (10) closed trades,
-the summary carries a `low_sample_warning` flag rather than presenting a thin sample with false
-confidence.
+dropped or scored as a fake 0%; and a trade whose holding window contains a demerger-sized price jump
+(`src/stockgpt/backtest/corporate_actions.py`) is excluded entirely, not counted at face value -- a
+demerger's price effect is a real, permanent step-change in the raw data this pipeline has no way to
+retroactively adjust for, so a return computed straight through one is meaningless, not just noisy. This
+is a price-based heuristic (no free, reliable feed of actual NSE corporate-action events exists), not a
+certainty: it flags any (symbol, date) whose `day_change_pct` diverges from that day's cross-sectional
+median move by more than `BacktestDefaults.price_jump_threshold_pct` (35 points, market-relative so a
+genuine broad-market crash day doesn't get every symbol flagged). Below
+`BacktestDefaults.min_signals_for_confidence` (10) closed trades, the summary carries a
+`low_sample_warning` flag rather than presenting a thin sample with false confidence.
 
 Try it in the dashboard's **Strategy Lab** tab, or directly. One honest caveat on the "Save this
 strategy" button: it writes to a local JSON file (`data/backtest/saved_strategies.json`), which is
@@ -325,6 +332,7 @@ src/stockgpt/
     metrics.py                     win rate / return summary stats
     walkforward.py                 train/test date split + walk-forward threshold sweep
     portfolio.py                    top-K per-day signal-selection backtest
+    corporate_actions.py             price-jump heuristic (demergers etc.) -- excludes contaminated trades
 
 dashboard/app.py     Streamlit dashboard, 14 tabs: Overview (incl. a live custom-filter query box),
                        Heatmap, Opportunities, Sectors (incl. sector rotation), Stock Explorer (incl.
@@ -343,14 +351,25 @@ scripts/
   verify_against_real_data.py    the real-data verification described above
   backfill_history.py             multi-year historical backfill (see "Historical backfill" above)
 
-tests/                 104 unit tests: scoring (incl. a regression test encoding the original's
+tests/                 111 unit tests (plus a separate tests/js/ suite for the browser-side backtest
+                          engine port, cross-verified against this Python engine on identical data --
+                          see below): scoring (incl. a regression test encoding the original's
                           risk-penalty bug as an assertion), backtest engine correctness (hand-computed
                           expected returns), fundamentals, scanner, watchlist access control,
                           signal catalog validity, alert detection + delivery (mocked network),
                           sector-source fallback chain, sector rotation, walk-forward validation
                           (synthetic panels with a known generalizing vs. overfit outcome),
                           top-K portfolio backtest, historical backfill (ratio derivation from raw
-                          statements, no-lookahead as-of merge, fallback triggering)
+                          statements, no-lookahead as-of merge, fallback triggering), corporate-action
+                          price-jump detection and exclusion (market-relative flagging, and a
+                          mid-holding-window trade actually gets excluded, not just entry/exit days)
+tests/js/               dashboard/static/{query_parser,backtest_engine,panel_loader}.js unit + cross-
+                          verification tests (Node's built-in test runner, no added dependency) --
+                          gen_fixture.py generates a synthetic panel (including a deliberate demerger-
+                          sized price jump) through the REAL Python engine, crossverify.node.js runs
+                          the same panel through the JS port and diffs every number; panel_loader and
+                          browser_build.test.js additionally cover the data-shaping helpers and the
+                          actual concatenated-into-one-script browser build (see widget_strategy_lab.py)
 examples/                real 66-day sample dataset (see above) so the app works on first clone
 .github/workflows/         daily_pipeline.yml (includes the alerts step), weekly_fundamentals.yml, tests.yml
 ```
@@ -363,7 +382,7 @@ examples/                real 66-day sample dataset (see above) so the app works
    values as repository secrets in GitHub Actions / your Streamlit Cloud app settings. Everything is
    optional except that an unset `WATCHLIST_SECRET` makes the watchlist tab read-only everywhere,
    fail-closed, which is the intended default.
-4. `python -m pytest tests/ -q` to confirm everything passes (104 tests).
+4. `python -m pytest tests/ -q` to confirm everything passes (111 tests).
 5. `streamlit run dashboard/app.py` to run the dashboard locally against the sample data in `examples/`
    (copy `examples/sample_scan_latest.csv` to `data/scans/latest_scan.csv` and
    `examples/sample_history/*` to `data/history/` first, or just run `run_daily_pipeline.py` to fetch

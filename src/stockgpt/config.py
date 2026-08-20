@@ -161,6 +161,17 @@ class BacktestDefaults:
     fixed_holding_days: tuple = (7, 15, 30, 60)
     win_return_threshold_pct: float = 0.0   # return > this counts as a win
     min_signals_for_confidence: int = 10    # below this, flag as low-sample
+    # A symbol's day_change_pct diverging from that day's cross-sectional
+    # median move by at least this many percentage points is treated as a
+    # probable corporate action (demerger, stock split not reflected in
+    # current_price, etc.) rather than a genuine price move -- see
+    # backtest/corporate_actions.py's module docstring for the full
+    # reasoning and why this is a market-relative test, not a raw
+    # percentage cutoff. Chosen conservatively: comfortably above NSE's
+    # widest routine circuit limits (20%) so it doesn't flag ordinary
+    # volatile trading days, while still catching real demerger-sized drops
+    # (commonly 20-60%+) even on days when the broader market also moved.
+    price_jump_threshold_pct: float = 35.0
 
 
 BACKTEST_DEFAULTS = BacktestDefaults()

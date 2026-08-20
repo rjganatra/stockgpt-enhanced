@@ -8,8 +8,12 @@ NaN scores (real fetch gaps), a missing/null sector, a short mid-series gap
 for one symbol (a real fetch failure looks exactly like this), both open
 and closed trades, condition-exit with and without an explicit exit_query,
 `in [...]`, `and`/`or`/`not`, `.str.contains(...)`, a walk-forward
-train/test split, and a top-K portfolio day-collision. Fixed random seed,
-so re-running this always produces byte-identical fixtures -- if you change
+train/test split, a top-K portfolio day-collision, and a deliberate
+demerger-sized price jump on one symbol/day (see the day_change_pct block
+below) so corporate_actions.py::flag_price_jumps and its JS port
+(computePriceJumpFlags in backtest_engine.js) are actually cross-verified
+against each other, not just present-but-untested. Fixed random seed, so
+re-running this always produces byte-identical fixtures -- if you change
 either engine, regenerate with this script and re-run crossverify.node.js;
 if the two engines still agree, the fixture files won't even change.
 
@@ -72,6 +76,31 @@ rows = [r for r in rows if not (r[S.SYMBOL] == "CCC" and 20 <= dates.get_loc(pd.
 panel = pd.DataFrame(rows)
 panel[S.SCAN_DATE] = pd.to_datetime(panel[S.SCAN_DATE])
 panel = panel.sort_values([S.SYMBOL, S.SCAN_DATE]).reset_index(drop=True)
+
+# day_change_pct, computed the same way scanner.py does (this symbol's own
+# price vs its own previous row) -- NaN on each symbol's first row (no
+# previous_close to diff against), same as the real pipeline.
+panel[S.DAY_CHANGE_PCT] = (
+    panel.groupby(S.SYMBOL)[S.CURRENT_PRICE].pct_change() * 100
+).round(2)
+
+# Deliberate demerger-sized jump: AAA's price on day index 25 is forced to
+# drop ~45% from its (otherwise smooth) trend, and day_change_pct is
+# recomputed for that row and the next (both diff against a now-much-lower
+# price). AAA has entries in several strategies above with holding periods
+# that span day 25, so this is exercised by the existing strategy set, not
+# just a strategy built solely to probe it -- if flag_price_jumps and
+# computePriceJumpFlags ever disagree on which trades this excludes,
+# crossverify.node.js's existing per-strategy diffs will catch it.
+_aaa = panel[panel[S.SYMBOL] == "AAA"].sort_values(S.SCAN_DATE)
+_jump_idx = _aaa.index[25]
+_next_idx = _aaa.index[26]
+_pre_jump_price = float(panel.loc[_aaa.index[24], S.CURRENT_PRICE])
+_new_price = round(_pre_jump_price * 0.55, 2)
+panel.loc[_jump_idx, S.CURRENT_PRICE] = _new_price
+panel.loc[_jump_idx, S.DAY_CHANGE_PCT] = round((_new_price - _pre_jump_price) / _pre_jump_price * 100, 2)
+_post_jump_price = float(panel.loc[_next_idx, S.CURRENT_PRICE])
+panel.loc[_next_idx, S.DAY_CHANGE_PCT] = round((_post_jump_price - _new_price) / _new_price * 100, 2)
 
 strategies = [
     Strategy(name="fixed_basic", entry_query="final_score >= 65",

@@ -25,6 +25,7 @@ from __future__ import annotations
 import pandas as pd
 
 from .. import schema as S
+from .corporate_actions import flag_price_jumps
 from .engine import Trade, _entry_dates, _run_fixed_holding
 from .strategy import ExitMode, Strategy
 
@@ -58,9 +59,15 @@ def run_topk_backtest(panel: pd.DataFrame, strategy: Strategy, top_k: int,
     # .eval() calls carry fixed overhead that adds up badly across ~1800
     # real symbols.
     full_entry_mask = panel.eval(strategy.entry_query)
+    # Same corporate-action flagging run_backtest applies -- see
+    # corporate_actions.py. Computed once here too so a demerger-corrupted
+    # trade can't sneak into the top-K results even though this path
+    # doesn't call run_backtest/_run_fixed_holding's usual entry point.
+    full_jump_flags = flag_price_jumps(panel)
 
     # Every rising-edge entry, per symbol -- identical detection to run_backtest.
     per_symbol_entries: dict[str, tuple[pd.DataFrame, list[int]]] = {}
+    jump_flags_by_symbol: dict[str, "pd.Series"] = {}
     for symbol, sdf in panel.groupby(S.SYMBOL, sort=False):
         sdf = sdf.sort_values(S.SCAN_DATE)
         order = sdf.index
@@ -69,6 +76,7 @@ def run_topk_backtest(panel: pd.DataFrame, strategy: Strategy, top_k: int,
         positions = _entry_dates(sdf, entry_mask)
         if positions:
             per_symbol_entries[symbol] = (sdf, positions)
+            jump_flags_by_symbol[symbol] = full_jump_flags.loc[order].to_numpy()
 
     # Bucket every entry by its actual calendar date, across all symbols.
     by_date: dict = {}
@@ -90,5 +98,6 @@ def run_topk_backtest(panel: pd.DataFrame, strategy: Strategy, top_k: int,
 
     all_trades: list[Trade] = []
     for symbol, sdf, pos in kept:
-        all_trades.extend(_run_fixed_holding(symbol, sdf, [pos], strategy.fixed_holding_days, strategy))
+        all_trades.extend(_run_fixed_holding(symbol, sdf, [pos], strategy.fixed_holding_days,
+                                              strategy, jump_flags_by_symbol[symbol]))
     return all_trades

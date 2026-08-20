@@ -174,6 +174,14 @@ def build_widget_html() -> str:
     your actual historical win rate would have been. Runs entirely in this browser tab --
     nothing is sent to any server.
   </p>
+  <p class="sl-caption">
+    A trade whose holding window contains a demerger-sized price jump (a symbol's day-over-day
+    move diverging sharply from the broader market that day) is excluded from every result below,
+    not counted at face value -- these are real, permanent price discontinuities this data has no
+    way to adjust for, so a return computed straight through one would be meaningless. Heuristic,
+    not certain: no free feed of actual corporate-action events exists, so this can occasionally
+    exclude a real (non-corporate-action) big move, or miss a smaller one.
+  </p>
   <label for="sl-preset">Start from a strategy</label>
   <select id="sl-preset"><option value="">-- New custom strategy --</option></select>
   <label for="sl-name">Strategy name</label>
