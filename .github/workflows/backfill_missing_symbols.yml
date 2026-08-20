@@ -1,0 +1,91 @@
+name: Backfill Missing Symbols (manual, one-off)
+
+# Expands data/history from the current top-250-by-market-cap subset toward
+# the full ~2,297-symbol universe. Manual-only (workflow_dispatch) -- this
+# is a one-off/occasional data-expansion job, not part of the daily
+# pipeline, and is NOT scheduled.
+#
+# Why this has to run here and not on a laptop or in an ordinary sandbox:
+# it needs real outbound access to Yahoo Finance (yfinance), which
+# GitHub-hosted runners have (the existing daily_pipeline.yml already
+# proves this works) but many restricted/sandboxed environments do not.
+#
+# Why it's chunked via offset/limit inputs instead of one big run: fetching
+# financial statements per-symbol is the documented slow/throttle-prone
+# part of scripts/backfill_missing_symbols.py (see that file's docstring
+# and src/stockgpt/backfill.py). 2,047 missing symbols is unlikely to
+# reliably finish inside a single job's time budget, so this is designed
+# to be run several times with different offset/limit windows -- each run
+# only ever ADDS missing symbols to data/history (see
+# scripts/backfill_missing_symbols.py's docstring for the no-overwrite
+# merge guarantee), so re-running with overlapping ranges is safe, just
+# wasteful.
+#
+# Suggested usage: trigger this workflow from the Actions tab several
+# times with non-overlapping offset/limit windows (e.g. offset=0
+# limit=500, then offset=500 limit=500, ...) until "symbols currently
+# missing" reports 0. Each run fetches its chunk into a run-specific
+# scratch dir, merges into data/history, and commits -- so it's safe to
+# stop after any single run and pick up later with the next offset.
+
+on:
+  workflow_dispatch:
+    inputs:
+      offset:
+        description: "Skip this many missing symbols before taking the chunk (0-indexed)."
+        required: false
+        default: "0"
+      limit:
+        description: "How many missing symbols to fetch this run. Leave blank/0 to attempt ALL remaining (risky -- may not finish in time)."
+        required: false
+        default: "500"
+      years:
+        description: "Years of price history to fetch per symbol."
+        required: false
+        default: "3"
+
+permissions:
+  contents: write
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Fetch missing symbols into a scratch dir
+        run: |
+          LIMIT_ARG=""
+          if [ -n "${{ inputs.limit }}" ] && [ "${{ inputs.limit }}" != "0" ]; then
+            LIMIT_ARG="--limit ${{ inputs.limit }}"
+          fi
+          python scripts/backfill_missing_symbols.py --fetch \
+            --years "${{ inputs.years }}" \
+            --offset "${{ inputs.offset }}" \
+            $LIMIT_ARG \
+            --scratch-dir data/_backfill_scratch
+
+      - name: Merge scratch dir into data/history (existing rows always win)
+        run: python scripts/backfill_missing_symbols.py --merge --scratch-dir data/_backfill_scratch
+
+      - name: Clean up scratch dir
+        run: rm -rf data/_backfill_scratch
+
+      - name: Commit expanded history
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+          git add data/history
+          git commit -m "Backfill missing symbols into data/history (offset=${{ inputs.offset }} limit=${{ inputs.limit }})" || echo "No changes"
+          git pull --rebase origin main
+          git push
