@@ -1,13 +1,13 @@
 sector,recent_avg_final_score,prior_avg_final_score,change,change_pct
-Technology,42.93,32.99,9.93,30.11
-Consumer Cyclical,33.89,26.11,7.77,29.76
-Industrials,32.83,25.19,7.63,30.3
-Financial Services,29.28,23.03,6.25,27.13
-Real Estate,35.87,29.67,6.2,20.9
-Basic Materials,31.66,25.78,5.87,22.78
-Communication Services,29.75,25.24,4.51,17.86
-Healthcare,38.72,35.66,3.06,8.59
-Consumer Defensive,24.73,22.36,2.37,10.58
+Technology,42.91,32.99,9.91,30.05
+Consumer Cyclical,33.98,26.11,7.86,30.11
+Industrials,32.95,25.19,7.76,30.78
+Financial Services,29.42,23.03,6.38,27.72
+Real Estate,36.02,29.67,6.36,21.43
+Basic Materials,31.84,25.78,6.06,23.5
+Communication Services,29.82,25.24,4.58,18.14
+Healthcare,38.91,35.66,3.25,9.13
+Consumer Defensive,24.86,22.36,2.5,11.18
 Unknown,17.39,15.96,1.43,8.98
-Energy,29.18,28.05,1.13,4.02
-Utilities,19.78,20.65,-0.87,-4.2
+Energy,29.41,28.05,1.35,4.83
+Utilities,19.89,20.65,-0.76,-3.69
