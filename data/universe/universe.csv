@@ -38,7 +38,6 @@ ACGL,Unknown,Automobile Corporation of Goa Limited
 ACI,Chemicals,Archean Chemical Industries Limited
 ACL,Unknown,Andhra Cements Limited
 ACMESOLAR,Power,Acme Solar Holdings Limited
-ACSTECH,Unknown,ACS Technologies Limited
 ACUTAAS,Healthcare,Acutaas Chemicals Limited
 ADANIENSOL,Power,Adani Energy Solutions Limited
 ADANIENT,Metals & Mining,Adani Enterprises Limited
@@ -466,11 +465,9 @@ CRISIL,Financial Services,Crisil Limited
 CRIZAC,Consumer Services,Crizac Limited
 CROMPTON,Consumer Durables,Crompton Greaves Consumer Electricals Limited
 CROWN,Unknown,Crown Lifters Limited
-CRSL,Unknown,Cressanda Railway Solutions Limited
 CSBBANK,Financial Services,CSB Bank Limited
 CSLFINANCE,Unknown,CSL Finance Limited
 CSM,Unknown,CSM Technologies Limited
-CTE,Unknown,Cambridge Technology Enterprises Limited
 CUB,Financial Services,City Union Bank Limited
 CUBEXTUB,Unknown,Cubex Tubings Limited
 CUMMINSIND,Capital Goods,Cummins India Limited
@@ -674,6 +671,7 @@ FUSION,Unknown,Fusion Finance Limited
 GABRIEL,Automobile and Auto Components,Gabriel India Limited
 GAEL,Fast Moving Consumer Goods,Gujarat Ambuja Exports Limited
 GAIL,Oil Gas & Consumable Fuels,GAIL (India) Limited
+GAJA,Unknown,Gaja Alternative Asset Management Limited
 GALAPREC,Unknown,Gala Precision Engineering Limited
 GALAXYSURF,Unknown,Galaxy Surfactants Limited
 GALLANTT,Capital Goods,Gallantt Ispat Limited
@@ -1128,7 +1126,6 @@ KRITI,Unknown,Kriti Industries (India) Limited
 KRITIKA,Unknown,Kritika Wires Limited
 KRITINUT,Unknown,Kriti Nutrients Limited
 KRN,Capital Goods,KRN Heat Exchanger and Refrigeration Limited
-KRONOX,Unknown,Kronox Lab Sciences Limited
 KROSS,Unknown,Kross Limited
 KRSNAA,Unknown,Krsnaa Diagnostics Limited
 KRYSTAL,Unknown,Krystal Integrated Services Limited
@@ -1299,7 +1296,6 @@ MIDHANI,Capital Goods,Mishra Dhatu Nigam Limited
 MIDWESTLTD,Unknown,Midwest Limited
 MIIL,Unknown,Meghna Infracon Infrastructure Limited
 MILKYMIST,Unknown,Milky Mist Dairy Food Limited
-MINALIND,Unknown,Minal Industries Limited
 MINDACORP,Automobile and Auto Components,Minda Corporation Limited
 MINDTECK,Unknown,Mindteck (India) Limited
 MIRZAINT,Unknown,Mirza International Limited
@@ -1989,7 +1985,6 @@ SUZLON,Capital Goods,Suzlon Energy Limited
 SVGLOBAL,Unknown,S V Global Mill Limited
 SVPGLOB,Unknown,SVP GLOBAL TEXTILES LIMITED
 SWANCORP,Chemicals,SWAN CORP LIMITED
-SWARAJ,Unknown,Swaraj Suiting Limited
 SWARAJENG,Unknown,Swaraj Engines Limited
 SWARNSAR,Unknown,Swarnsarita Jewels India Limited
 SWELECTES,Unknown,Swelect Energy Systems Limited
