@@ -110,6 +110,24 @@ def do_merge(scratch_dir: Path) -> None:
         sys.exit(1)
     real_dir = DATA_DIR / "history"
     day_folders = sorted(p for p in scratch_dir.iterdir() if p.is_dir())
+    # The most recent day in the scratch dir is "today" (or the latest
+    # session as of whenever --fetch ran) -- yfinance's price history
+    # always runs right up to the current day. That's exactly the one
+    # folder the daily pipeline (.github/workflows/daily_pipeline.yml)
+    # also writes and commits on every run, since it's the day still "in
+    # motion". Merging into it here raced with a concurrent daily-pipeline
+    # commit and produced an unresolvable git conflict on
+    # data/history/<today>/scan.csv the first time this ran. Skipping the
+    # single latest day sidesteps that entirely -- it costs nothing, since
+    # that day's data for these symbols will be picked up the next time
+    # this script runs (or once trim_history_symbols.py's --keep-top
+    # policy is revisited), and every other (already-closed) day here is
+    # untouched by the daily pipeline and safe to merge.
+    if day_folders:
+        skipped_latest = day_folders[-1]
+        day_folders = day_folders[:-1]
+        print(f"Skipping {skipped_latest.name} (latest/in-progress day -- owned by the daily pipeline, "
+              f"not merged here to avoid a commit race).")
     merged = skipped_no_new = created = 0
     for folder in day_folders:
         new_file = folder / "scan.csv"
