@@ -1,13 +1,16 @@
 sector,recent_avg_final_score,prior_avg_final_score,change,change_pct
-Unknown,62.45,15.25,47.2,309.53
-Real Estate,42.39,28.13,14.26,50.69
-Technology,46.44,34.55,11.89,34.41
-Industrials,36.35,25.68,10.67,41.57
-Consumer Cyclical,36.95,27.5,9.45,34.36
-Financial Services,32.5,23.5,9.0,38.31
-Communication Services,31.6,25.3,6.3,24.88
-Healthcare,41.13,35.41,5.72,16.14
-Basic Materials,33.26,27.56,5.7,20.69
-Consumer Defensive,26.65,22.65,4.01,17.7
-Energy,30.17,26.85,3.32,12.37
-Utilities,20.51,19.55,0.96,4.92
+Real Estate,42.48,28.24,14.24,50.42
+Technology,46.62,35.02,11.59,33.1
+Industrials,36.28,25.86,10.42,40.32
+Consumer Cyclical,36.94,27.77,9.16,33.0
+Financial Services,32.63,24.58,8.05,32.75
+Communication Services,31.52,25.56,5.96,23.34
+Basic Materials,33.21,27.79,5.42,19.51
+Healthcare,41.16,36.13,5.03,13.93
+Consumer Defensive,26.59,22.63,3.96,17.52
+Energy,30.3,26.6,3.69,13.88
+Utilities,20.39,19.49,0.9,4.63
+Power,0.0,17.26,-17.26,-100.0
+Fast Moving Consumer Goods,0.22,25.13,-24.91,-99.1
+Chemicals,0.0,34.85,-34.85,-100.0
+Automobile and Auto Components,2.22,44.34,-42.11,-94.98
