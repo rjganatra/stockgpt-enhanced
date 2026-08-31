@@ -264,9 +264,19 @@ def fundamentals_asof(hist_fund_df: pd.DataFrame, trading_dates: pd.DatetimeInde
 
     sorted_fund = hist_fund_df.sort_index()
     # merge_asof requires both sides sorted and as a DataFrame with the key
-    # as a column, not the index.
-    left = pd.DataFrame({"trading_date": trading_dates}).sort_values("trading_date")
+    # as a column, not the index. It also requires both key columns to share
+    # the exact same datetime64 unit (pandas >=2.2 stopped silently
+    # coercing this) -- trading_dates comes from yfinance's price-history
+    # index and period_date from statement timestamps (or, for the
+    # current-fallback case, pd.Timestamp.now()), which can land on
+    # different units (e.g. datetime64[s] vs datetime64[us]) depending on
+    # pandas version and where each Timestamp originated. Normalizing both
+    # to datetime64[ns] here makes the merge robust to that regardless of
+    # which side happens to disagree.
+    left = pd.DataFrame({"trading_date": pd.to_datetime(trading_dates)}).astype(
+        {"trading_date": "datetime64[ns]"}).sort_values("trading_date")
     right = sorted_fund.reset_index().rename(columns={"index": "period_date"})
+    right["period_date"] = pd.to_datetime(right["period_date"]).astype("datetime64[ns]")
     merged = pd.merge_asof(left, right, left_on="trading_date", right_on="period_date", direction="backward")
     merged = merged.set_index("trading_date").reindex(trading_dates)
     return merged[DERIVABLE_FIELDS]
