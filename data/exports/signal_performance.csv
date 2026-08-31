@@ -23,14 +23,14 @@ Relative Strength Leader,15D,4004,3826,178,54.0,1.3,0.65,47.96,-34.04,15.0,False
 Relative Strength Leader,30D,4004,3826,178,56.98,2.91,1.96,130.54,-42.49,30.0,False,Bullish
 Relative Strength Leader,60D,4004,3826,178,59.91,5.83,4.08,196.67,-53.34,60.0,False,Bullish
 Relative Strength Leader,7D,4004,3942,62,52.82,0.71,0.31,48.52,-23.7,7.0,False,Bullish
-Low Risk Quality,15D,3120,3056,64,57.46,1.9,1.32,63.69,-28.68,15.0,False,Bullish
-Low Risk Quality,30D,3119,3030,89,59.37,3.37,2.29,130.54,-38.39,30.0,False,Bullish
-Low Risk Quality,60D,3119,2990,129,59.23,6.04,3.32,167.63,-49.93,60.0,False,Bullish
-Low Risk Quality,7D,3120,3098,22,56.91,1.08,0.72,36.14,-20.19,7.0,False,Bullish
-Range Accumulation Zone,15D,4897,4747,150,54.92,1.44,0.86,45.04,-54.74,15.0,False,Bullish
-Range Accumulation Zone,30D,4897,4747,150,55.55,2.69,1.44,123.39,-48.0,30.0,False,Bullish
-Range Accumulation Zone,60D,4897,4747,150,58.48,5.62,3.09,201.75,-52.85,60.0,False,Bullish
-Range Accumulation Zone,7D,4897,4845,52,54.12,0.78,0.47,38.98,-35.55,7.0,False,Bullish
+Low Risk Quality,15D,3121,3056,65,57.46,1.9,1.32,63.69,-28.68,15.0,False,Bullish
+Low Risk Quality,30D,3120,3030,90,59.37,3.37,2.29,130.54,-38.39,30.0,False,Bullish
+Low Risk Quality,60D,3120,2990,130,59.23,6.04,3.32,167.63,-49.93,60.0,False,Bullish
+Low Risk Quality,7D,3121,3098,23,56.91,1.08,0.72,36.14,-20.19,7.0,False,Bullish
+Range Accumulation Zone,15D,4896,4747,149,54.92,1.44,0.86,45.04,-54.74,15.0,False,Bullish
+Range Accumulation Zone,30D,4896,4747,149,55.55,2.69,1.44,123.39,-48.0,30.0,False,Bullish
+Range Accumulation Zone,60D,4896,4747,149,58.48,5.62,3.09,201.75,-52.85,60.0,False,Bullish
+Range Accumulation Zone,7D,4896,4845,51,54.12,0.78,0.47,38.98,-35.55,7.0,False,Bullish
 Range Profit Booking Zone,15D,8030,7736,294,55.52,1.79,1.02,61.21,-41.57,15.0,False,Bearish
 Range Profit Booking Zone,30D,8028,7734,294,57.51,3.57,1.98,130.54,-44.15,30.0,False,Bearish
 Range Profit Booking Zone,60D,8022,7728,294,61.05,6.96,4.33,182.15,-58.42,60.0,False,Bearish
