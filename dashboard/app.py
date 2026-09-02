@@ -921,9 +921,10 @@ with tab_strategy:
         "exactly the memory pattern that used to crash this app's free hosting tier. The widget "
         "below fetches quarterly history shards straight from GitHub "
         "(raw.githubusercontent.com) and caches them in this browser so a reload doesn't "
-        "re-download. Defaults to the trailing 1 year; use 'Load full history' inside the widget "
-        "for the full window, which is a bigger download (see the button for the size before it "
-        "starts)."
+        "re-download. Defaults to the most recent quarter only (full-universe shards now run "
+        "60-70MB+ EACH, so loading a full year automatically would mean a ~250MB+ unprompted "
+        "download); use 'Load full history' inside the widget to add more -- real size shown "
+        "before each download starts."
     )
     # Today's scan has the exact same columns the history panel does (the
     # panel is just every day's scan stacked together) -- using `df` here

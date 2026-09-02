@@ -106,9 +106,22 @@
   }
 
   async function ensureDefaultPanel() {
-    setStatus("Loading trailing 1 year of history...");
+    // Used to default to the trailing 4 quarters (~1 year) back when shards
+    // were measured at ~8MB/quarter (250-symbol history). Now that
+    // data/history holds close to the full universe, real shards run
+    // 60-70MB+ EACH (see CONFIG.meta.quarter_sizes_mb, populated from actual
+    // file sizes at export time) -- silently fetching 4 of those on page
+    // load would mean a ~250-280MB unprompted download+parse, exactly the
+    // "crash the whole dashboard" risk this widget was built to avoid.
+    // Defaulting to the single most recent quarter keeps the automatic
+    // page-load cost bounded to one real shard's size instead of four.
     allQuarters = quartersInRange(CONFIG.meta.date_from, CONFIG.meta.date_to);
-    const defaultQuarters = allQuarters.slice(-4);
+    const defaultQuarters = allQuarters.slice(-1);
+    const sizes = CONFIG.meta.quarter_sizes_mb || {};
+    const defaultMb = defaultQuarters.reduce((sum, q) => sum + (sizes[q] || 0), 0);
+    setStatus(defaultMb
+      ? `Loading most recent quarter (~${defaultMb.toFixed(0)}MB)...`
+      : "Loading most recent quarter...");
     const db = await openDb();
     try {
       const raws = await loadQuartersCached(db, defaultQuarters, (q) => setStatus(`Loading ${q}...`));
@@ -127,10 +140,17 @@
   async function loadFullHistory() {
     const remaining = allQuarters.filter((q) => !loadedQuarters.includes(q));
     if (remaining.length === 0) return;
-    const totalMbEstimate = remaining.length * 8; // rough, matches this project's own measured ~8MB/quarter
+    // Real per-quarter sizes from the last export run (see
+    // export_dashboard_data.py::export_meta) -- not a guess. Falls back to
+    // a conservative 70MB/quarter (today's real full-universe measurement)
+    // for any quarter missing from meta.json rather than silently
+    // understating the download.
+    const sizes = CONFIG.meta.quarter_sizes_mb || {};
+    const totalMbEstimate = remaining.reduce((sum, q) => sum + (sizes[q] || 70), 0);
     const ok = window.confirm(
-      `This downloads the remaining ${remaining.length} quarter(s) of history (~${totalMbEstimate}MB). `
-      + `Recommended on desktop/wifi, not mobile data. Continue?`
+      `This downloads the remaining ${remaining.length} quarter(s) of history (~${totalMbEstimate.toFixed(0)}MB). `
+      + `This can be a large, slow download and may be memory-heavy to parse on mobile/low-memory devices. `
+      + `Recommended on desktop/wifi only. Continue?`
     );
     if (!ok) return;
     setStatus(`Loading ${remaining.length} more quarter(s)...`);
@@ -138,8 +158,8 @@
     try {
       // Fetch just the NEW quarters (loadQuartersCached only touches
       // IndexedDB/network for what isn't already cached), then rebuild the
-      // full panel by re-reading every quarter -- including the 4 already
-      // in `panel` -- from cache in chronological order. Re-reading the
+      // full panel by re-reading every quarter -- including the one(s)
+      // already in `panel` -- from cache in chronological order. Re-reading the
       // already-loaded ones costs an IndexedDB lookup, not a re-download
       // (isCurrentQuarter's per-quarter cache check already makes that
       // free), and it's simpler and less error-prone than trying to splice

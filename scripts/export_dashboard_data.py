@@ -235,13 +235,19 @@ def _quarter_key(timestamp: pd.Timestamp) -> str:
     return f"{timestamp.year}-Q{(timestamp.month - 1) // 3 + 1}"
 
 
-def export_strategy_lab_shards(panel: pd.DataFrame) -> None:
+def export_strategy_lab_shards(panel: pd.DataFrame) -> dict[str, int]:
+    """Returns {quarter: file_size_bytes} so export_meta() can publish real
+    sizes -- the browser widget used to guess ~8MB/quarter (measured back
+    when history was capped at 250 symbols); now that data/history holds
+    close to the full ~2,300-symbol universe, real shard sizes are running
+    60-70MB+ each, and a stale guess would badly understate the download
+    the widget's own "Load Full History" confirm dialog shows the user."""
     out_dir = EXPORT_DIR / "strategy_lab"
     out_dir.mkdir(parents=True, exist_ok=True)
 
     if panel.empty:
         print("Strategy Lab shards: empty panel, nothing written.")
-        return
+        return {}
 
     lab_panel = panel.drop(columns=[c for c in STRATEGY_LAB_DROP_COLUMNS if c in panel.columns])
     quarter_series = lab_panel[S.SCAN_DATE].apply(_quarter_key)
@@ -288,12 +294,14 @@ def export_strategy_lab_shards(panel: pd.DataFrame) -> None:
             existing.unlink()
             removed += 1
 
-    total_bytes = sum((out_dir / f"{q}.json").stat().st_size for q in present_quarters)
+    shard_sizes = {q: (out_dir / f"{q}.json").stat().st_size for q in present_quarters}
+    total_bytes = sum(shard_sizes.values())
     print(f"Strategy Lab shards: {written} quarter(s) written ({total_bytes / 1e6:.1f} MB total), "
           f"{removed} stale quarter(s) removed -> {out_dir}")
+    return shard_sizes
 
 
-def export_meta(panel: pd.DataFrame) -> None:
+def export_meta(panel: pd.DataFrame, shard_sizes: dict[str, int] | None = None) -> None:
     if panel.empty:
         meta = {"generated_at": pd.Timestamp.now(tz="Asia/Kolkata").isoformat(),
                 "days": 0, "symbols": 0, "date_from": None, "date_to": None}
@@ -306,6 +314,11 @@ def export_meta(panel: pd.DataFrame) -> None:
             "date_from": str(pd.Timestamp(dates[0]).date()),
             "date_to": str(pd.Timestamp(dates[-1]).date()),
         }
+    # Real per-quarter Strategy Lab shard sizes (MB, rounded) -- lets the
+    # browser widget show/estimate accurate download sizes instead of a
+    # hardcoded guess that goes stale as the universe size changes. See
+    # export_strategy_lab_shards()'s docstring.
+    meta["quarter_sizes_mb"] = {q: round(b / 1e6, 1) for q, b in sorted((shard_sizes or {}).items())}
     (EXPORT_DIR / "meta.json").write_text(json.dumps(meta, indent=2))
     print(f"Meta: {meta}")
 
@@ -316,12 +329,12 @@ def main() -> None:
     panel = load_history_panel(DATA_DIR / "history")
     print(f"Panel: {len(panel)} rows" if not panel.empty else "Panel is empty.")
 
-    export_meta(panel)
+    shard_sizes = export_strategy_lab_shards(panel)
+    export_meta(panel, shard_sizes)
     export_sector_rotation(panel)
     export_score_history(panel)
     export_signal_performance(panel)
     export_leaderboard(panel)
-    export_strategy_lab_shards(panel)
     print("Export complete.")
 
 
