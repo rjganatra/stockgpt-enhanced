@@ -32,20 +32,6 @@ jobs:
       - name: Run daily pipeline (universe -> scan -> relative strength -> range bound -> merge fundamentals -> final score -> history/changes)
         run: python scripts/run_daily_pipeline.py
 
-      - name: Trim today's snapshot to the memory-safe symbol set
-        # run_daily_pipeline.py scans close to the full ~2,000-symbol
-        # universe by design -- necessary for Overview/Opportunities/etc.,
-        # which read data/scans/latest_scan.csv (today only, always full
-        # size, untouched here). But every day this same full-size snapshot
-        # also gets added to data/history, which is what the dashboard
-        # loads as one big multi-year panel -- left unchecked, that panel
-        # would silently grow back to the ~2,000-symbol scale one ordinary
-        # day at a time, exactly undoing the deliberate 250-symbol backfill
-        # trim (see README's "Historical backfill" section) and eventually
-        # crashing the deployed app again. --latest-only caps only today's
-        # new day, never re-touches already-trimmed historical days.
-        run: python scripts/trim_history_symbols.py --keep-top 250 --latest-only
-
       - name: Prune history older than the retention window
         # Keeps data/history a rolling window instead of growing forever --
         # one new day gets added above, one day that just aged out gets
