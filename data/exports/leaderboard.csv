@@ -5,6 +5,6 @@ Low risk quality,60D,14601,13228,1373,56.32,6.38,2.62,270.23,-72.59,60.0,False
 Low risk quality,30D,14609,14119,490,55.81,3.69,1.59,171.27,-46.83,30.0,False
 "Strong band entry, 30D hold",15D,10808,10626,182,53.45,2.29,0.84,99.55,-42.43,15.0,False
 Low risk quality,15D,14616,14461,155,53.32,2.09,0.69,105.57,-45.31,15.0,False
-52W low + oversold RSI,condition_exit,12220,11145,1075,67.39,1.45,4.1,58.31,-84.55,27.8,False
+52W low + oversold RSI,condition_exit,12226,11149,1077,67.37,1.45,4.1,58.31,-84.55,27.8,False
 "Strong band entry, 30D hold",7D,10812,10735,77,51.23,1.04,0.18,65.73,-41.28,7.0,False
 "High conviction, ride the band",condition_exit,10814,10801,13,39.89,0.77,-0.54,109.56,-21.0,3.8,False
