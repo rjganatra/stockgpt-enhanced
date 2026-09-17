@@ -130,8 +130,8 @@ ANDHRSUGAR,Unknown,The Andhra Sugars Limited
 ANDREWYU,Unknown,Andrew Yule & Company Limited
 ANGELONE,Financial Services,Angel One Limited
 ANIKINDS,Unknown,Anik Industries Limited
-ANMOL,Unknown,Anmol India Limited
 ANNAPURNA,Unknown,Annapurna Swadisht Limited
+ANNU,Unknown,Annu Projects Limited
 ANSALBU,Unknown,Ansal Buildwell Limited
 ANTELOPUS,Unknown,Antelopus Selan Energy Limited
 ANTGRAPHIC,Unknown,Antarctica Limited
@@ -155,6 +155,7 @@ APTUS,Financial Services,Aptus Value Housing Finance India Limited
 AQYLON,Unknown,Aqylon Nexus Limited
 ARCHIDPLY,Unknown,Archidply Industries Limited
 ARCHIES,Unknown,Archies Limited
+ARCIL,Unknown,Asset Reconstruction Company (India) Limited
 ARCL,Unknown,ARCL Organics Limited
 ARDEE,Unknown,Ardee Industries Limited
 ARE&M,Automobile and Auto Components,Amara Raja Energy & Mobility Limited
@@ -405,7 +406,6 @@ CENTURYPLY,Consumer Durables,Century Plyboards (India) Limited
 CERA,Consumer Durables,Cera Sanitaryware Limited
 CESC,Power,CESC Limited
 CEWATER,Unknown,Concord Enviro Systems Limited
-CFEL,Unknown,Confidence Futuristic Energetech Limited
 CGCL,Financial Services,Capri Global Capital Limited
 CGPOWER,Capital Goods,CG Power and Industrial Solutions Limited
 CGVAK,Unknown,CG Vak Software & Exports Limited
@@ -764,7 +764,6 @@ GRANULES,Healthcare,Granules India Limited
 GRAPHITE,Capital Goods,Graphite India Limited
 GRASIM,Construction Materials,Grasim Industries Limited
 GRAUWEIL,Unknown,Grauer & Weil India Limited
-GRAVISSHO,Unknown,Graviss Hospitality Limited
 GRAVITA,Metals & Mining,Gravita India Limited
 GREAVESCOT,Capital Goods,Greaves Cotton Limited
 GREENLAM,Unknown,Greenlam Industries Limited
@@ -914,6 +913,7 @@ INDBANK,Unknown,Indbank Merchant Banking Services Limited
 INDGN,Healthcare,Indegene Limited
 INDHOTEL,Consumer Services,The Indian Hotels Company Limited
 INDIACEM,Construction Materials,The India Cements Limited
+INDIAGLYCO,Fast Moving Consumer Goods,India Glycols Limited
 INDIAMART,Consumer Services,Indiamart Intermesh Limited
 INDIANB,Financial Services,Indian Bank
 INDIANCARD,Unknown,Indian Card Clothing Company Limited
@@ -1069,6 +1069,7 @@ KANOHAR,Unknown,Kanohar Electricals Limited
 KANPRPLA,Unknown,Kanpur Plastipack Limited
 KANSAINER,Consumer Durables,Kansai Nerolac Paints Limited
 KAPSTON,Unknown,Kapston Services Limited
+KARAMTARA,Unknown,Karamtara Engineering Limited
 KARMAENG,Unknown,Karma Energy Limited
 KARURVYSYA,Financial Services,Karur Vysya Bank Limited
 KAVDEFENCE,Unknown,Kavveri Defence & Wireless Technologies Limited
@@ -1150,7 +1151,6 @@ KTKBANK,Financial Services,The Karnataka Bank Limited
 KUANTUM,Unknown,Kuantum Papers Limited
 KUSUMGAR,Unknown,Kusumgar Limited
 KWIL,Unknown,Kwality Wall's (India) Limited
-LADDERUP,Unknown,Ladderup Finance Limited
 LAGNAM,Unknown,Lagnam Spintex Limited
 LAHOTIOV,Unknown,Lahoti Overseas Limited
 LAKSHMIMIL,Unknown,Lakshmi Mills Company Limited
@@ -1170,6 +1170,7 @@ LAXMICOT,Unknown,Laxmi Cotspin Limited
 LAXMIDENTL,Unknown,Laxmi Dental Limited
 LAXMIINDIA,Unknown,Laxmi India Finance Limited
 LCCINFOTEC,Unknown,LCC Infotech Limited
+LCCPROJECT,Unknown,LCC Projects Limited
 LCL,Unknown,Lohia Corp Limited
 LEAPIND,Unknown,LEAP India Limited
 LEMERITE,Unknown,Le Merite Exports Limited
@@ -1338,6 +1339,7 @@ MOTILALOFS,Financial Services,Motilal Oswal Financial Services Limited
 MOTISONS,Unknown,Motisons Jewellers Limited
 MOTOGENFIN,Unknown,The Motor & General Finance Limited
 MPHASIS,Information Technology,MphasiS Limited
+MPIMANIPAL,Unknown,Manipal Payment and Identity Solutions Limited
 MPSLTD,Unknown,MPS Limited
 MRF,Automobile and Auto Components,MRF Limited
 MRPL,Oil Gas & Consumable Fuels,Mangalore Refinery and Petrochemicals Limited
@@ -1350,7 +1352,6 @@ MUFIN,Unknown,Mufin Green Finance Limited
 MUFTI,Unknown,Credo Brands Marketing Limited
 MUKANDLTD,Unknown,Mukand Limited
 MUKESHB,Unknown,Mukesh Babu Financial Services Limited
-MUKKA,Unknown,Mukka Proteins Limited
 MUNJALAU,Unknown,Munjal Auto Industries Limited
 MUNJALSHOW,Unknown,Munjal Showa Limited
 MURUDCERA,Unknown,Murudeshwar Ceramics Limited
@@ -1558,7 +1559,7 @@ PML,Unknown,Paul Merchants Limited
 PNB,Financial Services,Punjab National Bank
 PNBGILTS,Unknown,PNB Gilts Limited
 PNBHOUSING,Financial Services,PNB Housing Finance Limited
-PNC,Unknown,Pritish Nandy Communications Limited
+PNC,Unknown,PNC Media and Entertainment Limited
 PNCINFRA,Construction,PNC Infratech Limited
 PNGJL,Consumer Durables,P N Gadgil Jewellers Limited
 PNGSREVA,Unknown,PNGS Reva Diamond Jewellery Limited
@@ -1671,6 +1672,7 @@ RELIANCE,Oil Gas & Consumable Fuels,Reliance Industries Limited
 RELIGARE,Financial Services,Religare Enterprises Limited
 RELTD,Unknown,Ravindra Energy Limited
 REMSONSIND,Unknown,Remsons Industries Limited
+RENTOMOJO,Unknown,Rentomojo Limited
 RENUKA,Fast Moving Consumer Goods,Shree Renuka Sugars Limited
 REPCOHOME,Unknown,Repco Home Finance Limited
 REPRO,Unknown,Repro India Limited
@@ -1935,6 +1937,7 @@ STARHEALTH,Financial Services,Star Health and Allied Insurance Company Limited
 STARPAPER,Unknown,Star Paper Mills Limited
 STARTECK,Unknown,Starteck Finance Limited
 STCINDIA,Unknown,The State Trading Corporation of India Limited
+STEAMHOUSE,Unknown,Steamhouse India Limited
 STEELCAS,Unknown,Steelcast Limited
 STEELCITY,Unknown,Steel City Securities Limited
 STEELXIND,Unknown,STEEL EXCHANGE INDIA LIMITED
