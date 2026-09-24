@@ -1,10 +1,10 @@
 strategy_name,horizon_label,total_signals,closed_trades,open_trades,win_rate_pct,avg_return_pct,median_return_pct,best_return_pct,worst_return_pct,avg_holding_days,low_sample_warning
-"Strong band entry, 30D hold",60D,10770,10018,752,56.44,6.36,3.07,160.63,-56.05,60.0,False
-Low risk quality,60D,14608,13470,1138,56.08,6.3,2.54,270.23,-72.59,60.0,False
-"Strong band entry, 30D hold",30D,10776,10369,407,55.41,3.98,1.96,130.54,-53.19,30.0,False
-Low risk quality,30D,14616,14211,405,55.9,3.72,1.63,171.27,-46.83,30.0,False
-"Strong band entry, 30D hold",15D,10781,10576,205,53.43,2.27,0.83,99.55,-42.43,15.0,False
-Low risk quality,15D,14623,14558,65,53.52,2.13,0.75,105.57,-45.31,15.0,False
-52W low + oversold RSI,condition_exit,12375,11289,1086,67.56,1.46,4.12,58.31,-84.55,27.7,False
-"Strong band entry, 30D hold",7D,10785,10683,102,51.28,1.04,0.19,65.73,-41.28,7.0,False
-"High conviction, ride the band",condition_exit,10787,10759,28,40.1,0.78,-0.53,109.56,-21.0,3.8,False
+"Strong band entry, 30D hold",60D,10775,10029,746,56.43,6.35,3.07,160.63,-56.05,60.0,False
+Low risk quality,60D,14608,13500,1108,56.06,6.3,2.54,270.23,-72.59,60.0,False
+"Strong band entry, 30D hold",30D,10781,10383,398,55.41,3.99,1.96,130.54,-53.19,30.0,False
+Low risk quality,30D,14616,14231,385,55.88,3.72,1.63,171.27,-46.83,30.0,False
+"Strong band entry, 30D hold",15D,10786,10590,196,53.41,2.27,0.82,99.55,-42.43,15.0,False
+Low risk quality,15D,14623,14578,45,53.5,2.13,0.74,105.57,-45.31,15.0,False
+52W low + oversold RSI,condition_exit,12483,11334,1149,67.58,1.47,4.12,58.31,-84.55,27.7,False
+"Strong band entry, 30D hold",7D,10790,10688,102,51.28,1.04,0.19,65.73,-41.28,7.0,False
+"High conviction, ride the band",condition_exit,10792,10778,14,40.07,0.78,-0.53,109.56,-21.0,3.8,False
