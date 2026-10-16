@@ -1,24 +1,25 @@
 sector,recent_avg_final_score,prior_avg_final_score,change,change_pct
-Power,3.79,4.55,-0.76,-16.7
-Fast Moving Consumer Goods,1.12,1.89,-0.77,-40.78
-Metals & Mining,0.12,1.01,-0.9,-88.47
+Services,0.11,0.0,0.11,
 Chemicals,0.0,1.01,-1.01,-100.0
-Capital Goods,6.9,8.04,-1.14,-14.23
-Technology,23.02,24.77,-1.74,-7.04
-Information Technology,0.54,2.41,-1.87,-77.7
-Communication Services,15.49,17.38,-1.89,-10.86
-Consumer Defensive,20.88,22.9,-2.02,-8.81
-Real Estate,17.26,19.55,-2.29,-11.72
-Utilities,13.99,16.58,-2.59,-15.61
-Industrials,23.48,26.14,-2.66,-10.19
-Basic Materials,24.45,28.27,-3.82,-13.5
-Unknown,10.15,13.98,-3.84,-27.43
-Consumer Cyclical,22.08,25.97,-3.89,-14.97
-Automobile and Auto Components,2.02,6.05,-4.03,-66.66
-Consumer Services,1.24,6.13,-4.89,-79.82
-Energy,35.93,41.1,-5.17,-12.57
-Financial Services,20.97,26.32,-5.35,-20.33
-Construction Materials,1.43,8.56,-7.13,-83.28
-Consumer Durables,0.17,7.31,-7.14,-97.67
-Healthcare,30.39,38.57,-8.18,-21.22
-Realty,0.26,10.36,-10.1,-97.48
+Metals & Mining,0.12,1.14,-1.02,-89.74808324205915
+Power,3.56,4.84,-1.29,-26.55270523466957
+Technology,23.12,24.67,-1.55,-6.287234815176743
+Fast Moving Consumer Goods,0.63,2.18,-1.56,-71.32459130032927
+Communication Services,15.51,17.23,-1.72,-9.997410697365668
+Consumer Defensive,20.78,22.55,-1.77,-7.832882246159553
+Information Technology,0.37,2.41,-2.04,-84.49826989619378
+Capital Goods,6.28,8.55,-2.27,-26.536694698873575
+Real Estate,17.03,19.4,-2.37,-12.206582808536455
+Industrials,23.32,25.8,-2.48,-9.612797274030678
+Utilities,13.64,16.55,-2.91,-17.575525318820944
+Consumer Services,1.18,4.13,-2.96,-71.58022037086805
+Consumer Cyclical,21.95,25.73,-3.78,-14.694469800547452
+Basic Materials,24.21,28.0,-3.78,-13.507736330505793
+Unknown,9.96,13.77,-3.81,-27.64363210593353
+Automobile and Auto Components,2.31,6.81,-4.49,-66.0080793242747
+Financial Services,20.9,25.79,-4.89,-18.94952413519325
+Consumer Durables,0.55,6.49,-5.94,-91.47145207931504
+Energy,35.12,41.17,-6.05,-14.690091729396618
+Construction Materials,1.07,7.99,-6.92,-86.63583252190847
+Healthcare,29.74,38.3,-8.56,-22.340514698539423
+Realty,0.26,10.36,-10.1,-97.47972190034763
