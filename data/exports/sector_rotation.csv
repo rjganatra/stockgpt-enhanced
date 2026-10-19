@@ -1,25 +1,25 @@
 sector,recent_avg_final_score,prior_avg_final_score,change,change_pct
-Services,0.11,0.0,0.11,
+Services,0.0,0.22,-0.22,-100.0
+Metals & Mining,0.27,0.63,-0.36,-56.76
+Power,3.98,4.63,-0.65,-14.07
 Chemicals,0.0,1.01,-1.01,-100.0
-Metals & Mining,0.12,1.14,-1.02,-89.74808324205915
-Power,3.56,4.84,-1.29,-26.55270523466957
-Technology,23.13,24.67,-1.54,-6.252458393620129
-Fast Moving Consumer Goods,0.63,2.18,-1.56,-71.32459130032927
-Communication Services,15.52,17.23,-1.7,-9.893947810735416
-Consumer Defensive,20.81,22.55,-1.74,-7.700853855886416
-Information Technology,0.37,2.41,-2.04,-84.49826989619378
-Capital Goods,6.28,8.55,-2.27,-26.536694698873575
-Real Estate,17.03,19.4,-2.37,-12.210123998084534
-Industrials,23.33,25.8,-2.47,-9.571957855160838
-Utilities,13.67,16.55,-2.88,-17.416312072533152
-Consumer Services,1.18,4.13,-2.96,-71.58022037086805
-Basic Materials,24.25,28.0,-3.74,-13.366738709227796
-Consumer Cyclical,21.98,25.73,-3.74,-14.555697623901137
-Unknown,9.95,13.77,-3.82,-27.709701293940807
-Automobile and Auto Components,2.31,6.81,-4.49,-66.0080793242747
-Financial Services,20.96,25.79,-4.83,-18.722816695420093
-Consumer Durables,0.64,6.49,-5.85,-90.1028965681318
-Energy,35.2,41.17,-5.97,-14.500152555906231
-Construction Materials,1.07,7.99,-6.92,-86.63583252190847
-Healthcare,29.77,38.3,-8.53,-22.272160610058332
-Realty,0.26,10.36,-10.1,-97.47972190034763
+Communication Services,15.64,17.16,-1.52,-8.86
+Technology,23.04,24.62,-1.57,-6.4
+Consumer Defensive,20.62,22.29,-1.67,-7.48
+Fast Moving Consumer Goods,0.57,2.26,-1.69,-74.86
+Information Technology,0.17,2.22,-2.05,-92.22
+Real Estate,16.81,19.26,-2.46,-12.75
+Capital Goods,6.46,9.11,-2.64,-29.03
+Industrials,22.92,25.63,-2.71,-10.58
+Consumer Services,0.77,3.9,-3.13,-80.19
+Utilities,13.17,16.43,-3.26,-19.85
+Consumer Cyclical,21.68,25.53,-3.85,-15.07
+Basic Materials,23.88,27.75,-3.87,-13.93
+Unknown,9.64,13.52,-3.88,-28.73
+Automobile and Auto Components,3.67,7.78,-4.11,-52.88
+Financial Services,20.81,25.35,-4.54,-17.9
+Consumer Durables,0.68,5.62,-4.94,-87.86
+Energy,34.48,40.91,-6.43,-15.73
+Construction Materials,0.34,7.41,-7.07,-95.35
+Healthcare,28.69,38.25,-9.56,-24.99
+Realty,0.26,10.36,-10.1,-97.48
