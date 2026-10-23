@@ -350,6 +350,7 @@ BMWVENTLTD,Unknown,BMW Ventures Limited
 BNAGROCHEM,Unknown,BN Agrochem Limited
 BOHRAIND,Unknown,Bohra Industries Limited
 BOMDYEING,Unknown,Bombay Dyeing & Mfg Company Limited
+BONFIG,Unknown,Bonfiglioli Transmissions Limited
 BONLON,Unknown,Bonlon Industries Limited
 BORANA,Unknown,Borana Weaves Limited
 BOROLTD,Unknown,Borosil Limited
@@ -452,7 +453,6 @@ COFFEEDAY,Unknown,Coffee Day Enterprises Limited
 COFORGE,Information Technology,Coforge Limited
 COHANCE,Healthcare,Cohance Lifesciences Limited
 COLPAL,Fast Moving Consumer Goods,Colgate Palmolive (India) Limited
-COMFINTE,Unknown,Comfort Intech Limited
 COMPEAU,Unknown,Competent Automobiles Company Limited
 COMPUSOFT,Unknown,Compucom Software Limited
 COMSYN,Unknown,Commercial Syn Bags Limited
@@ -815,7 +815,6 @@ HAL,Capital Goods,Hindustan Aeronautics Limited
 HALDER,Unknown,Halder Venture Limited
 HALDYNGL,Unknown,Haldyn Glass Limited
 HALEOSLABS,Unknown,HALEOS LABS LIMITED
-HAMPTON,Unknown,Hampton Sky Realty Limited
 HAPPSTMNDS,Information Technology,Happiest Minds Technologies Limited
 HAPPYFORGE,Capital Goods,Happy Forgings Limited
 HARDWYN,Unknown,Hardwyn India Limited
@@ -901,7 +900,7 @@ ICEMAKE,Unknown,Ice Make Refrigeration Limited
 ICICIAMC,Financial Services,ICICI Prudential Asset Management Company Limited
 ICICIBANK,Financial Services,ICICI Bank Limited
 ICICIGI,Financial Services,ICICI Lombard General Insurance Company Limited
-ICICIPRULI,Financial Services,ICICI Prudential Life Insurance Company Limited
+ICICILIFE,Unknown,ICICI Life Insurance Limited
 ICIL,Textiles,Indo Count Industries Limited
 ICRA,Unknown,ICRA Limited
 IDBI,Financial Services,IDBI Bank Limited
@@ -1448,6 +1447,7 @@ NITCO,Unknown,Nitco Limited
 NITINSPIN,Unknown,Nitin Spinners Limited
 NITIRAJ,Unknown,Nitiraj Engineers Limited
 NITTAGELA,Unknown,Nitta Gelatin India Limited
+NITYAS,Unknown,Nityas Gems and Jewellery Limited
 NIVABUPA,Financial Services,Niva Bupa Health Insurance Company Limited
 NKIND,Unknown,NK Industries Limited
 NLCINDIA,Power,NLC India Limited
@@ -1935,6 +1935,7 @@ SMCGLOBAL,Unknown,SMC Global Securities Limited
 SMLMAH,Capital Goods,SML Mahindra Limited
 SMLT,Unknown,Sarthak Metals Limited
 SMSPHARMA,Unknown,SMS Pharmaceuticals Limited
+SMT,Unknown,Sahajanand Medical Technologies Limited
 SNOWMAN,Unknown,Snowman Logistics Limited
 SOBHA,Realty,Sobha Limited
 SOFTTECH,Unknown,Softtech Engineers Limited
@@ -2138,6 +2139,7 @@ TNPETRO,Unknown,Tamilnadu PetroProducts Limited
 TNPL,Unknown,Tamil Nadu Newsprint & Papers Limited
 TOKYOPLAST,Unknown,Tokyo Plast International Limited
 TOLINS,Unknown,Tolins Tyres Limited
+TONBO,Unknown,Tonbo Imaging India Limited
 TORNTPHARM,Healthcare,Torrent Pharmaceuticals Limited
 TORNTPOWER,Power,Torrent Power Limited
 TOUCHWOOD,Unknown,Touchwood Entertainment Limited
@@ -2276,6 +2278,7 @@ VLSFINANCE,Unknown,VLS Finance Limited
 VMART,Consumer Services,V-Mart Retail Limited
 VMM,Consumer Services,Vishal Mega Mart Limited
 VMSTMT,Unknown,VMS TMT Limited
+VNL,Unknown,Vishal Nirmiti Limited
 VOEPL,Unknown,Virtuoso Optoelectronics Limited
 VOGL,Oil Gas & Consumable Fuels,Vedanta Oil and Gas Limited
 VOITHPAPR,Unknown,Voith Paper Fabrics India Limited
@@ -2343,6 +2346,7 @@ ZENITHEXPO,Unknown,Zenith Exports Limited
 ZENITHSTL,Unknown,Zenith Steel Pipes & Industries Limited
 ZENSARTECH,Information Technology,Zensar Technologies Limited
 ZENTEC,Capital Goods,Zen Technologies Limited
+ZETWERK,Unknown,Zetwerk Manufacturing Businesses Limited
 ZFCVINDIA,Automobile and Auto Components,ZF Commercial Vehicle Control Systems India Limited
 ZFSTEERING,Unknown,ZF Steering Gear (India) Limited
 ZIMLAB,Unknown,Zim Laboratories Limited

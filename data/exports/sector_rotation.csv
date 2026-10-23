@@ -1,24 +1,26 @@
 sector,recent_avg_final_score,prior_avg_final_score,change,change_pct
-Metals & Mining,1.15,0.5,0.65,131.46
-Power,5.11,4.65,0.46,9.92
+Metals & Mining,1.44,0.4,1.05,264.4133644133644
+Power,5.59,4.65,0.94,20.25170169002734
+Construction,0.5,0.0,0.5,
+Media Entertainment & Publication,0.0,0.0,0.0,
+Consumer Durables,1.21,2.19,-0.98,-44.68925695183103
 Chemicals,0.0,1.01,-1.01,-100.0
-Consumer Defensive,20.06,21.24,-1.19,-5.59
-Communication Services,15.78,16.99,-1.22,-7.16
-Technology,22.86,24.15,-1.29,-5.35
-Information Technology,0.28,1.78,-1.5,-84.47
-Fast Moving Consumer Goods,0.51,2.22,-1.71,-77.0
-Consumer Durables,1.09,2.82,-1.72,-61.23
-Consumer Services,0.0,2.71,-2.71,-100.0
-Real Estate,16.01,18.88,-2.87,-15.21
-Industrials,21.58,25.0,-3.42,-13.68
-Financial Services,20.16,23.86,-3.7,-15.5
-Consumer Cyclical,20.84,24.68,-3.84,-15.56
-Unknown,8.73,12.64,-3.91,-30.92
-Basic Materials,22.68,26.85,-4.17,-15.53
-Utilities,11.92,16.15,-4.23,-26.18
-Capital Goods,6.03,10.85,-4.82,-44.4
-Construction Materials,0.0,5.05,-5.05,-100.0
-Energy,32.34,39.73,-7.39,-18.6
-Realty,0.26,10.36,-10.1,-97.48
-Automobile and Auto Components,2.92,13.62,-10.7,-78.56
-Healthcare,26.14,37.15,-11.01,-29.64
+Communication Services,15.65,16.96,-1.32,-7.771222931245466
+Information Technology,0.34,1.7,-1.35,-79.64601769911505
+Fast Moving Consumer Goods,0.64,2.08,-1.45,-69.40978886756238
+Technology,22.61,24.1,-1.5,-6.203793208216845
+Consumer Defensive,19.46,21.26,-1.81,-8.491258240642638
+Consumer Services,0.0,2.51,-2.51,-100.0
+Construction Materials,1.79,4.86,-3.07,-63.20987654320987
+Real Estate,15.56,19.03,-3.47,-18.21761888919651
+Financial Services,19.67,23.62,-3.95,-16.7178141556862
+Industrials,20.94,25.08,-4.14,-16.510962147917144
+Unknown,8.24,12.45,-4.21,-33.8045144980591
+Consumer Cyclical,20.35,24.57,-4.22,-17.18134627011998
+Basic Materials,22.06,26.82,-4.76,-17.740586138244147
+Utilities,11.38,16.25,-4.87,-29.975050448273556
+Capital Goods,6.39,11.55,-5.16,-44.665432026920165
+Realty,0.33,7.4,-7.07,-95.58951332560835
+Energy,31.46,39.65,-8.19,-20.652238707441796
+Healthcare,25.36,36.73,-11.37,-30.953414731846294
+Automobile and Auto Components,2.6,18.15,-15.55,-85.65552699228792
