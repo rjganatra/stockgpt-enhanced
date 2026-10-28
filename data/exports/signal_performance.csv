@@ -3,10 +3,10 @@ High Conviction,15D,10317,10231,86,53.28,2.16,0.79,99.55,-83.28,15.0,False,Bulli
 High Conviction,30D,10312,10052,260,54.39,3.61,1.63,130.54,-83.04,30.0,False,Bullish
 High Conviction,60D,10307,9660,647,54.54,5.33,1.94,160.63,-82.64,60.0,False,Bullish
 High Conviction,7D,10321,10281,40,51.46,1.04,0.21,65.73,-81.41,7.0,False,Bullish
-52W Low Opportunity,15D,10645,9973,672,47.56,1.07,-0.36,106.15,-90.59,15.0,False,Bullish
-52W Low Opportunity,30D,10645,9408,1237,49.23,1.65,-0.18,135.11,-59.81,30.0,False,Bullish
-52W Low Opportunity,60D,10645,8511,2134,52.33,3.54,0.99,168.82,-85.86,60.0,False,Bullish
-52W Low Opportunity,7D,10645,10274,371,47.5,0.76,-0.25,776.86,-59.38,7.0,False,Bullish
+52W Low Opportunity,15D,10644,9973,671,47.56,1.07,-0.36,106.15,-90.59,15.0,False,Bullish
+52W Low Opportunity,30D,10644,9408,1236,49.23,1.65,-0.18,135.11,-59.81,30.0,False,Bullish
+52W Low Opportunity,60D,10644,8511,2133,52.33,3.54,0.99,168.82,-85.86,60.0,False,Bullish
+52W Low Opportunity,7D,10644,10274,370,47.5,0.76,-0.25,776.86,-59.38,7.0,False,Bullish
 Swing Candidate,15D,28194,25944,2250,46.28,0.76,-0.65,128.05,-90.59,15.0,False,Bullish
 Swing Candidate,30D,28193,24118,4075,47.98,1.41,-0.58,765.27,-80.99,30.0,False,Bullish
 Swing Candidate,60D,28182,22182,6000,50.33,2.94,0.16,479.52,-85.86,60.0,False,Bullish
@@ -27,10 +27,10 @@ Low Risk Quality,15D,14494,14379,115,51.37,1.77,0.32,124.17,-82.97,15.0,False,Bu
 Low Risk Quality,30D,14491,14222,269,52.19,3.03,0.71,144.62,-81.34,30.0,False,Bullish
 Low Risk Quality,60D,14487,13656,831,51.35,4.95,0.59,611.75,-75.1,60.0,False,Bullish
 Low Risk Quality,7D,14499,14451,48,50.9,0.98,0.13,66.67,-81.52,7.0,False,Bullish
-Range Accumulation Zone,15D,56266,54123,2143,47.91,1.12,-0.39,702.05,-90.59,15.0,False,Bullish
-Range Accumulation Zone,30D,56251,52663,3588,48.5,1.82,-0.46,765.27,-84.11,30.0,False,Bullish
-Range Accumulation Zone,60D,56209,50455,5754,50.78,3.83,0.36,447.44,-85.83,60.0,False,Bullish
-Range Accumulation Zone,7D,56277,55117,1160,48.18,0.62,-0.21,674.3,-81.05,7.0,False,Bullish
+Range Accumulation Zone,15D,56265,54123,2142,47.91,1.12,-0.39,702.05,-90.59,15.0,False,Bullish
+Range Accumulation Zone,30D,56250,52663,3587,48.5,1.82,-0.46,765.27,-84.11,30.0,False,Bullish
+Range Accumulation Zone,60D,56208,50455,5753,50.78,3.83,0.36,447.44,-85.83,60.0,False,Bullish
+Range Accumulation Zone,7D,56276,55117,1159,48.18,0.62,-0.21,674.3,-81.05,7.0,False,Bullish
 Range Profit Booking Zone,15D,59096,58242,854,46.72,1.09,-0.7,162.19,-80.86,15.0,False,Bearish
 Range Profit Booking Zone,30D,59071,57090,1981,47.28,1.96,-0.91,244.9,-79.74,30.0,False,Bearish
 Range Profit Booking Zone,60D,59026,54245,4781,47.54,3.43,-1.15,508.16,-83.54,60.0,False,Bearish
@@ -39,7 +39,7 @@ Range Breakdown Risk,15D,25580,24321,1259,52.3,2.1,0.62,128.05,-77.24,15.0,False
 Range Breakdown Risk,30D,25578,23537,2041,53.32,3.01,1.19,191.28,-80.54,30.0,False,Bearish
 Range Breakdown Risk,60D,25563,22905,2658,57.1,6.19,3.39,421.4,-85.96,60.0,False,Bearish
 Range Breakdown Risk,7D,25583,24792,791,50.95,1.09,0.16,99.42,-54.37,7.0,False,Bearish
-Avoid / Risky,15D,46946,45850,1096,47.79,1.11,-0.41,635.93,-81.09,15.0,False,Bearish
-Avoid / Risky,30D,46931,44778,2153,48.81,2.15,-0.31,680.01,-77.77,30.0,False,Bearish
-Avoid / Risky,60D,46915,42531,4384,48.67,3.59,-0.51,508.16,-81.97,60.0,False,Bearish
-Avoid / Risky,7D,46953,46504,449,47.53,0.44,-0.3,118.53,-82.01,7.0,False,Bearish
+Avoid / Risky,15D,46945,45850,1095,47.79,1.11,-0.41,635.93,-81.09,15.0,False,Bearish
+Avoid / Risky,30D,46930,44778,2152,48.81,2.15,-0.31,680.01,-77.77,30.0,False,Bearish
+Avoid / Risky,60D,46914,42531,4383,48.67,3.59,-0.51,508.16,-81.97,60.0,False,Bearish
+Avoid / Risky,7D,46952,46504,448,47.53,0.44,-0.3,118.53,-82.01,7.0,False,Bearish
