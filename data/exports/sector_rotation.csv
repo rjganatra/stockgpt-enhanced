@@ -1,25 +1,21 @@
 sector,recent_avg_final_score,prior_avg_final_score,change,change_pct
-Fast Moving Consumer Goods,6.21,2.06,4.15,201.4124783362218
-Metals & Mining,2.51,0.15,2.37,1618.1929181929186
-Construction,0.72,0.0,0.72,
-Power,5.33,4.85,0.48,9.93758287248147
-Consumer Durables,0.89,0.43,0.46,106.24999999999997
-Media Entertainment & Publication,0.0,0.0,0.0,
-Construction Materials,0.91,1.43,-0.52,-36.365223463687144
-Communication Services,15.74,16.51,-0.78,-4.695499962989187
-Chemicals,0.0,1.01,-1.01,-100.0
-Technology,22.26,23.66,-1.4,-5.905991407089893
-Information Technology,0.0,1.61,-1.61,-100.0
-Consumer Services,0.0,2.05,-2.05,-100.0
-Realty,1.3,3.98,-2.68,-67.23638470451912
-Consumer Defensive,17.93,21.42,-3.49,-16.273542240107925
-Financial Services,18.83,22.39,-3.56,-15.911302438080119
-Real Estate,14.72,18.69,-3.97,-21.25633300630304
-Consumer Cyclical,19.71,23.92,-4.21,-17.58840328981355
-Unknown,6.95,11.71,-4.76,-40.65895765774062
-Capital Goods,5.31,10.25,-4.94,-48.16532242928677
-Utilities,10.65,15.75,-5.1,-32.36365082864122
-Industrials,19.72,24.82,-5.1,-20.542387449642863
-Basic Materials,20.9,26.25,-5.35,-20.388333397093504
-Energy,29.44,38.9,-9.46,-24.323229680771476
-Healthcare,24.69,34.85,-10.16,-29.163190686067914
+Fast Moving Consumer Goods,8.51,1.89,6.62,349.8
+Metals & Mining,3.52,0.12,3.4,2906.84
+Consumer Durables,0.89,0.47,0.43,90.97
+Power,5.54,5.13,0.4,7.88
+Construction,0.5,0.88,-0.38,-43.26
+Communication Services,15.86,16.35,-0.48,-2.96
+Construction Materials,0.81,1.43,-0.62,-43.44
+Chemicals,0.0,0.92,-0.92,-100.0
+Technology,22.11,23.47,-1.36,-5.8
+Financial Services,18.7,21.95,-3.24,-14.78
+Consumer Defensive,17.71,21.26,-3.55,-16.7
+Real Estate,14.59,18.41,-3.82,-20.75
+Consumer Cyclical,19.61,23.57,-3.96,-16.78
+Capital Goods,5.05,9.15,-4.09,-44.76
+Unknown,6.72,11.47,-4.75,-41.43
+Utilities,10.67,15.43,-4.76,-30.85
+Industrials,19.52,24.51,-5.0,-20.38
+Basic Materials,20.65,25.83,-5.18,-20.04
+Healthcare,24.81,33.84,-9.03,-26.69
+Energy,28.93,38.1,-9.18,-24.09
