@@ -1,5 +1,4 @@
 scan_date,final_score,technical_score,sector_adjusted_fundamental_score,relative_strength_score,risk_penalty
-2023-11-03,35.35,75.0,4.0,53.0,4.0
 2023-11-06,30.49,65.0,4.0,43.0,4.0
 2023-11-07,25.64,35.0,4.0,53.0,4.0
 2023-11-08,23.42,35.0,4.0,43.0,4.0
@@ -743,4 +742,4 @@ scan_date,final_score,technical_score,sector_adjusted_fundamental_score,relative
 2026-10-29,47.2,60.0,23.0,88.0,3.0
 2026-10-30,37.94,42.0,23.0,70.0,3.0
 2026-11-02,38.23,42.0,23.0,70.0,3.0
-2026-11-03,38.15,42.0,23.0,70.0,3.0
+2026-11-03,49.77,70.0,23.0,88.0,3.0
