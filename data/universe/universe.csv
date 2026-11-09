@@ -210,7 +210,6 @@ ATAM,Unknown,Atam Valves Limited
 ATGL,Oil Gas & Consumable Fuels,Adani Total Gas Limited
 ATHERENERG,Automobile and Auto Components,Ather Energy Limited
 ATL,Unknown,Allcargo Terminals Limited
-ATLANTAA,Unknown,ATLANTAA LIMITED
 ATLANTAELE,Capital Goods,Atlanta Electricals Limited
 ATLASCYCLE,Unknown,Atlas Cycles (Haryana) Limited
 ATUL,Chemicals,Atul Limited
@@ -343,6 +342,7 @@ BLKASHYAP,Unknown,B. L. Kashyap and Sons Limited
 BLS,Consumer Services,BLS International Services Limited
 BLSE,Unknown,BLS E-Services Limited
 BLSPOLY,Unknown,BLS Polymers Limited
+BLUECHIP,Unknown,Blue Chip India Limited
 BLUECLOUDS,Unknown,Blue Cloud Softech Solutions Limited
 BLUECOAST,Unknown,Blue Coast Hotels Limited
 BLUEDART,Unknown,Blue Dart Express Limited
@@ -556,6 +556,7 @@ DIFFNKG,Unknown,Diffusion Engineers Limited
 DIGIDRIVE,Unknown,Digidrive Distributors Limited
 DIGISPICE,Unknown,DiGiSPICE Technologies Limited
 DIGITIDE,Unknown,Digitide Solutions Limited
+DIGJAMLMTD,Unknown,Digjam Limited
 DISAQ,Unknown,Disa India Limited
 DISHTV,Unknown,Dish TV India Limited
 DIVGIITTS,Unknown,Divgi Torqtransfer Systems Limited
@@ -692,6 +693,7 @@ FIRSTCRY,Consumer Services,Brainbees Solutions Limited
 FISCHER,Unknown,Fischer Medical Ventures Limited
 FIVESTAR,Financial Services,Five-Star Business Finance Limited
 FLAIR,Unknown,Flair Writing Industries Limited
+FLEXITUFF,Unknown,Flexituff Ventures International Limited
 FLUOROCHEM,Chemicals,Gujarat Fluorochemicals Limited
 FMGOETZE,Unknown,Federal-Mogul Goetze (India) Limited.
 FMNL,Unknown,Future Market Networks Limited
@@ -723,6 +725,8 @@ GANGAFORGE,Unknown,Ganga Forging Limited
 GANGESSECU,Unknown,Ganges Securities Limited
 GARFIBRES,Unknown,Garware Technical Fibres Limited
 GARUDA,Unknown,Garuda Construction and Engineering Limited
+GATECH,Unknown,GACM Technologies Limited
+GATECHDVR,Unknown,GACM Technologies Limited
 GATEWAY,Unknown,Gateway Distriparks Limited
 GAUDIUMIVF,Unknown,Gaudium IVF and Women Health Limited
 GAYAHWS,Unknown,Gayatri Highways Limited
@@ -755,7 +759,6 @@ GLASSWALL,Unknown,Glass Wall Systems (India) Limited
 GLAXO,Healthcare,GlaxoSmithKline Pharmaceuticals Limited
 GLENMARK,Healthcare,Glenmark Pharmaceuticals Limited
 GLFL,Unknown,Gujarat Lease Financing Limited
-GLOBAL,Unknown,Global Education Limited
 GLOBALE,Unknown,Globale Tessile Limited
 GLOBALVECT,Unknown,Global Vectra Helicorp Limited
 GLOBE,Unknown,GLOBE ENTERPRISES (INDIA) LIMITED
@@ -895,6 +898,7 @@ HITECH,Unknown,Hi-Tech Pipes Limited
 HLEGLAS,Unknown,HLE Glascoat Limited
 HLVLTD,Unknown,HLV LIMITED
 HMAAGRO,Unknown,HMA Agro Industries Limited
+HMVL,Unknown,Hindustan Media Ventures Limited
 HNDFDS,Unknown,Hindustan Foods Limited
 HOMEFIRST,Financial Services,Home First Finance Company India Limited
 HONASA,Fast Moving Consumer Goods,Honasa Consumer Limited
@@ -1215,7 +1219,6 @@ LCCPROJECT,Unknown,LCC Projects Limited
 LCL,Unknown,Lohia Corp Limited
 LEAPIND,Unknown,LEAP India Limited
 LEENEE,Unknown,Lee & Nee Softwares Exports Limited
-LEMERITE,Unknown,Le Merite Exports Limited
 LEMONTREE,Consumer Services,Lemon Tree Hotels Limited
 LENSKART,Consumer Services,Lenskart Solutions Limited
 LEXUS,Unknown,Lexus Granito (India) Limited
@@ -1274,6 +1277,7 @@ MAHLIFE,Unknown,Mahindra Lifespace Developers Limited
 MAHLOG,Unknown,Mahindra Logistics Limited
 MAHSEAMLES,Unknown,Maharashtra Seamless Limited
 MAITHANALL,Unknown,Maithan Alloys Limited
+MAJESAUT,Unknown,Majestic Auto Limited
 MAKERSL,Unknown,Makers Laboratories Limited
 MALLCOM,Unknown,Mallcom (India) Limited
 MALUPAPER,Unknown,Malu Paper Mills Limited
@@ -1502,6 +1506,7 @@ ODIGMA,Unknown,Odigma Consultancy Solutions Limited
 ODYCORP,Unknown,Odyssey Corporation Limited
 OFSS,Information Technology,Oracle Financial Services Software Limited
 OIL,Oil Gas & Consumable Fuels,Oil India Limited
+OILCOUNTUB,Unknown,Oil Country Tubular Limited
 OLAELEC,Automobile and Auto Components,Ola Electric Mobility Limited
 OLECTRA,Automobile and Auto Components,Olectra Greentech Limited
 OMAXAUTO,Unknown,Omax Autos Limited
@@ -1516,7 +1521,6 @@ ONIDA,Unknown,Onida Electronics Limited
 ONIXSOLAR,Unknown,Onix Solar Energy Limited
 ONMOBILE,Unknown,OnMobile Global Limited
 OPTIEMUS,Unknown,Optiemus Infracom Limited
-OPTIFIN,Unknown,Optimus Finance Limited
 ORBTEXP,Unknown,Orbit Exports Limited
 ORCHASP,Unknown,Orchasp Limited
 ORCHPHARMA,Unknown,Orchid Pharma Limited
@@ -1765,6 +1769,7 @@ RPTECH,Unknown,Rashi Peripherals Limited
 RRECL,Unknown,RDB Real Estate Constructions Limited
 RRIL,Unknown,RRIL Limited
 RRKABEL,Capital Goods,R R Kabel Limited
+RSDFIN,Unknown,RSD Finance Limited
 RSL,Unknown,Rajputana Stainless Limited
 RSSOFTWARE,Unknown,R. S. Software (India) Limited
 RSWM,Unknown,RSWM Limited
@@ -1881,6 +1886,7 @@ SHAHINVEST,Unknown,Shah Investor's Home Limited
 SHAILY,Consumer Durables,Shaily Engineering Plastics Limited
 SHAKTIPUMP,Capital Goods,Shakti Pumps (India) Limited
 SHALBY,Unknown,Shalby Limited
+SHALPAINTS,Unknown,Shalimar Paints Limited
 SHANKARA,Unknown,Shankara Building Products Limited
 SHANKESH,Unknown,Shankesh Jewellers Limited
 SHANTI,Unknown,Shanti Overseas (India) Limited
@@ -2263,6 +2269,7 @@ VEDAVAAG,Unknown,VEDAVAAG Systems Limited
 VEDL,Metals & Mining,Vedanta Limited
 VEDPOWER,Power,Vedanta Power Limited
 VEEDOL,Unknown,Veedol Corporation Limited
+VEEFIN,Unknown,Veefin Solutions Limited
 VEEGALAND,Unknown,Veegaland Developers Limited
 VENKEYS,Unknown,Venky's (India) Limited
 VENTIVE,Unknown,Ventive Hospitality Limited
@@ -2372,7 +2379,6 @@ YUKEN,Unknown,Yuken India Limited
 ZAGGLE,Information Technology,Zaggle Prepaid Ocean Services Limited
 ZEEL,Media Entertainment & Publication,Zee Entertainment Enterprises Limited
 ZEELEARN,Unknown,Zee Learn Limited
-ZEEMEDIA,Unknown,Zee Media Corporation Limited
 ZENITHEXPO,Unknown,Zenith Exports Limited
 ZENITHSTL,Unknown,Zenith Steel Pipes & Industries Limited
 ZENSARTECH,Information Technology,Zensar Technologies Limited
