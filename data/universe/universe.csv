@@ -2,6 +2,7 @@ symbol,sector,company_name
 20MICRONS,Unknown,20 Microns Limited
 360ONE,Financial Services,360 ONE WAM LIMITED
 3BBLACKBIO,Unknown,3B Blackbio Dx Limited
+3IINFOLTD,Unknown,3i Infotech Limited
 3MINDIA,Unknown,3M India Limited
 3PLAND,Unknown,3P Land Holdings Limited
 5PAISA,Unknown,5Paisa Capital Limited
@@ -16,6 +17,7 @@ AARTECH,Unknown,Aartech Solonics Limited
 AARTIDRUGS,Unknown,Aarti Drugs Limited
 AARTIIND,Chemicals,Aarti Industries Limited
 AARTIPHARM,Healthcare,Aarti Pharmalabs Limited
+AARTISURF,Unknown,Aarti Surfactants Limited
 AARVI,Unknown,Aarvi Encon Limited
 AASTHA,Unknown,Aastha Spintex Limited
 AAVAS,Financial Services,Aavas Financiers Limited
@@ -527,6 +529,7 @@ DEEPAKFERT,Chemicals,Deepak Fertilizers and Petrochemicals Corporation Limited
 DEEPAKNTR,Chemicals,Deepak Nitrite Limited
 DEEPINDS,Unknown,Deep Industries Limited
 DELHIVERY,Services,Delhivery Limited
+DELPHIFX,Unknown,DELPHI WORLD MONEY LIMITED
 DELTACORP,Unknown,Delta Corp Limited
 DELTAMAGNT,Unknown,Delta Manufacturing Limited
 DEN,Unknown,Den Networks Limited
@@ -784,6 +787,7 @@ GOKEX,Textiles,Gokaldas Exports Limited
 GOKUL,Unknown,Gokul Refoils and Solvent Limited
 GOKULAGRO,Fast Moving Consumer Goods,Gokul Agro Resources Limited
 GOLDIAM,Consumer Durables,Goldiam International Limited
+GOLDTECH,Unknown,AION-TECH SOLUTIONS LIMITED
 GOODLUCK,Unknown,Goodluck India Limited
 GOODYEAR,Unknown,Goodyear India Limited
 GOPAL,Unknown,Gopal Snacks Limited
@@ -1367,6 +1371,7 @@ MOIL,Metals & Mining,MOIL Limited
 MOKSH,Unknown,Moksh Ornaments Limited
 MOL,Unknown,Meghmani Organics Limited
 MOLBIO,Unknown,Molbio Diagnostics Limited
+MOLDTECH,Unknown,Mold-Tek Technologies Limited
 MOLDTKPAC,Unknown,Mold-Tek Packaging Limited
 MOMSBELIEF,Unknown,Rays of Belief Limited
 MONARCH,Unknown,Monarch Networth Capital Limited
@@ -1484,6 +1489,7 @@ NOVAAGRI,Unknown,Nova Agritech Limited
 NPST,Unknown,Network People Services Technologies Limited
 NRAIL,Unknown,N R Agarwal Industries Limited
 NRBBEARING,Unknown,NRB Bearing Limited
+NRL,Unknown,Nupur Recyclers Limited
 NSLNISP,Metals & Mining,NMDC Steel Limited
 NTCIND,Unknown,NTC Industries Limited
 NTPC,Power,NTPC Limited
@@ -1695,6 +1701,7 @@ RAJTV,Unknown,Raj Television Network Limited
 RALLIS,Chemicals,Rallis India Limited
 RAMANEWS,Unknown,Shree Rama Newsprint Limited
 RAMAPHO,Unknown,Rama Phosphates Limited
+RAMASTEEL,Unknown,Rama Steel Tubes Limited
 RAMCOCEM,Construction Materials,The Ramco Cements Limited
 RAMCOIND,Unknown,Ramco Industries Limited
 RAMCOSYS,Unknown,Ramco Systems Limited
@@ -1758,6 +1765,7 @@ RPEL,Unknown,Raghav Productivity Enhancers Limited
 RPGLIFE,Unknown,RPG Life Sciences Limited
 RPOWER,Power,Reliance Power Limited
 RPPINFRA,Unknown,R.P.P. Infra Projects Limited
+RPPL,Unknown,Rajshree Polypack Limited
 RPSGVENT,Unknown,RPSG VENTURES LIMITED
 RPTECH,Unknown,Rashi Peripherals Limited
 RRECL,Unknown,RDB Real Estate Constructions Limited
@@ -1980,6 +1988,7 @@ SPAL,Unknown,S. P. Apparels Limited
 SPANDANA,Unknown,Spandana Sphoorty Financial Limited
 SPARC,Healthcare,Sun Pharma Advanced Research Company Limited
 SPCENET,Unknown,Spacenet Enterprises India Limited
+SPECIALITY,Unknown,Speciality Restaurants Limited
 SPECTRUM,Unknown,Spectrum Electrical Industries Limited
 SPELS,Unknown,SPEL Semiconductor Limited
 SPENCERS,Unknown,Spencer's Retail Limited
@@ -2160,6 +2169,7 @@ TINNARUBR,Unknown,Tinna Rubber and Infrastructure Limited
 TIPSFILMS,Unknown,Tips Films Limited
 TIPSMUSIC,Media Entertainment & Publication,Tips Music Limited
 TIRUMALCHM,Unknown,Thirumalai Chemicals Limited
+TIRUPATIFL,Unknown,Tirupati Forge Limited
 TITAGARH,Capital Goods,TITAGARH RAIL SYSTEMS LIMITED
 TITAN,Consumer Durables,Titan Company Limited
 TMB,Financial Services,Tamilnad Mercantile Bank Limited
@@ -2210,6 +2220,7 @@ UBL,Fast Moving Consumer Goods,United Breweries Limited
 UCOBANK,Financial Services,UCO Bank
 UDS,Unknown,Updater Services Limited
 UEL,Unknown,Ujaas Energy Limited
+UFBL,Unknown,United Foodbrands Limited
 UFLEX,Unknown,UFLEX Limited
 UFO,Unknown,UFO Moviez India Limited
 UGROCAP,Unknown,Ugro Capital Limited
@@ -2269,6 +2280,7 @@ VEEGALAND,Unknown,Veegaland Developers Limited
 VENKEYS,Unknown,Venky's (India) Limited
 VENTIVE,Unknown,Ventive Hospitality Limited
 VENUSPIPES,Unknown,Venus Pipes & Tubes Limited
+VENUSREM,Unknown,Venus Remedies Limited
 VERTOZ,Unknown,Vertoz Limited
 VESUVIUS,Capital Goods,Vesuvius India Limited
 VETO,Unknown,Veto Switchgears And Cables Limited
