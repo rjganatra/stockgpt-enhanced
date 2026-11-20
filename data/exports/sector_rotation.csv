@@ -1,23 +1,25 @@
 sector,recent_avg_final_score,prior_avg_final_score,change,change_pct
-Healthcare,36.23,24.87,11.35,45.63896450708177
-Utilities,20.6,11.05,9.55,86.46620015284638
-Real Estate,23.39,14.19,9.2,64.83402660633382
-Consumer Cyclical,28.13,19.35,8.78,45.39885680127003
-Communication Services,24.3,16.05,8.25,51.37866097106119
-Financial Services,26.17,17.96,8.22,45.75041426475367
-Consumer Defensive,25.11,17.08,8.03,47.04706172786835
-Industrials,26.3,18.81,7.48,39.77209211809021
-Energy,34.8,27.93,6.87,24.603963294106094
-Basic Materials,25.7,19.97,5.73,28.713989032565507
-Technology,27.16,21.67,5.49,25.334564280275785
-Chemicals,2.71,0.0,2.71,
-Automobile and Auto Components,5.5,2.81,2.69,95.43963155074266
-Consumer Durables,3.52,1.28,2.24,175.00542064180397
-Construction,2.26,0.34,1.92,562.5138837467605
-Construction Materials,2.48,0.73,1.75,239.75308641975306
-Oil Gas & Consumable Fuels,3.26,2.46,0.8,32.57514216084484
-Metals & Mining,3.5,3.52,-0.02,-0.5369212304971088
-Unknown,3.69,6.21,-2.51,-40.49157228136878
-Capital Goods,1.92,4.66,-2.74,-58.86311838047996
-Fast Moving Consumer Goods,4.4,7.85,-3.45,-43.95030520364872
-Power,0.7,5.54,-4.84,-87.33225010531385
+Healthcare,37.0,24.98,12.02,48.12
+Real Estate,24.56,14.0,10.56,75.45
+Utilities,21.42,11.0,10.42,94.68
+Consumer Cyclical,29.21,19.26,9.95,51.64
+Financial Services,27.08,17.66,9.42,53.35
+Communication Services,25.54,16.17,9.37,57.97
+Consumer Defensive,26.09,16.78,9.31,55.5
+Industrials,27.3,18.44,8.86,48.05
+Energy,35.51,27.27,8.24,30.22
+Basic Materials,26.51,19.62,6.89,35.14
+Technology,27.88,21.38,6.5,30.38
+Automobile and Auto Components,5.52,2.85,2.67,93.86
+Construction Materials,2.81,0.73,2.08,285.09
+Consumer Durables,3.77,1.84,1.93,104.92
+Chemicals,2.74,0.85,1.89,222.85
+Construction,2.22,0.34,1.88,549.25
+Oil Gas & Consumable Fuels,3.12,2.46,0.65,26.57
+Metals & Mining,3.48,3.52,-0.03,-0.94
+Unknown,3.52,6.09,-2.57,-42.19
+Fast Moving Consumer Goods,4.54,7.85,-3.31,-42.18
+Capital Goods,1.54,5.42,-3.87,-71.49
+Power,0.8,5.54,-4.74,-85.56
+Information Technology,3.06,20.87,-17.81,-85.33
+Realty,3.75,47.8,-44.05,-92.16
