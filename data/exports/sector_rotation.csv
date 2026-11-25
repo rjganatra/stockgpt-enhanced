@@ -1,25 +1,25 @@
 sector,recent_avg_final_score,prior_avg_final_score,change,change_pct
-Healthcare,37.88,26.49,11.39,42.99
-Consumer Cyclical,29.56,19.79,9.77,49.38
-Financial Services,27.71,17.99,9.72,54.04
-Real Estate,24.28,14.65,9.62,65.65
-Consumer Defensive,26.08,17.12,8.96,52.36
-Communication Services,25.65,16.74,8.91,53.22
-Industrials,27.44,18.68,8.76,46.91
-Utilities,21.43,12.69,8.74,68.87
-Energy,34.8,27.7,7.1,25.62
-Basic Materials,26.19,19.47,6.72,34.54
-Technology,27.41,21.68,5.73,26.43
-Consumer Durables,3.74,1.05,2.69,256.43
+Healthcare,37.98,26.49,11.49,43.36
+Consumer Cyclical,29.6,19.79,9.81,49.55
+Financial Services,27.72,17.99,9.73,54.08
+Real Estate,24.3,14.65,9.65,65.85
+Consumer Defensive,26.12,17.12,9.0,52.55
+Communication Services,25.55,16.74,8.81,52.64
+Industrials,27.41,18.68,8.73,46.75
+Utilities,21.38,12.69,8.68,68.41
+Energy,34.57,27.7,6.87,24.8
+Basic Materials,26.15,19.47,6.68,34.31
+Technology,27.3,21.68,5.62,25.9
+Consumer Durables,3.77,1.05,2.72,259.01
 Automobile and Auto Components,5.49,2.82,2.67,94.64
 Construction Materials,2.81,0.81,2.0,246.58
 Chemicals,2.87,1.42,1.44,101.5
 Construction,2.2,0.83,1.37,163.95
 Oil Gas & Consumable Fuels,3.12,2.84,0.28,9.69
 Metals & Mining,3.48,3.94,-0.45,-11.5
-Fast Moving Consumer Goods,4.61,7.85,-3.24,-41.23
-Unknown,3.42,6.69,-3.27,-48.91
-Power,1.4,5.37,-3.97,-73.97
-Capital Goods,0.74,6.65,-5.91,-88.87
+Fast Moving Consumer Goods,4.69,7.85,-3.16,-40.27
+Unknown,3.42,6.69,-3.27,-48.87
+Power,1.25,5.37,-4.11,-76.65
+Capital Goods,0.83,6.65,-5.83,-87.56
 Information Technology,0.14,20.65,-20.51,-99.31
 Realty,2.82,42.58,-39.76,-93.39
