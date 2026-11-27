@@ -1,27 +1,27 @@
 sector,recent_avg_final_score,prior_avg_final_score,change,change_pct
-Real Estate,24.68,15.31,9.37,61.21
-Healthcare,37.77,28.68,9.09,31.7
-Consumer Cyclical,29.57,20.69,8.88,42.9
-Financial Services,27.72,18.91,8.81,46.57
-Consumer Defensive,26.43,17.7,8.73,49.33
-Communication Services,25.46,17.26,8.2,47.53
-Industrials,27.48,19.42,8.05,41.48
-Utilities,20.7,14.33,6.37,44.42
-Basic Materials,25.86,19.88,5.98,30.06
-Energy,34.12,28.29,5.83,20.6
-Technology,27.04,22.05,4.99,22.63
-Construction Materials,2.81,1.04,1.77,169.57
-Textiles,5.89,4.38,1.51,34.53
-Chemicals,2.69,2.45,0.24,9.69
-Consumer Durables,3.34,3.48,-0.14,-3.94
-Automobile and Auto Components,5.1,5.45,-0.36,-6.54
-Oil Gas & Consumable Fuels,3.12,4.02,-0.91,-22.57
-Construction,1.72,2.83,-1.11,-39.12
-Metals & Mining,3.23,5.86,-2.63,-44.91
-Fast Moving Consumer Goods,4.72,7.63,-2.91,-38.19
-Consumer Services,3.07,6.55,-3.48,-53.06
-Unknown,3.44,7.04,-3.6,-51.11
-Capital Goods,0.94,5.27,-4.33,-82.12
-Power,1.57,5.92,-4.34,-73.41
+Real Estate,24.55,15.98,8.57,53.65
+Consumer Defensive,26.37,18.39,7.98,43.38
+Healthcare,37.67,29.82,7.85,26.34
+Consumer Cyclical,29.32,21.47,7.85,36.58
+Financial Services,27.44,19.76,7.68,38.88
+Communication Services,25.13,17.75,7.37,41.54
+Industrials,27.18,20.14,7.04,34.96
+Basic Materials,25.42,20.52,4.91,23.92
+Utilities,20.2,15.34,4.86,31.66
+Energy,33.56,28.97,4.59,15.85
+Technology,26.66,22.52,4.14,18.4
+Textiles,6.0,4.38,1.62,36.99
+Construction Materials,2.81,1.22,1.59,131.06
+Chemicals,2.56,3.01,-0.45,-14.89
+Consumer Durables,3.11,4.27,-1.16,-27.15
+Oil Gas & Consumable Fuels,3.12,5.17,-2.06,-39.78
+Automobile and Auto Components,4.89,7.08,-2.2,-31.02
+Construction,1.39,3.86,-2.47,-64.07
+Fast Moving Consumer Goods,4.61,8.29,-3.67,-44.34
+Capital Goods,1.0,4.83,-3.84,-79.36
+Unknown,3.42,7.45,-4.04,-54.14
+Power,1.72,5.92,-4.19,-70.85
+Metals & Mining,2.86,7.5,-4.64,-61.87
+Consumer Services,3.05,7.76,-4.71,-60.75
 Information Technology,0.14,20.65,-20.51,-99.31
-Realty,4.17,42.58,-38.41,-90.21
+Realty,4.77,42.58,-37.81,-88.8
